@@ -1,0 +1,49 @@
+<?page title="Decision" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window title="Decision" border="normal" id="winDecision" width="500px" height="300px" mode="modal" closable="true" >
+		<vbox>
+			<toolbar hflex="true" id="save_dec">
+				<toolbarbutton style="text-align:center; width:60px; height:18px"  label="Save" onClick="@command('onSave', win=winDecision)"/>
+			</toolbar>
+		</vbox>
+		<div vflex="true">	
+				<n:table width="" cellspacing="50">
+					<n:tr align="left">
+						<n:td>Name:</n:td>
+						<n:td border="normal" width="165px" class="k-padding2" align="left">
+						    <textbox id="txtName" width="165px" disabled="true" value="@bind(vm.selected.name)"/>
+						</n:td>
+					</n:tr>
+					<n:tr align="left">
+						<n:td>Loan ID:</n:td>
+						<n:td border="normal" width="165px" class="k-padding2" align="left">
+						    <textbox id="txtLoanId" width="165px" disabled="true" value="@bind(vm.selected.loanId)"/>
+						</n:td>
+					</n:tr>
+					<n:tr align="left">
+						<n:td>Amount:</n:td>
+						<n:td border="normal" width="165px" class="k-padding2" align="left">
+						    <textbox id="txtAmount" width="165px" disabled="true" value="@bind(vm.selected.amountCurrency)"/>
+						</n:td>
+					</n:tr>
+					<n:tr align="left">
+						<n:td>Decision:</n:td>
+						<n:td class="k-padding2">
+							<radiogroup id="dec" onCheck="" selectedItem="@bind(vm.selected.decision)">
+			                <radio id="rApprove" value="1" label="Approve" selected="@load(vm.selected.decision eq 1)" radiogroup="dec" />
+			                <radio id="rRejct" value="-1" label="Reject" selected="@load(vm.selected.decision eq -1)" radiogroup="dec" />
+			                <radio id="rCancel" value="-2" label="Cancel" selected="@load(vm.selected.decision eq -2)" radiogroup="dec" />
+			                <radio id="rPending" value="0" label="Pending" selected="@load(vm.selected.decision eq 0)" radiogroup="dec" />
+			            </radiogroup>
+						</n:td>
+					</n:tr>
+					<n:tr align="left">
+						<n:td>Note:</n:td>
+						<n:td border="normal" class="k-padding2" align="left">
+						    <textbox id="txtNote" width="365px"  value="@bind(vm.selected.note)" rows="5"/>
+						</n:td>
+					</n:tr>		
+				</n:table>
+		</div>
+	</window>
+</zk>

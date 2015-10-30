@@ -1,0 +1,72 @@
+<?link href="/img/app/favicon.ico" rel="shortcut icon" type="image/x-icon"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css.dsp?v=${desktop.webApp.build}"?>
+
+<window id="loginWin" border="none"
+	apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('kredit.web.core.util.authentication.viewmodel.LoginVM')"
+	mode="modal"
+	position="center,center">
+	<vbox>
+		<n:div xmlns:n="native" class="bg_login">
+			<n:div class="k-login">
+				<!--    
+				<grid style="border:none;">
+					<rows>
+						<row>
+							<label value="Username" sclass="k-label-b"/>
+						</row>
+						<row>
+							<textbox id="txtUsername" width="100%" sclass="kh-textbox" value="@bind(vm.username)"/>
+						</row>
+						<row>
+							<label value="Password" sclass="k-label-b"/>
+						</row>
+						<row>
+							<textbox id="txtPassword" type="password" width="100%" sclass="kh-textbox" value="@bind(vm.password)" 
+							onOK="@command('onOK')" onCancel="@command('onCancel')"/>
+						</row>
+					</rows>
+				</grid>
+				-->
+				<n:span class="k-login-key"></n:span> 
+				<n:table class="myLabel" cellspacing="10">
+					<n:tr>
+						<n:td width="90px">Username:</n:td>
+						<n:td>
+							<textbox id="txtUsername" sclass="kh-textbox txtBox" value="@bind(vm.username)"/>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>Password:</n:td>
+						<n:td>
+							<textbox id="txtPassword" type="password" sclass="kh-textbox txtBox" value="@bind(vm.password)" 
+							onOK="@command('onOK')" onCancel="@command('onCancel')"/>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+			
+			<n:span>
+				<label id="mesgLbl" value="@load(vm.message)" sclass="errormsg"/>
+				<label value="Login" sclass="k-login-btn k-link" onClick="@command('doLogin')"/>
+			</n:span>
+			<n:hr class="k-line"></n:hr>
+			<n:table class="k-forgot">
+				<n:tr>
+					<n:td width="335px">
+						<label value="Forgot password?" sclass="k-link"/>	
+					</n:td>
+					<n:td align="right">
+						<label value="Exit" sclass="k-link" onClick="loginWin.detach();"/>	
+					</n:td>
+				</n:tr>
+			</n:table>
+			<!--  
+			<hbox sclass="k-login-btn">
+				<button id="btnLogin" label="Sign in" onClick="@command('doLogin')"/>
+				<button label="Close" onClick='btnLogin.setDisabled(true); loginWin.detach();'/>
+			</hbox>
+			-->
+		</n:div>
+	</vbox>
+</window>

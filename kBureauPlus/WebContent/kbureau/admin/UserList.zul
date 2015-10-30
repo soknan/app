@@ -1,0 +1,209 @@
+<zk>
+	<window id="kBureauUserList" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.KBureauUserVM')"
+		validationMessages="@id('vmsgs')">
+		<vbox id="mVbox" hflex="true">
+			<groupbox>
+				<caption label="Filter" />
+				<n:table xmlns:n="native">
+					<n:tr>
+						<n:td width="80px">Branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.branches)"
+								readonly="false" value="@bind(vm.param.branch.description)"
+								selectedItem="@bind(vm.param.branch)"
+								onChange="@command('onChangeBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td>Sub branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.subBranches)"
+								readonly="false" value="@load(vm.param.subBranch.description)"
+								selectedItem="@bind(vm.param.subBranch)"
+								onChange="@command('onChangeSubBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td>
+							<label value="Status:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.statuses)"
+								readonly="false" value="@load(vm.param.status.description)"
+								selectedItem="@bind(vm.param.status)" width="70px"
+								onChange="@command('onChangeStatus')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<toolbar>
+				<toolbarbutton label="New" image="/img/app/new.png"
+					onClick="@command('onNewUser')"
+					visible="@load(vm.priviledge.canCreate)" />
+				<toolbarbutton label="Open" image="/img/app/edit.png"
+					disabled="@load(vm.selectedUser.id eq 0)"
+					onClick="@command('onEditUser')"
+					visible="@load(vm.priviledge.canRead)" />
+				<toolbarbutton label="Delete" image="/img/app/bin18.png"
+					disabled="@load(vm.selectedUser.id eq 0)"
+					onClick="@command('onConfirmDelete')"
+					visible="@load(vm.priviledge.canDelete)" />
+				<space bar="true" sclass="k-ver-bar" />
+				<toolbarbutton label="Reset Pwd"
+					image="/img/app/recycle18.png"
+					disabled="@load(vm.selectedUser.id eq 0)"
+					onClick="@command('onConfirmReset')"
+					visible="@load(vm.priviledge.canUpdate)" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Look for: " />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)" />
+				<toolbarbutton id="searchSubject" label="Find"
+					image="/img/app/find.png" onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear"
+					image="/img/kbureau/edit-clear.png" onClick="@command('onClear')" />
+
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox model="@load(vm.rows)" readonly="false"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('onChangeRowPerPage')" width="40px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+
+			<listbox id="lstUser" model="@load(vm.kbureauUsers)"
+				selectedItem="@bind(vm.selectedUser)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[
+	lstUser.pagingChild.mold = "os";
+]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Validity" sort="auto(validity)"
+						width="50px" />
+					<listheader label="Username" sort="auto(username)"
+						width="100px" />
+					<listheader label="Email" sort="auto(email)"
+						width="200px" />
+					<listheader label="Sex" sort="auto(sex)"
+						width="40px" />
+					<listheader label="Sub Branch"
+						sort="auto(subBranchCode)" width="150px" />
+					<listheader label="Branch" sort="auto(branchCode)"
+						width="60px" />
+					<listheader label="Last Login"
+						sort="auto(lastLoginDate)" width="140px" />
+					<listheader label="Entered" sort="auto(dateCreated)"
+						width="140px" />
+					<listheader label="Status" sort="auto(status)"
+						width="50px" />
+					<listheader label="Type" sort="auto(userType)"
+						width="90px" />
+					<listheader label="Security"
+						sort="auto(securityCode)" width="60px" />
+					<listheader label="Note" sort="auto(note)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onEditUser')">
+						<listcell
+							image="@load(item.validity eq 1?'/img/kbureau/clock_green.png':'/img/kbureau/clock_red.png')"
+							tooltiptext="@load(item.validity eq 1?'This account has been enabled.':'This account has been disabled or expired.')" />
+						<listcell label="@load(item.username)" />
+						<listcell label="@load(item.email)" />
+						<listcell label="@load(item.sex)" />
+						<listcell label="@load(item.subBranchFull)" />
+						<listcell label="@load(item.branchCode)" />
+						<listcell label="@load(item.lastLoginDate)" />
+						<listcell label="@load(item.dateCreated)" />
+						<listcell label="@load(item.status)" />
+						<listcell
+							label="@load(item.userType eq 0?'Permanent':'Acting')" />
+						<listcell label="@load(item.securityCode)"
+							style="text-align:right;" />
+						<listcell label="@load(item.note)" />
+					</listitem>
+				</template>
+				<!--  
+					<listfoot>
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter label="@load(vm.countUser)"
+					sclass="k-listfooter-right" />
+					</listfoot>
+				-->
+			</listbox>
+		</vbox>
+
+		<include src="/kbureau/admin/KBureauUser.zul" />
+
+		<window title="Delete Confirmation" mode="modal" border="normal"
+			width="300px" visible="@load(not empty vm.msgDelete)">
+			<vbox hflex="true">
+				<hbox height="50px" style="padding: 10px 0 0 0;">
+					<image src="/img/app/bin32.png" />
+					<label value="@load(vm.msgDelete)" />
+				</hbox>
+				<hbox pack="center" hflex="true">
+					<button label="Yes"
+						onClick="@command('onDeleteUser')" />
+					<button label="No"
+						onClick="@command('onCancelDelete')" />
+				</hbox>
+			</vbox>
+		</window>
+
+		<window title="Password Reset Confirmation" mode="modal"
+			border="normal" width="300px"
+			visible="@load(not empty vm.msgReset)">
+			<vbox hflex="true" vflex="true">
+				<hbox height="50px" style="padding: 10px 0 0 0;">
+					<image src="/img/app/recycle32.png" />
+					<label value="@load(vm.msgReset)" />
+				</hbox>
+				<hbox pack="center" hflex="true">
+					<button label="Yes"
+						onClick="@command('onResetPwdDefault')" />
+					<button label="No"
+						onClick="@command('onCancelReset')" />
+				</hbox>
+			</vbox>
+		</window>
+
+		<menupopup id="menuKBureauUser">
+			<menuitem image="/img/app/new16.png" label="New"
+				onClick="@command('onNewUser')"
+				visible="@load(vm.priviledge.canCreate)" />
+			<menuitem image="/img/app/bin16.png" label="Delete"
+				onClick="@command('onConfirmDelete')"
+				visible="@load(vm.priviledge.canDelete)" />
+			<menuitem image="/img/app/recycle16.png"
+				label="Reset pwd default" onClick="@command('onConfirmReset')"
+				visible="@load(vm.priviledge.canUpdate)" />
+		</menupopup>
+
+	</window>
+</zk>
+

@@ -1,0 +1,150 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<window id="winValidity">
+	<vbox>
+		<toolbar>
+			<toolbarbutton label="New" image="/img/app/new.png"
+				onClick="@command('onNewValidity')"
+				visible="@load(vm.priviledge.canCreate)" />
+			<toolbarbutton label="Save" image="/img/app/save.png"
+				disabled="@load(not vm.canSaveValidity)"
+				onClick="@command('onSaveValidity')"
+				visible="@load(vm.priviledge.canUpdate)" />
+			<toolbarbutton label="Delete" image="/img/app/delete.png"
+				disabled="@load(not vm.canDeleteValidity)"
+				onClick="@command('onConfirmDeleteValidity')"
+				visible="@load(vm.priviledge.canDelete)" />
+			<toolbarbutton label="Notify Email"
+				image="/img/kbureau/email_production.png"
+				onClick="@command('onEmailActing')"
+				disabled="@load(not vm.canSendEmailActing)" />
+			<toolbarbutton label="Cancel" image="/img/app/cancel.png"
+				onClick="@command('onCancelEditValidity')"
+				visible="@load(vm.canSaveValidity)" />
+		</toolbar>
+
+		<listbox model="@load(vm.validities)"
+			onSelect="@command('onSelectValidity')"
+			selectedItem="@bind(vm.selectedValidity)" hflex="true" rows="5">
+			<listhead sizable="true">
+				<listheader label="Status" width="50px" />
+				<listheader label="Type" width="60px" />
+				<listheader label="Req. Date" width="80px" />
+				<listheader label="Start Date" width="80px" />
+				<listheader label="End Date" width="80px" />
+				<listheader label="Email Sent" width="80px" />
+				<listheader label="Note" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menuValidity">
+					<listcell image="@load(item.statusImg)"
+						tooltiptext="@load(item.statusTooltip)" />
+					<listcell
+						label="@load(item.type eq 'E'?'Enable':'Disable')" />
+					<listcell
+						label="@load(item.requestDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell
+						label="@load(item.startDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell
+						label="@load(item.endDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell image="@load(item.countEmailSent eq 0?'':'/img/kbureau/check_yes.png')"
+						tooltiptext="@load(item.countEmailSent eq 0?'Not yet send email notification':'Already sent email notification')" />	
+					<listcell label="@load(item.note)" />
+				</listitem>
+			</template>
+		</listbox>
+
+		<groupbox visible="@load(not empty vm.selectedValidity)"
+			hflex="true" mold="3d"
+			form="@id('fValidity') @load(vm.selectedValidity) @save(vm.selectedValidity, before='onSaveValidity')">
+			<caption label="@load(vm.groupLabelValidityTitle)" />
+			<grid hflex="true" style="border:none;">
+				<columns>
+					<column width="80px" />
+					<column />
+					<column width="80px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label style="margin: 2px 2px;">
+							Start date:
+						</label>
+						<datebox value="@bind(fValidity.startDate)"
+							format="dd-MM-yyyy" width="100%"
+							onChange="@command('notifyChangingValidity')"
+							constraint="no empty, no past: Please input Start Date." />
+						<label style="margin: 2px 2px;">
+							End date:
+						</label>
+						<datebox value="@bind(fValidity.endDate)"
+							format="dd-MM-yyyy" width="100%"
+							onChange="@command('notifyChangingValidity')"
+							constraint="no empty, no past: Please input End Date." />
+					</row>
+					<row>
+						Requested:
+						<!--  
+							<datebox value="@load(fValidity.requestDate)"
+							format="dd-MM-yyyy" width="100%"
+							onChange="@command('notifyChangingValidity')" 
+							constraint="no empty, no past: Please input End Date."
+							/>
+						-->
+						<datebox value="@bind(fValidity.requestDate)"
+							format="dd-MM-yyyy" width="100%"
+							onChange="@command('notifyChangingValidity')"
+							constraint="no empty: Please input Request Date." />
+						Note:
+						<textbox value="@bind(fValidity.note)"
+							width="100%" multiline="true"
+							onChanging="@command('notifyChangingValidity')" />
+					</row>
+					<!-- 
+						<row>
+						Note:
+						<cell colspan="3">
+						<textbox value="@bind(fValidity.note)"
+						width="100%" multiline="true"
+						onChanging="@command('notifyChangingValidity')" />
+						</cell>
+						</row>
+					-->
+				</rows>
+			</grid>
+		</groupbox>
+		<groupbox id="resultMsgValidity"
+			visible="@load(not empty vm.resultMsgValidity)"
+			style="align:center;">
+			<div align="center">
+				<hlayout>
+					<image src="@load(vm.resultIconValidity)" />
+					<label sclass="@load(vm.resultMsgClassValidity)"
+						value="@load(vm.resultMsgValidity)" />
+				</hlayout>
+			</div>
+		</groupbox>
+		<window title="Confirm" mode="modal" border="normal"
+			width="300px" visible="@load(not empty vm.deleteMessageValidity)">
+			<vbox hflex="true">
+				<hlayout height="50px">
+					<image src="/img/app/delete.png" />
+					<label value="@load(vm.deleteMessageValidity)" />
+				</hlayout>
+				<hbox pack="center" hflex="true">
+					<button label="Delete"
+						onClick="@command('onDeleteValidity')" />
+					<button label="Cancel"
+						onClick="@command('cancelDeleteValidity')" />
+				</hbox>
+			</vbox>
+		</window>
+		<menupopup id="menuValidity">
+			<menuitem image="/img/app/new16.png" label="New"
+				onClick="@command('onNewValidity')"
+				visible="@load(vm.priviledge.canCreate)" />
+			<menuitem image="/img/app/delete16.png" label="Delete"
+				onClick="@command('onConfirmDeleteValidity')"
+				visible="@load(vm.priviledge.canDelete)" />
+		</menupopup>
+	</vbox>
+</window>

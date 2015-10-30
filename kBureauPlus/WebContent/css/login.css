@@ -1,0 +1,159 @@
+.title-text {
+    color: #222222;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+#headline {
+    background: none repeat scroll 0 0 #F7F7F7;
+    border-bottom: 1px solid #DFDFDF;
+    height: 62px;
+    min-width: 960px;
+}
+
+.wrapper {
+    clear: both;
+    margin: 0 auto;
+    width: 960px;
+}
+
+body {
+    background-color: #FFFFFF;
+    margin: 0;
+    min-height: 100%;
+    padding: 0;
+}
+
+.normal, body, button, input, select, textarea {
+    color: #444444;
+    font-family: "Open Sans","lucida grande","Segoe UI",arial,verdana,"lucida sans unicode",tahoma,sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+#header-border-div {
+    border-bottom: 1px solid #FAFBFC;
+    border-top: 1px solid #F18811;
+    height: 0;
+    width: 100%;
+}
+
+#notify {
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 #000000 inset;
+    color: #222222;
+    display: inline-block;
+    font-size: 12px;
+    padding: 6px 10px;
+}
+
+.server-success {
+    background-color: #C4ECA9;
+    border: 1px solid #8FDB5C;
+}
+
+#outer-frame {
+    margin: 0 auto;
+    width: 960px;
+}
+
+
+#page-logo-header {
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+
+#login-container, #register-container {
+    height: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#login-container > form {
+    margin-top: 40px;
+}
+
+#login-container > form, #register-container > form {
+    display: inline-block;
+    width: 357px;
+}
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+#login-partial, #register-partial {
+    width: 357px;
+}
+
+#login-partial #email-field {
+    margin-bottom: 12px;
+    margin-top: 16px;
+}
+
+.sick-input {
+    position: relative;
+}
+
+
+.sick-input input, .sick-input textarea {
+    border: 1px solid #BFBFBF;
+    border-radius: 3px 3px 3px 3px;
+    /*box-shadow: 0 0 0 #000000, 0 3px 3px #EEEEEE inset;*/
+    font-size: 16px;
+    padding: 5px;
+}
+
+.sick-input input {
+    height: 24px;
+    width: 345px;
+}
+
+
+#password-field {
+    margin-bottom: 12px;
+    margin-top: 16px;
+}
+
+input[type="password"] {
+    font-family: arial,sans-serif;
+}
+
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+}
+
+#login-partial #login-footer {
+    margin-top: 20px;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
+
+.clear {
+    clear: both;
+}
+
+#login-container .splash, #register-container .splash {
+    float: right;
+    height: 390px;
+    padding-left: 18px;
+    padding-right: 57px;
+    width: 464px;
+}
+
+login-container #login_kite, #register-container #login_kite {
+    padding-left: 30px;
+}
+
+img {
+    border: 0 none;
+}

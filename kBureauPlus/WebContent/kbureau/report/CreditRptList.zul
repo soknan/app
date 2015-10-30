@@ -1,0 +1,367 @@
+<?page title="Consume Credit Report List" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<zscript>
+		<![CDATA[
+	class MyConst implements Constraint {
+		//Constraint//
+		public void validate(Component comp, Object value) {
+			if (value != null && !((String) value).isEmpty()) {
+				try {
+					Double.parseDouble(value.toString());
+				} catch (Exception e) {
+					throw new WrongValueException(comp,
+							"Please input number only.");
+				}
+			}
+		}
+	}
+	Constraint ctt = new MyConst();
+]]>
+</zscript>
+
+	<window id="rpt" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.report.CbcReportVM')"
+		validationMessages="@id('vmsgs')">
+		<vbox width="100%" vflex="true" hflex="true" xmlns:n="native">
+			<groupbox open="true" hflex="true">
+				<caption label="Filter" />
+				<n:table width="100%">
+					<n:tr>
+						<n:td width="80px">Branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.branches)"
+								readonly="false" value="@bind(vm.param.branch.description)"
+								selectedItem="@bind(vm.param.branch)"
+								onChange="@command('onChangeBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td width="50px">
+							<label value="Action:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.rptTypes)"
+								readonly="false" value="@load(vm.param.rptType.description)"
+								selectedItem="@bind(vm.param.rptType)" width="70px"
+								onChange="@command('onChangeType')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td width="80px">
+							<label value="Start date:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<datebox value="@bind(vm.param.startDate)"
+								onChange="@command('onChangeStartDate')" format="dd-MM-yyyy" />
+						</n:td>
+						<n:td width="100px">
+							<label value="Start amount:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<textbox style="text-align:right;"
+								value="@bind(vm.param.fromAmount)" constraint="${ctt}"
+								onChange="@command('onChangeFromAmount')" />
+						</n:td>
+						<n:td width="80px">
+							<label value="Currency:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.currencies)"
+								readonly="false" value="@load(vm.param.currency.description)"
+								selectedItem="@bind(vm.param.currency)"
+								onChange="@command('onChangeCurrency')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>Sub branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.subBranches)"
+								readonly="false" value="@load(vm.param.subBranch.description)"
+								selectedItem="@bind(vm.param.subBranch)"
+								onChange="@command('onChangeSubBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td>
+							<label value="Status:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.rptStatuses)"
+								readonly="false" value="@load(vm.param.status.description)"
+								selectedItem="@bind(vm.param.status)" width="70px"
+								onChange="@command('onChangeStatus')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td>
+							<label value="End date:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<datebox value="@bind(vm.param.endDate)"
+								onChange="@command('onChangeEndDate')" format="dd-MM-yyyy" />
+						</n:td>
+						<n:td>
+							<label value="End amount:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<textbox style="text-align:right;"
+								value="@bind(vm.param.toAmount)" constraint="${ctt}"
+								onChange="@command('onChangeToAmount')" />
+						</n:td>
+						<n:td>
+							<label value="Decision:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.decisions)"
+								readonly="false" value="@load(vm.param.decision.description)"
+								selectedItem="@bind(vm.param.decision)"
+								onChange="@command('onChangeDecision')"
+								disabled="@load(vm.param.status.code eq 'ERROR')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<toolbar>
+				<toolbarbutton label="View Report"
+					image="/img/app/edit.png" disabled="@load(vm.selected.id eq 0)"
+					onClick="@command('onView')"
+					visible="@load(vm.priviledge.canRead)" />
+				<toolbarbutton label="Decision" onClick="@command('onDecision')" image="/img/kbureau/dec.png" disabled="@load(vm.selected.id eq 0)"/>
+				<space bar="true" sclass="k-ver-bar" />
+
+				<label value="Look for: " />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)" />
+				<toolbarbutton label="Find" image="/img/app/find.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear"
+					image="/img/kbureau/edit-clear.png" onClick="@command('onClear')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					disabled="@load(vm.selectedTabIndex ne 5)" readonly="false"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('onChangeRowPerPage')" width="40px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+
+			<tabbox hflex="true"
+				selectedIndex="@bind(vm.selectedTabIndex)"
+				onSelect="@command('doSearch')">
+				<tabs>
+					<tab id="tSummary" label="Summary"></tab>
+					<tab id="tAction" label="Action"></tab>
+					<tab id="tDecision" label="Decision"></tab>
+					<tab id="tFee" label="Fee"></tab>
+					<tab id="tLoan" label="Loan"></tab>
+					<tab id="tLst" label="Consumer Credit Report">
+						<attribute name="onClick">
+							<![CDATA[
+	if (tabConsumerCrdRpt.getChildren().isEmpty()) {
+		Component comp = Executions.createComponents(
+				"/kbureau/report/ConsumerCreditReport.zul", rpt, null);
+		tabConsumerCrdRpt.appendChild(comp);
+	}
+]]>
+						</attribute>
+					</tab>
+					<tab id="tActiveAcc" label="Active Accounts"></tab>
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<hbox width="100%">
+							<groupbox mold="3d" hflex="true"
+								style="padding: 0 5px 0 0;">
+								<caption
+									label="Standard vs Lite Report" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divPieAction" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" hflex="true"
+								style="padding:0 0 5px 0;">
+								<caption label="Decision Making" />
+								<n:div
+									style=" 100%; height: 400px; overflow: hidden;"
+									id="divPieDecision" xmlns:n="native" />
+							</groupbox>
+						</hbox>
+						<hbox width="100%">
+							<groupbox mold="3d" hflex="true"
+								style="padding:0 5px 0 0;">
+								<caption label="Loan Summary" />
+								<n:div
+									style=" 100%; height: 200px; overflow: hidden;"
+									id="divLoanSummary" xmlns:n="native" />
+								<n:div
+									style="width: 100%; height: 200px; overflow: hidden;"
+									id="divLoanSummaryChart" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" hflex="true"
+								style="padding: 0 5px 0 0;">
+								<caption label="CBC's Fee" />
+								<n:div
+									style=" 100%; height: 200px; overflow: hidden;"
+									id="divCbcFeeTable" xmlns:n="native" />
+								<n:div
+									style="width: 100%; height: 200px; overflow: hidden;"
+									id="divCbcFee" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" hflex="true"
+								style="padding:0 0 5px 0;">
+								<caption label="Income vs Expense" />
+								<n:div
+									style=" 100%; height: 200px; overflow: hidden;"
+									id="divCbcIncomeExpenseTable" xmlns:n="native" />
+								<n:div
+									style=" 100%; height: 200px; overflow: hidden;"
+									id="divIncomeExpense" xmlns:n="native" />
+							</groupbox>
+							
+						</hbox>
+					</tabpanel>
+					<tabpanel>
+						<vbox width="100%">
+							<groupbox mold="3d" width="100%"
+								vflex="true" hflex="true" style="padding: 0 0 5px 0;">
+								<caption label="Action by Day" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divActionByDay" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" width="100%"
+								vflex="true" hflex="true" style="padding: 0 0 0 0;">
+								<caption label="Action by Branch" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divActionByBranch" xmlns:n="native" />
+							</groupbox>
+						</vbox>
+					</tabpanel>
+					<tabpanel>
+						<hbox width="100%">
+							<groupbox mold="3d" hflex="true"
+								style="padding:0 0 5px 0;">
+								<caption label="Action by Decision" />
+								<n:div
+									style=" 100%; height: 400px; overflow: hidden;"
+									id="divActionByDecision" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" hflex="true"
+								style="padding:0 0 5px 0;">
+								<caption label="Decision by Action" />
+								<n:div
+									style=" 100%; height: 400px; overflow: hidden;"
+									id="divDecisionByAction" xmlns:n="native" />
+							</groupbox>
+						</hbox>
+						<vbox width="100%">
+							<groupbox mold="3d" hflex="true"
+								style="padding:0 0 5px 0;">
+								<caption label="Decision by Branch" />
+								<n:div
+									style=" 100%; height: 400px; overflow: hidden;"
+									id="divDecisionByBranch" xmlns:n="native" />
+							</groupbox>
+						</vbox>
+					</tabpanel>
+					<tabpanel>
+						<vbox width="100%">
+							<groupbox mold="3d" hflex="true"
+								vflex="true" style="padding: 0 0 5px 0;">
+								<caption
+									label="CBC's Fee charged by Branch" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divCbcFeeByBranch" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" hflex="true"
+								vflex="true" style="padding:0 0 0 0;">
+								<caption
+									label="Income vs Expense by Branch" />
+								<n:div
+									style=" 100%; height: 400px; overflow: hidden;"
+									id="divIncomeExpenseByBranch" xmlns:n="native" />
+							</groupbox>
+						</vbox>
+					</tabpanel>
+					<tabpanel>
+						<vbox width="100%">
+							<groupbox mold="3d" width="100%"
+								vflex="true" hflex="true" style="padding: 0 0 5px 0;">
+								<caption label="Total Loan by Branch" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divLoanCountByBranch" xmlns:n="native" />
+							</groupbox>
+							<groupbox mold="3d" width="100%"
+								vflex="true" hflex="true" style="padding: 0 0 0 0;">
+								<caption
+									label="Total Loan Amount by Branch" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divLoanAmountByBranch" xmlns:n="native" />
+							</groupbox>
+						</vbox>
+					</tabpanel>
+					<tabpanel id="tabConsumerCrdRpt" />
+					<tabpanel>
+						<vbox width="100%">
+							<groupbox mold="3d" width="100%"
+								vflex="true" hflex="true" style="padding: 0 0 5px 0;">
+								<caption label="Number of Active Accounts -- Existing clients vs New clients" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divNumActiveAccDetail" xmlns:n="native" />
+								<n:div
+									style="width: 100%; height: 400px; overflow: hidden;"
+									id="divNumActiveAcc" xmlns:n="native" />	
+							</groupbox>
+						</vbox>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</vbox>
+		
+		<include src="/kbureau/report/report.zul"></include>
+
+		<menupopup id="menu">
+			<menuitem image="/img/app/edit.png" label="View Report"
+				onClick="@command('onView')" visible="@load(vm.priviledge.canRead)" />
+		</menupopup>
+	</window>
+</zk>

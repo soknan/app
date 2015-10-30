@@ -1,0 +1,152 @@
+<zk>
+	<window id="kBureauUserList" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.admin.CbcAuthenVM')"
+		validationMessages="@id('vmsgs')">
+		<vbox id="mVbox" hflex="true">
+			<groupbox>
+				<caption label="Filter" />
+				<n:table xmlns:n="native">
+					<n:tr>
+						<n:td width="60px">Branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.branches)"
+								style="margin:0 10px 0 0" readonly="false"
+								value="@bind(vm.param.branch.description)"
+								selectedItem="@bind(vm.param.branch)"
+								onChange="@command('onChangeBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td width="80px">Sub branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.subBranches)"
+								style="margin:0 10px 0 0" readonly="false"
+								value="@load(vm.param.subBranch.description)"
+								selectedItem="@bind(vm.param.subBranch)"
+								onChange="@command('onChangeSubBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td width="40px">Flag:</n:td>
+						<n:td>
+							<combobox model="@load(vm.flags)"
+							style="margin:0 10px 0 0"
+								readonly="false" value="@load(vm.param.flag.description)"
+								selectedItem="@bind(vm.param.flag)"
+								onChange="@command('onChangeFlag')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td><checkbox label="include reserve" checked="@bind(vm.param.includeReserve)" onCheck="@command('doSearch')"/> </n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<toolbar>
+				<toolbarbutton label="New" image="/img/app/new.png"
+					onClick="@command('onNew')"
+					visible="@load(vm.priviledge.canCreate)" />
+				<toolbarbutton label="Open" image="/img/app/edit.png"
+					disabled="@load(vm.selected.id eq 0)" onClick="@command('onEdit')"
+					visible="@load(vm.priviledge.canRead)" />
+				<toolbarbutton label="Delete" image="/img/app/bin18.png"
+					disabled="@load(vm.selected.id eq 0)"
+					onClick="@command('onConfirmDelete')"
+					visible="@load(vm.priviledge.canDelete)" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Look for: " />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)" />
+				<toolbarbutton id="searchSubject" label="Find"
+					image="/img/app/find.png" onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear"
+					image="/img/kbureau/edit-clear.png" onClick="@command('onClear')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox model="@load(vm.rows)" readonly="false"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('onChangeRowPerPage')" width="40px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+
+			<listbox id="lstCbc" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selected)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[
+	lstCbc.pagingChild.mold = "os";
+]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Flag" width="50px"
+						sort="auto(remainDay)" />
+					<listheader label="Username" sort="auto(username)"
+						width="80px" />
+					<listheader label="Days left" width="60px"
+						sort="auto(remainDay)" />
+					<listheader label="Last Reseted" width="100px" />
+					<listheader label="Expired" width="100px" />
+					<listheader label="Code" sort="auto(subBranchCode)"
+						width="50px" />
+					<listheader label="Sub Branch"
+						sort="auto(subBranchCode)" width="120px" />
+					<listheader label="Branch" sort="auto(branchCode)" />
+
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onEdit')">
+						<listcell image="@load(item.flagImg)"
+							tooltiptext="@load(item.flagMsg)" />
+						<listcell label="@load(item.username)" />
+						<listcell label="@load(item.remainDay)" />
+						<listcell label="@load(item.resetedDate)" />
+						<listcell label="@load(item.expiredDate)" />
+						<listcell label="@load(item.subBranchCode)" />
+						<listcell label="@load(item.subBranchName)" />
+						<listcell label="@load(item.branchCode)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+
+		<include src="/kbureau/admin/CbcAuthen.zul" />
+		<window title="Delete Confirmation" mode="modal" border="normal"
+			width="300px" visible="@load(not empty vm.msgDelete)">
+			<vbox hflex="true">
+				<hbox height="50px" style="padding: 10px 0 0 0;">
+					<image src="/img/app/bin32.png" />
+					<label value="@load(vm.msgDelete)" />
+				</hbox>
+				<hbox pack="center" hflex="true">
+					<button label="Yes" onClick="@command('onDelete')" />
+					<button label="No"
+						onClick="@command('onCancelDelete')" />
+				</hbox>
+			</vbox>
+		</window>
+
+		<menupopup id="menuKBureauUser">
+			<menuitem image="/img/app/new16.png" label="New"
+				onClick="@command('onNew')"
+				visible="@load(vm.priviledge.canCreate)" />
+			<menuitem image="/img/app/bin16.png" label="Delete"
+				onClick="@command('onConfirmDelete')"
+				visible="@load(vm.priviledge.canDelete)" />
+		</menupopup>
+
+	</window>
+</zk>
+

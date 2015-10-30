@@ -1,0 +1,22 @@
+<?page title="Test XML Generator" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Test XML Generator" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('test.XmlVM')">
+
+		<vbox>
+			<textbox value="@bind(vm.loanID)" placeholder="Loan ID" constraint="no empty"/>
+			<textbox value="@bind(vm.refNo)" placeholder="Member Ref." constraint="no empty"/>
+
+			<hbox>
+				<button label="Generate XML"
+					onClick="@command('onGenerateXML')" />
+				<button label="Enquiry"
+					onClick="@command('onRequestCBC')" />
+			</hbox>
+
+		</vbox>
+
+
+	</window>
+</zk>

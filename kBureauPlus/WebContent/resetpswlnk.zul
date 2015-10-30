@@ -1,0 +1,94 @@
+<?link href="/img/app/favicon.ico" rel="shortcut icon" type="image/x-icon"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css.dsp?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/main.css?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/resetpsw.css?v=${desktop.webApp.build}"?>
+<zk xmlns:c="client">
+	<zscript><![CDATA[
+	String serverRoot = Executions.getCurrent().getContextPath();
+	class MyConst implements Constraint {
+		//Constraint//
+		public void validate(Component comp, Object value) {
+			if (value != null && ((String) value).length() < 6) {
+				throw new WrongValueException(comp,
+						"Password must be at least 6 characters");
+
+			}
+		}
+	}
+	Constraint ctt = new MyConst();
+]]></zscript>
+
+	<window id="singIn" border="none"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.core.util.authentication.viewmodel.ResetPswVM')">
+		<n:div xmlns:n="native">
+			<n:div id="outer-frame">
+				<n:div id="page-logo-header">
+					<n:a href="${serverRoot}">
+						<n:img id="db-logo" alt="kBureau Plus"
+							src="img/kbureau/KREDIT_short.png" />
+					</n:a>
+					<n:div id="header-border-div" />
+
+				</n:div>
+				<n:div id="login-container">
+					<n:div class="splash">
+						<n:img src="img/kbureau/resetpswlnk.png"
+							id="login_kite" alt="kBureau Plus" />
+					</n:div>
+					<n:form action="" method="post">
+						<!--  <n:div class="title-text">
+							kBureau Login
+							</n:div>
+						-->
+						<n:p style="font-size:16px">
+							Set your new password.
+						</n:p>
+						<n:div id="login-partial">
+							<n:div class="k-label-b login_label">
+								New Password
+							</n:div>
+							<n:div id="email-field"
+								class="sick-input">
+								<textbox type="password"
+									sclass="kh-textbox txtBox" value="@bind(vm.password)"
+									constraint="${ctt}" c:onChanging="meterUpdate(event)" />
+							</n:div>
+
+							<n:div class="k-label-b login_label">
+								Re-type Password
+							</n:div>
+							<n:div id="password-field"
+								class="sick-input">
+								<textbox type="password"
+									sclass="kh-textbox txtBox" value="@bind(vm.confirmPassword)"
+									onOK="@command('doResetPassword')"/>
+							</n:div>
+							<n:div>
+								<vlayout>
+									<div id="meter" sclass="meter"
+										width="360px">
+										<div sclass="meter-inner"></div>
+									</div>
+									<label id="msg" />
+								</vlayout>
+							</n:div>
+							<n:div id="login-footer" class="clearfix">
+								<button label="Submit"
+									onClick="@command('doResetPassword')"
+									style="float:right; margin-top:-10px;" height="30px"
+									width="80px" />
+								<n:div>
+									<label value="@load(vm.message)"
+										sclass="errormsg" />
+								</n:div>
+							</n:div>
+						</n:div>
+						<n:br class="clear" />
+					</n:form>
+				</n:div>
+			</n:div>
+		</n:div>
+	</window>
+	<script src="/js/psw_str.js"></script>
+</zk>

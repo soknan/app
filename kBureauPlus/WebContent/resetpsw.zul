@@ -1,0 +1,98 @@
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:c="client">
+	<zscript>
+		<![CDATA[
+	class MyConst implements Constraint {
+		//Constraint//
+		public void validate(Component comp, Object value) {
+			if (value != null && ((String) value).length() < 6) {
+				throw new WrongValueException(comp,
+						"Password must be at least 6 characters");
+
+			}
+		}
+	}
+	Constraint ctt = new MyConst();
+]]>
+</zscript>
+	<window id="resetPsw" border="none"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.core.util.authentication.viewmodel.ResetPswVM')"
+		>
+		<div visible="@load(vm.message.indexOf('success') eq -1)">
+			<n:div xmlns:n="native" class="bg_reset">
+				<n:div class="k-login">
+					<n:span class="k-login-key">
+						Please reset your password.
+					</n:span>
+					<n:table class="myLabel" cellspacing="10">
+						<n:tr>
+							<n:td width="90px">Password:</n:td>
+							<n:td>
+								<textbox type="password"
+									sclass="kh-textbox txtBox" value="@bind(vm.password)"
+									constraint="${ctt}" c:onChanging="meterUpdate(event)" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>Re-type:</n:td>
+							<n:td>
+								<textbox id="retypePsw" type="password"
+									sclass="kh-textbox txtBox" value="@bind(vm.confirmPassword)"
+									onOK="@command('onOK')" onCancel="@command('onCancel')" />
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td>Strength:</n:td>
+							<n:td>
+								<vlayout>
+									<div id="meter" sclass="meter"
+										width="250px">
+										<div sclass="meter-inner"></div>
+									</div>
+									<label id="msg" />
+								</vlayout>
+							</n:td>
+						</n:tr>
+					</n:table>
+					<n:div id="reset-footer" class="clearfix">
+						<button label="Submit"
+							onClick="@command('doResetPassword')"
+							style="float:right; margin-right:64px; margin-top:-10px;"
+							height="30px" width="80px" />
+						<n:div id="remember-me">
+							<label
+								value="@load(vm.message)" sclass="errormsg" />
+						</n:div>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<div visible="@load(vm.message.indexOf('success') gt -1)">
+			<n:div xmlns:n="native" class="bg_reset">
+				<n:div class="k-reseted k-reseted-msg">
+					<n:p style="margin-top:30px;">Congratulation!</n:p>
+					<n:p>
+						You have reset your password successfully.
+					</n:p>
+					<n:p>
+						Please use this new password for login next
+						time.
+					</n:p>
+					<n:div id="reset-footer" class="clearfix">
+						<button label="Ok"
+							style="float:right; margin-right:64px; margin-top:-10px;"
+							height="30px" width="80px">
+							<attribute name="onClick">
+						<![CDATA[
+	Executions.sendRedirect("index.zul");
+]]>
+						</attribute>
+						</button>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+	</window>
+	<script src="/js/psw_str.js"></script>
+</zk>

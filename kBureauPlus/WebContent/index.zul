@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Bureau Plus"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<?link href="/img/app/favicon.ico" rel="shortcut icon" type="image/x-icon"?>
+<?link rel="stylesheet" type="text/css" href="/macros/zksandbox.css.dsp?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css.dsp?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/customize.css?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/resetpsw.css?v=${desktop.webApp.build}"?>
+<?script type="text/javascript" src="/macros/zksandbox.js.dsp?v=${desktop.webApp.build}"?>
+<?script type="text/javascript" content="jq.IE6_ALPHAFIX=/24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png|normal.png|normal-sel.png|large.png|large-sel.png/;"?>
+<?component name="category" extends="button" widgetClass="zksandbox.Category" mold="default"?>
+<?component name="categorybar" extends="div" widgetClass="zksandbox.Categorybar"?>
+<?script type="text/javascript" src="/js/amcharts.js?v=${desktop.webApp.build}"?>
+<?script type="text/javascript" src="/js/chart.js?v=${desktop.webApp.build}"?>
+
+<zk>
+	<zscript><![CDATA[
+	String themeSClass = org.zkoss.zkplus.theme.Themes.getCurrentTheme();
+	String serverRoot = Executions.getCurrent().getContextPath();
+]]></zscript>
+
+	<borderlayout id="main" sclass="${themeSClass}"
+		apply="org.zkoss.zksandbox.MainLayoutComposer" xmlns:n="native">
+
+		<north border="none" size="70px" sclass="demo-header"
+			collapsible="true" xmlns:n="native">
+			<div>
+				<div sclass="demo-logo pointer">
+					<n:div>
+						<n:a href="${serverRoot}">
+							<image src="/img/KREDIT_small.png"
+								sclass="k-logo" />
+						</n:a>
+					</n:div>
+					<!--  <n:div class="k-version">version 2.1</n:div>-->
+				</div>
+				<n:div id="reglang_box"
+					style='${main$MainLayoutComposer.lastLoginDate eq ""?"display:none;":""}'>
+					<n:div class="item username">
+						Login as:
+						<label sclass="item"
+							value="${main$MainLayoutComposer.loginName}" />
+					</n:div>
+
+					<n:div class="item">
+						Last Login:
+						<label id="lbLoginDate" sclass="item"
+							value="${main$MainLayoutComposer.lastLoginDate}" />
+					</n:div>
+
+				</n:div>
+
+				<categorybar zclass="demo-categorybar" id="header">
+					<category zclass="demo-category"
+						forEach="${main$MainLayoutComposer.bookmarkRoles}"
+						id="${each.bookmarkCode}" image="${each.icon}"
+						label="${each.label}" forward="onClick=main.onCategorySelect" />
+				</categorybar>
+			</div>
+		</north>
+		<west id="Menu" title="Menu" size="200px" flex="true" splittable="true" minsize="200"
+			maxsize="300" collapsible="true" open="false">
+			<panel>
+				<panelchildren>
+					<n:div id="sub-menu">
+						<listbox id="itemList" oddRowSclass="non-odd"
+							sclass="demo-items"
+							itemRenderer="${main$MainLayoutComposer.itemRenderer}"
+							vflex="true">
+							<custom-attributes
+								org.zkoss.zul.listbox.rod="false" />
+						</listbox>
+					</n:div>
+				</panelchildren>
+			</panel>
+		</west>	
+		<center autoscroll="true" flex="true">
+			<include style="padding:3px;" id="xcontents" />
+		</center>
+	</borderlayout>
+</zk>

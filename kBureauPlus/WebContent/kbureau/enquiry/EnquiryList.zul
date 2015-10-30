@@ -1,0 +1,172 @@
+<?page title="Enquiry List" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+<tabbox>
+	<tabs>
+		<tab label="Customer Enquiry"/>
+		<tab label="Guarantor Enquiry"/>
+		<tab label="Co-Borrower Enquiry"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+	<window id="enqList" width="100%" height="500px"
+apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.enquiry.EnquiryVM')">
+		<vbox width="100%" vflex="true" hflex="true" xmlns:n="native">
+			<groupbox open="true" hflex="true">
+				<caption label="Filter" />
+				<n:table width="100%">
+					<n:tr>
+						<n:td width="80px">Branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.branches)"
+								readonly="false" value="@bind(vm.param.branch.description)"
+								selectedItem="@bind(vm.param.branch)"
+								onChange="@command('onChangeBranch')" disabled="@load(vm.login.branchCode ne '*')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						
+						<n:td width="80px">
+							<label visible="@load(vm.login.role eq 'ADM')" value="Start date:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<datebox value="@bind(vm.param.startDate)"
+								onChange="@command('onChangeStartDate')" format="dd-MM-yyyy" visible="@load(vm.login.role eq 'ADM')"/>
+						</n:td>
+						<n:td width="100px">
+							<label value="Start amount:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<textbox style="text-align:right;"
+								value="@bind(vm.param.fromAmount)" constraint="${ctt}"
+								onChange="@command('onChangeFromAmount')" />
+						</n:td>
+						<n:td width="80px">
+							<label value="Currency:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.currencies)"
+								readonly="false" value="@load(vm.param.currency.description)"
+								selectedItem="@bind(vm.param.currency)"
+								onChange="@command('onChangeCurrency')" width="70px">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>Sub branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.subBranches)"
+								readonly="false" value="@load(vm.param.subBranch.description)"
+								selectedItem="@bind(vm.param.subBranch)"
+								onChange="@command('onChangeSubBranch')" disabled="@load(vm.login.subBranchCode ne '*')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						
+						<n:td>
+							<label visible="@load(vm.login.role eq 'ADM')" value="End date:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<datebox value="@bind(vm.param.endDate)"
+								onChange="@command('onChangeEndDate')" format="dd-MM-yyyy" visible="@load(vm.login.role eq 'ADM')"/>
+						</n:td>
+						<n:td>
+							<label value="End amount:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<textbox style="text-align:right;"
+								value="@bind(vm.param.toAmount)" constraint="${ctt}"
+								onChange="@command('onChangeToAmount')" />
+						</n:td>
+						<n:td></n:td>
+						<n:td></n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="View" image="/img/app/edit.png" onClick="@command('onView')"/>	
+				<space bar="true" sclass="k-ver-bar" />
+				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAll')" />
+				
+				<space bar="true" sclass="k-ver-bar" />	
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+			
+			<listbox id="lstEnquiry" model="@load(vm.modelList)" selectedItem="@bind(vm.selectedEnquiry)" hflex="true" mold="paging" vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstEnquiry.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="LoanID" sort="auto(loanID)" style="text-align: center" />
+					<listheader label="Ref. Number" sort="auto(memberReference)" style="text-align: center" />
+					<listheader label="CIF" sort="auto(customerNo)" style="text-align: center"  width= "6%"/>
+					<listheader label="AlternativeAcc" sort="auto(alterAcc)" style="text-align: center" />
+					<listheader label="Name" sort="auto(fullNameKH)" style="text-align: center" width="8%"/>
+					<listheader label="Amount" sort="auto(amount)" style="text-align: center"  width="8%"/>
+					<listheader label="Currency" sort="auto(currency)" style="text-align: center" width= "5%" />
+					<listheader label="Branch" sort="auto(branchNameEN)" style="text-align: center" />
+					<listheader label="Sub Branch" sort="auto(subNameEN)" style="text-align: center" />
+					<listheader label="Value Date" sort="auto(valueDate)" style="text-align: center" />
+					<listheader label="Product" sort="auto(product)" style="text-align: center" />
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuEnquiry"
+						onDoubleClick="@command('onView')">
+						<listcell label="@load(item.loanID)" />
+						<listcell label="@load(item.memberReference)" />
+						<listcell label="@load(item.customerNo)" />
+						<listcell label="@load(item.alterAcc)" />
+						<listcell label="@load(item.fullNameKH)" />
+						<listcell label="@load(item.amountformat) @converter('formatedNumber', format='###,##0.00')" style="text-align: right" />
+						<listcell label="@load(item.currency)" />
+						<listcell label="@load(item.branchNameEN)"/>
+						<listcell label="@load(item.subNameEN)"/>
+						<listcell label="@load(item.valueDate) @converter('formatedDate', format='dd-MM-yyyy')"/>
+						<listcell label="@load(item.product)"/>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+		</tabpanel>
+		<tabpanel>
+			<include src="/kbureau/guarantor/GuarantorList.zul"/>
+		</tabpanel>
+		<tabpanel>
+			<include src="/kbureau/coborrower/CoborrowerList.zul"/>
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+</zk>

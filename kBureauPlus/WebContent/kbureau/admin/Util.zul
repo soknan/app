@@ -1,0 +1,106 @@
+<?page title="Utilities" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.admin.UtilVM')"
+		validationMessages="@id('vmsgs')" width="100%" xmlns:n="native">
+		<hbox width="100%">
+			<groupbox mold="3d" hflex="true"
+				style="padding: 0 0 5px 0;">
+				<caption label="Encryption" />
+				<n:table cellspacing="5" class="tbl_util">
+					<n:tr>
+						<n:td width="30px">Text:</n:td>
+						<n:td>
+							<textbox multiline="true" rows="3"
+								width="100%" value="@bind(vm.txtEnc)" />
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>Salt:</n:td>
+						<n:td>
+							<textbox width="100%"
+								value="@bind(vm.saltEnc)" />
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td></n:td>
+						<n:td align="right">
+							<button label="Encrypt"
+								onClick="@command('encrypt')" />
+						</n:td>
+					</n:tr>
+				</n:table>
+				<n:div class="k-hr">
+					<n:div class="z-groupbox-hm">
+						<n:div class="z-groupbox-header">
+							<n:div class="z-caption">
+								<n:span class="z-caption-cnt">
+									<n:span class="z-label">
+										Result:
+									</n:span>
+								</n:span>
+							</n:div>
+						</n:div>
+					</n:div>
+				</n:div>
+				<n:table cellspacing="5" class="tbl_util">
+					<n:tr>
+						<n:td>
+							<textbox multiline="true" rows="3"
+								width="100%" value="@load(vm.resultEnc)" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+
+			<groupbox mold="3d" hflex="true"
+				style="padding: 0 0 5px 0;">
+				<caption label="Decryption" />
+				<n:table cellspacing="5" class="tbl_util">
+					<n:tr>
+						<n:td width="30px">Text:</n:td>
+						<n:td>
+							<textbox multiline="true" rows="3"
+								width="100%" value="@bind(vm.txtDec)" />
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>Salt:</n:td>
+						<n:td>
+							<textbox width="100%"
+								value="@bind(vm.saltDec)" />
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td></n:td>
+						<n:td align="right">
+							<button label="Decrypt"
+								onClick="@command('decrypt')" />
+						</n:td>
+					</n:tr>
+				</n:table>
+				<n:div class="k-hr">
+					<n:div class="z-groupbox-hm">
+						<n:div class="z-groupbox-header">
+							<n:div class="z-caption">
+								<n:span class="z-caption-cnt">
+									<n:span class="z-label">
+										Result:
+									</n:span>
+								</n:span>
+							</n:div>
+						</n:div>
+					</n:div>
+				</n:div>
+				<n:table cellspacing="5" class="tbl_util">
+					<n:tr>
+						<n:td>
+							<textbox multiline="true" rows="3"
+								width="100%" value="@load(vm.resultDec)" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+		</hbox>
+	</window>
+</zk>

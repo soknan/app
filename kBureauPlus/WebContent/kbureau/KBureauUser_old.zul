@@ -1,0 +1,37 @@
+<zk>
+	<window id="kBureauUser" title="@load(vm.winTitle)" border="normal" width="700px" mode="modal" maximizable="true"
+	visible="@bind(vm.visible)" closable="true" onClose="self.setVisible(false); event.stopPropagation();">
+	<toolbar>
+			<toolbarbutton label="New" image="/img/app/new.png" onClick="@command('onNewUser')" visible="@load(vm.priviledge.canCreate)"/>
+			<toolbarbutton label="Save" image="/img/app/save.png" disabled="@load(not vm.canSave)" onClick="@command('onSave')" visible="@load(vm.priviledge.canUpdate)"/>
+			<toolbarbutton label="Delete" image="/img/app/delete.png" disabled="@load(vm.selectedUser.id eq 0)" onClick="@command('confirmDelete')" visible="@load(vm.priviledge.canDelete)"/>
+			<toolbarbutton label="Cancel" image="/img/app/cancel.png" onClick="@command('cancelEdit')" visible="@load(vm.canSave)"/>
+		</toolbar>
+		<grid hflex="true" style="border:none;" form="@id('fuser') @load(vm.selectedUser) @save(vm.selectedUser, before='onSave')">
+			<columns>
+				<column width="80px"/>
+				<column />
+				<column width="80px"/>
+				<column />
+			</columns>
+			<rows>
+				<row>
+					Username: 
+					<textbox id="txtUsername" value="@bind(fuser.username) @validator(vm.usernameValidator)" width="100%" onChange="@command('notifyChangingUserInfo')"/> 
+					Email: 
+					<textbox id="txtEmail" value="@bind(fuser.email) @validator(vm.emailValidator)" width="100px" onChange="@command('notifyChangingUserInfo')"/>
+				</row>
+				<row>
+					Password:
+					<textbox value="@bind(fuser.password)" type="password" width="100%" onChange="@command('notifyChangingUserInfo')"/>
+					Sub Branch Code: 
+					<textbox value="@bind(fuser.subBranchCode)" width="100%" onChange="@command('notifyChangingUserInfo')"/> 
+				</row>
+			</rows>
+		</grid>
+		<groupbox id="resultMsg" visible="@load(not empty vm.resultMsg)" style="align:center;">
+			<div align="center"><hlayout><image src="@load(vm.resultIcon)"/> <label sclass="@load(vm.resultMsgClass)" value="@load(vm.resultMsg)"/></hlayout></div>
+		</groupbox>
+	</window>
+
+</zk>

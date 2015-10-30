@@ -1,0 +1,244 @@
+<zk>
+
+	<zscript>
+		<![CDATA[
+	class MyConst implements Constraint {
+		//Constraint//
+		public void validate(Component comp, Object value) {
+			if (value != null && !((String) value).isEmpty()) {
+				if (!((String) value).matches(".+@.+\\.[a-z]+"))
+					throw new WrongValueException(comp,
+							"Please input valid email address.");
+			}
+		}
+	}
+	Constraint constraintEmail = new MyConst();
+	void closeWindow() {
+
+		kBureauUser.setVisible(false);
+		Component comTabbox = kBureauUser.getFellow("t0");
+
+		Component com = comTabbox.getFellow("t1").getFellow("tValidity")
+				.getFirstChild();
+		if (com != null) {
+			com.detach();
+			Tab t = (Tab) comTabbox.getFirstChild().getFellow("tInfo");
+			t.setSelected(true);
+		}
+
+		event.stopPropagation();
+	}
+]]>
+</zscript>
+
+	<window id="kBureauUser" title="@load(vm.winTitle)" border="normal"
+		width="600px" mode="modal" maximizable="false"
+		visible="@bind(vm.visible)" closable="true"
+		onClose="closeWindow();">
+
+		<tabbox id="t0">
+			<tabs>
+				<tab id="tInfo" label="Info" />
+				<tab label="Validity"
+					visible="@load(vm.selectedUser.id > 0)">
+					<attribute name="onClick">
+{
+<![CDATA[
+	if (tValidity.getChildren().isEmpty()) {
+		Component comp = Executions.createComponents(
+				"/kbureau/admin/UserValidity.zul", kBureauUser, null);
+		tValidity.appendChild(comp);
+		resultMsg.setVisible(false);
+	}
+]]>
+}
+</attribute>
+				</tab>
+			</tabs>
+			<tabpanels id="t1">
+				<tabpanel>
+					<vbox>
+						<toolbar>
+							<toolbarbutton label="New"
+								image="/img/app/new.png" onClick="@command('onNewUser')"
+								visible="@load(vm.priviledge.canCreate)" />
+							<toolbarbutton label="Save"
+								image="/img/app/save.png" onClick="@command('onSave')"
+								visible="@load(vm.priviledge.canUpdate)" />
+							<toolbarbutton label="Delete"
+								image="/img/app/delete.png"
+								disabled="@load(vm.selectedUser.id eq 0)"
+								onClick="@command('onConfirmDelete')"
+								visible="@load(vm.priviledge.canDelete)" />
+							<toolbarbutton label="Email"
+								image="/img/kbureau/email_production.png"
+								onClick="@command('onEmailPermanent')"
+								disabled="@load(not vm.canSendEmailPermanent)" />
+							<toolbarbutton label="Cancel"
+								image="/img/app/cancel.png" onClick="@command('onCancelEdit')"
+								visible="@load(vm.canSave)" />
+						</toolbar>
+						<grid id="grdUser" hflex="true"
+							style="border:none;"
+							form="@id('fuser') @init(vm.userFrm) @load(vm.selectedUser) @save(vm.selectedUser, before='onSave')">
+							<columns>
+								<column width="85px" />
+								<column />
+								<column width="85px" />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									<cell>
+										<label style="color:#636363;">
+											Username
+										</label>
+										<label value="*"
+											sclass="k-asterisk" />
+									</cell>
+									<textbox id="txtUsername"
+										value="@bind(fuser.username)" width="100%"
+										constraint="no empty"
+										onChange="@command('notifyChangeUsername', txtUsername = txtUsername)" />
+									<cell>
+										<label style="color:#636363;">
+											Email
+										</label>
+									</cell>
+									<textbox id="txtEmail"
+										value="@bind(fuser.email)" constraint="${constraintEmail}"
+										width="100%"
+										onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername)" />
+								</row>
+								<row>
+									<cell>
+										<label style="color:#636363;">
+											Branch
+										</label>
+										<label value="*"
+											sclass="k-asterisk" />
+									</cell>
+									<combobox id="cmbBranch"
+										model="@load(vm.fBranches)" autocomplete="true"
+										value="@bind(fuser.branch.description)"
+										selectedItem="@bind(fuser.branch)"
+										onChange="@command('onChangeFBranch', cmbBranch = self, cmbSubBranch = cmbSubBranch)"
+										width="100%">
+										<template name="model"
+											var="t">
+											<comboitem
+												label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+									<cell>
+										<label style="color:#636363;">
+											First name
+										</label>
+									</cell>
+									<textbox value="@bind(fuser.fName)"
+										width="100%" />
+								</row>
+								<row>
+									<cell>
+										<label style="color:#636363;">
+											Sub branch
+										</label>
+										<label value="*"
+											sclass="k-asterisk" />
+									</cell>
+									<combobox id="cmbSubBranch"
+										model="@load(vm.fSubBranches)" autocomplete="true"
+										value="@bind(fuser.subBranch.description)"
+										selectedItem="@bind(fuser.subBranch)"
+										onChange="@command('onChangeFSubBranch', cmbBranch = cmbBranch)"
+										width="100%">
+										<template name="model"
+											var="t">
+											<comboitem
+												label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+									<cell>
+										<label style="color:#636363;">
+											Last name
+										</label>
+									</cell>
+									<textbox value="@bind(fuser.lName)"
+										width="100%" />
+								</row>
+								<row>
+									<cell>
+										<label style="color:#636363;">
+											Status
+										</label>
+									</cell>
+									<combobox
+										model="@load(vm.fStatuses)" readonly="true"
+										value="@load(fuser.statusObj.description)"
+										selectedItem="@bind(fuser.statusObj)" width="100%">
+										<template name="model"
+											var="t">
+											<comboitem
+												label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+									<cell>
+										<label style="color:#636363;">
+											Sex
+										</label>
+									</cell>
+									<combobox model="@load(vm.fSexes)"
+										readonly="true" value="@bind(fuser.sexObj.description)"
+										selectedItem="@bind(fuser.sexObj)"
+										onChange="@command('onChangeFSex')" width="100%">
+										<template name="model"
+											var="t">
+											<comboitem
+												label="@load(t.description)" />
+										</template>
+									</combobox>
+								</row>
+								<row>
+									User type
+									<radiogroup width="100%"
+										selectedIndex="@bind(fuser.userType)">
+										<radio label="Permanent"
+											style="text-align:left;" />
+										<radio label="Acting"
+											style="padding: 0 0 0 30px;" />
+									</radiogroup>
+									<!-- 
+										Note
+										<textbox id="txtNote" value="@bind(fuser.note)"
+										width="100%" multiline="true"/>
+									-->
+								</row>
+								<row>
+									Note:
+									<cell colspan="3">
+										<textbox
+											value="@bind(fuser.note)" width="100%" multiline="true" />
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</vbox>
+
+					<groupbox id="resultMsg"
+						visible="@load(not empty vm.resultMsg)" style="align:center;">
+						<div align="center">
+							<hlayout>
+								<image src="@load(vm.resultIcon)" />
+								<label sclass="@load(vm.resultMsgClass)"
+									value="@load(vm.resultMsg)" />
+							</hlayout>
+						</div>
+					</groupbox>
+				</tabpanel>
+				<tabpanel id="tValidity" />
+			</tabpanels>
+		</tabbox>
+	</window>
+
+</zk>
+

@@ -1,0 +1,67 @@
+.k-clear {
+	clear: both;
+}
+
+#reset-footer {
+	margin-top: 10px;
+}
+
+.bg_reset {
+	background-image: url(../img/kbureau/reset_psw.png);
+	width: 532px;
+	height: 348px;
+}
+
+.k-reseted {
+	padding: 100px 24px 0 100px;
+}
+
+.k-reseted-msg {
+	color: #636363;
+	font-family: arial, sans-serif;
+	font-size: 16px;
+	margin: 25px 0 0;
+}
+
+.meter {
+	font-size: 1px;
+	height: 3px;
+}
+
+.meter-inner {
+	width: 0px;
+	height: 3px;
+}
+
+.meter-red .meter-inner {
+	background: red;
+}
+
+.meter-orange .meter-inner {
+	background: orange;
+}
+
+.meter-green .meter-inner {
+	background: green;
+}
+
+#reset_footer .submit {
+	float: right;
+	margin-right: 164px;
+	margin-top: -10px;
+}
+
+#reset_footer .close {
+	float: right;
+	margin-right: 24px;
+	margin-top: -10px;
+}
+
+.txtBoxForgotPsw {
+	margin: 0 30px 0 0;
+	width: 335px;
+}
+
+.forgot-msg {
+	padding: 15px 0 0 0;
+}

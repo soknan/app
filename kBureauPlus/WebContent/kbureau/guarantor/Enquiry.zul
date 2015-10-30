@@ -1,0 +1,513 @@
+<?page title="CBC" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="css/customize.css"?>
+<zk xmlns:n="native">
+	<window id="cbc" title="CBC Enquiry" border="normal" visible="@load(vm.visibleEnquiry)"
+		mode="overlapped" closable="true" width="981px" height="auto" contentStyle="overflow:auto"
+		position="center"
+		onClose="self.setVisible(false); event.stopPropagation();">
+	    
+		<div vflex="true">
+			<n:div id="consumer_head" class="widget-box transparent" style="opacity: 1;">
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td><n:i class="red_label">*</n:i> Enquiry Type</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox width="165px" disabled="true" value="@load(vm.cbcM.enquiryType eq 'NA'?'New Application':'')">
+							</combobox>
+						</n:td>
+						<n:td><n:i class="red_label">*</n:i> Product Type</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox model="@bind(vm.lstProductType)"
+									value="@bind(vm.cbcM.productItem.description) @save(vm.cbcM.productItem.description,before='enquiryConfirmation')" disabled="true" constraint="no empty"
+									selectedItem="@bind(vm.cbcM.productType)"
+									 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@bind(t.description)"
+											description="@bind(t.code)" />
+									</template>
+								</combobox>
+						</n:td>
+						<n:td></n:td>
+						<n:td>
+							<button id="btnEnquiry" label="Request" onClick="@command('enquiryConfirmation')" visible="@load(vm.cbcM.reqButton eq 'sbm')" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>
+							<n:i class="red_label">*</n:i> Number of Applicants
+						</n:td>
+						<n:td border="normal" width="165px" class="k-padding" align="left">
+						    <textbox id="txtNumApp" width="165px" disabled="true" value="@load(vm.cbcM.numberOfApplicants)"/>
+						</n:td>
+						<n:td><n:i class="red_label">*</n:i> Account Type</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox width="165px" disabled="true" value="@load(vm.cbcM.accountType eq 'S'?'Single':'')">
+							</combobox>
+						</n:td>
+						<n:td align="right">CIF </n:td>
+						<n:td align="left"><textbox id="txtCIF" width="159px" disabled="true" value="@load(vm.cbcM.customerNo)"/></n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td><n:i class="red_label">*</n:i> Member Reference</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox id="txt" width="165px" disabled="@load(vm.login.role ne 'ADM')" value="@bind(vm.cbcM.memberReference)" />
+						</n:td>
+						<n:td><n:i class="red_label">*</n:i> Amount</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox id="txtAmount" width="165px" disabled="true" value="@load(vm.cbcM.amount)"/>
+						</n:td>
+						<n:td><n:i class="red_label">*</n:i> Currency</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox width="165px" disabled="true" value="@load(vm.cbcM.currency)">
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vMemberReference)"/></n:td>
+						<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vAmount)"/></n:td>
+						<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vCurrency)"/></n:td>
+					</n:tr>						
+				</n:table>
+			</n:div>
+			
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Consumer1</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:table width="100%" cellspacing="5">
+						<n:tr align="right">
+							<n:td><n:i class="red_label">*</n:i> Applicant Type</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px"  disabled="true" value="@load(vm.cbcM.applicantType eq 'P'?'Primary':'')">
+								</combobox>
+							</n:td>
+							<n:td colspan = "2" style="text-align:center"></n:td>
+							<n:td colspan = "2" style="text-align:center"></n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIdType1)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIdNumber1)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIdExpiry)"/></n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>
+								<n:i class="red_label">*</n:i> ID Type 1
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.idType1Desc)">
+								</combobox>
+							</n:td>
+							<n:td><n:i class="red_label">*</n:i> ID Number 1</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtIdNum1" width="165px" disabled="true" value="@load(vm.cbcM.idNumber1)"/>
+							</n:td>
+							<n:td><n:i class="red_label">*</n:i> ID Expiry Date</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" format="dd-MM-yyyy" disabled="true" value="@load(vm.cbcM.idExpiryDate1)"/>
+							</n:td>
+						</n:tr>
+						
+						<n:tr align="right">
+							<n:td>ID Type 2</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.idType2Desc)">
+								</combobox>
+							</n:td>
+							<n:td>ID Number 2</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtIdNum2" width="165px" disabled="true" value="@load(vm.cbcM.idNumber2)"/>
+							</n:td>
+							<n:td>ID Expiry Date</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" format="dd-MM-yyyy" disabled="true" value="@load(vm.cbcM.idExpiryDate2)"/>
+							</n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>ID Type 3</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.idType3Desc)">
+								</combobox>
+							</n:td>
+							<n:td>ID Number 3</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtIdNum3" width="165px" disabled="true" value="@load(vm.cbcM.idNumber3)"/>
+							</n:td>
+							<n:td>ID Expiry Date</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" format="dd-MM-yyyy" disabled="true" value="@load(vm.cbcM.idExpiryDate3)"/>
+							</n:td>
+						</n:tr>
+					</n:table>
+					<n:table width="100%" cellspacing="5" id="tbl_gotoright">
+						<n:tr align="right">
+							<n:td><n:i class="red_label">*</n:i> Date of Birth</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" format="dd-MM-yyyy" disabled="true" value="@load(vm.cbcM.dob)"/>
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vDateofbirth)"/></n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td><n:i class="red_label">*</n:i> Gender</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.sex eq 'M'?'Male':'Female')">
+								</combobox>
+							</n:td>
+							<n:td><n:i class="red_label">*</n:i> Marital Status</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@bind(vm.lstMaritalStatus)"
+									value="@bind(vm.cbcM.maritalStatusItem.description) @save(vm.cbcM.maritalStatusItem.description,before='enquiryConfirmation')"  disabled="true" constraint="no empty"
+									selectedItem="@bind(vm.cbcM.maritalStatus)" width="165px">
+									<template name="model" var="t">
+										<comboitem label="@bind(t.description)"
+											description="@bind(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td><n:i class="red_label">*</n:i> Nationality Code</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px"  disabled="true" value="@load(vm.cbcM.nationalityCode)">
+								</combobox>
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vGender)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vMaritalStatus)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vNationality)"/></n:td>
+						</n:tr>
+					</n:table>
+					<n:table width="100%" cellspacing="5" id="tbl_gotoright2">
+						<n:tr align="right">
+							<n:td></n:td>
+							<n:td class="top_label"><n:i class="red_label">*</n:i> Country</n:td>
+							<n:td class="top_label"><n:i class="red_label">*</n:i> Province</n:td>
+							<n:td class="top_label"> District</n:td>
+							<n:td class="top_label"> Commune</n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>Place of Birth</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.dCountry)">
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.dProvince)">
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.dDistrict)">
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox width="165px" disabled="true" value="@load(vm.cbcM.dCommune)">
+								</combobox>
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vConCountry)"/></n:td>
+							<n:td style="text-align:center"><label class="red" value="@load(vm.vMessage.vConProvince)"/></n:td>
+							<n:td style="text-align:center"><label class="red" value=""/></n:td>
+							<n:td style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td></n:td>
+							<n:td class="top_label"><n:i class="red_label">*</n:i> Last Name</n:td>
+							<n:td class="top_label"><n:i class="red_label">*</n:i> First Name</n:td>
+							<n:td class="top_label">Second Name</n:td>
+							<n:td class="top_label">Third Name</n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>Khmer Name</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtKhmNam" width="165px" disabled="true" value="@load(vm.cbcM.lastNameKH)"/>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtFNam" width="165px" disabled="true" value="@load(vm.cbcM.firstNameKH)"/>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtSNam" width="165px" disabled="true" />
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtTNam" width="165px" disabled="true" />
+							</n:td>
+						</n:tr>
+						
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vLastNameKH)"/></n:td>
+							<n:td style="text-align:center"><label class="red" value="@load(vm.vMessage.vFirstNameKH)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+						
+						<n:tr align="right">
+							<n:td>English Name</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtEngNam" width="165px" disabled="true" value="@load(vm.cbcM.lastNameEN)"/>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtFEngNam" width="165px" disabled="true" value="@load(vm.cbcM.firstNameEN)"/>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtSEngNam" width="165px" disabled="true" />
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtTEngNam" width="165px" disabled="true" />
+							</n:td>
+						</n:tr>
+						
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vLastNameEN)"/></n:td>
+							<n:td style="text-align:center"><label class="red" value="@load(vm.vMessage.vFirstNameEN)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+					</n:table>
+				</n:div>
+			</n:div>
+			
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Address Details</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td><n:i class="red_label">*</n:i> Address Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.addressType eq 'RESID'?'Residential':'')"></combobox>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Address Line 1</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtAdd" width="165px" disabled="true" value="@load(vm.cbcM.addressline1)"/>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> City
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCit" width="165px"  disabled="true" value="@load(vm.cbcM.city)" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vAddressline1)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vAddCity)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red_label">*</n:i> Country
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.country)"></combobox>
+								</n:td>
+								<n:td>Province</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true" value="@load(vm.cbcM.province)"></combobox>
+								</n:td>
+								<n:td>District</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true" value="@load(vm.cbcM.district)"></combobox>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vAddCountry)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Commune</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true" value="@load(vm.cbcM.commune)">
+									</combobox>
+								</n:td>
+								<n:td>Village</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true" value="@load(vm.cbcM.village)">
+									</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Contact Details</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td align="left" class="ContDet_top_label">Phone Number Type</n:td>
+								<n:td align="left" class="ContDet_top_label">Country Code</n:td>
+								<n:td align="left" class="ContDet_top_label">Area Code</n:td>
+								<n:td align="left" class="ContDet_top_label"><n:i class="red_label">* </n:i>Phone Number</n:td>
+								<n:td align="left" class="ContDet_top_label">Extension</n:td>		
+							</n:tr>
+							<n:tr align="right">
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.phone1.type)">
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.phone1.countryCode)">
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCode1" width="165px" disabled="true" value="@load(vm.cbcM.phone1.areacode)"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtPhon1" width="165px" disabled="true" value="@load(vm.cbcM.phone1.phoneNumber)"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtExt1" width="165px" disabled="true"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "3" style="text-align:left"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:left"><label class="red" value="@load(vm.vMessage.vPhone1)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.phone2.type)">
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.phone2.countryCode)">
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCode2" width="165px" disabled="true" value="@load(vm.cbcM.phone2.areacode)"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtPhon2" width="165px" disabled="true" value="@load(vm.cbcM.phone2.phoneNumber)"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtExt2" width="165px" disabled="true"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "3" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:left"><label class="red" value="@load(vm.vMessage.vPhone2)"/></n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Occupation Details</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td><n:i class="red_label">*</n:i> Employment Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.employmentType eq 'C'?'Current':'')">
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Self Employed</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.selfEmployed eq 'Y'?'Yes':'No')">
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Length of Service</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtLeng" width="165px" value="@load(vm.cbcM.lengthOfServince)" disabled="true"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vSelfEmployed)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vlengthOfServince)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red_label">*</n:i> Occupation</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtOcc" disabled="true" width="165px" value="@load(vm.cbcM.occupation)"/>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Total Monthly Income</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtTotal" width="165px"  disabled="true" value="@load(vm.cbcM.totalMonthlyIncome)"/>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Currency</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.currency1)">
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vOccupation)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIncome)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vOccCurrency)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red_label">*</n:i> Employer Name</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtEmp" width="165px" disabled="true" value="@load(vm.cbcM.employerName)" constraint="${ctt}"/>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Employer Address Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.employerAddressType eq 'RESID'?'Residential':'')">
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Employer Address Line 1</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtEmpAddr1" width="165px" disabled="true" value="@load(vm.cbcM.employerAddressLine1)"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vEmployerName)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vEmployerAddLine1)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red_label">*</n:i> City</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" value="@load(vm.cbcM.employerCity)" disabled="true">
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red_label">*</n:i> Employer Country Code</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="@load(vm.cbcM.employerCountryCode)">
+									</combobox>
+								</n:td>
+								<n:td>Province</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true">
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vCity)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vEmployerCountryCode)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>District</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true">
+									</combobox>
+								</n:td>
+								<n:td>Commune</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true">
+									</combobox>
+								</n:td>
+								<n:td>Village</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px"  disabled="true">
+									</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<include src="/kbureau/report/report.zul"></include>
+	</window>
+</zk>

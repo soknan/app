@@ -1,0 +1,74 @@
+<zk>
+	<window id="kBureauUser" title="@load(vm.winTitle)" border="normal"
+		width="360px" mode="modal" maximizable="false"
+		visible="@bind(vm.visible)" closable="true"
+		onClose="self.setVisible(false); event.stopPropagation();">
+		<vbox>
+			<toolbar>
+				<toolbarbutton label="New" image="/img/app/new.png"
+					onClick="@command('onNew')"
+					visible="@load(vm.priviledge.canCreate)" />
+				<toolbarbutton label="Save" image="/img/app/save.png"
+					onClick="@command('onSave')"
+					visible="@load(vm.priviledge.canUpdate)" />
+				<toolbarbutton label="Delete"
+					image="/img/app/delete.png" disabled="@load(vm.selected.id eq 0)"
+					onClick="@command('onConfirmDelete')"
+					visible="@load(vm.priviledge.canDelete)" />
+				<toolbarbutton label="Cancel"
+					image="/img/app/cancel.png" onClick="@command('onCancelEdit')"
+					visible="@load(vm.canSave)" />
+			</toolbar>
+			<grid id="grdUser" hflex="true" style="border:none;"
+				form="@id('fcbc') @load(vm.selected) @save(vm.selected, before='onSave')">
+				<columns>
+					<column width="80px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<cell>
+							<label style="color:#636363;">
+								Username
+							</label>
+							<label value="*" sclass="k-asterisk" />
+						</cell>
+						<textbox value="@bind(fcbc.username)"
+							constraint="no empty: Please enter username" width="100%" />
+					</row>
+					<row>
+						<cell>
+							<label style="color:#636363;">
+								Password
+							</label>
+							<label value="*" sclass="k-asterisk" />
+						</cell>
+						<textbox value="@bind(fcbc.passwordDec)"
+							constraint="no empty: Please enter password" width="100%" />
+					</row>
+					<row>
+						<cell>
+							<label style="color:#636363;">
+								Sub code
+							</label>
+							<label value="*" sclass="k-asterisk" />
+						</cell>
+						<textbox value="@bind(fcbc.subBranchCode)"
+							constraint="no empty: Please enter sub branch code" width="40px" />
+					</row>
+				</rows>
+			</grid>
+		</vbox>
+		<groupbox id="resultMsg" visible="@load(not empty vm.resultMsg)"
+			style="align:center;">
+			<div align="center">
+				<hlayout>
+					<image src="@load(vm.resultIcon)" />
+					<label sclass="@load(vm.resultMsgClass)"
+						value="@load(vm.resultMsg)" />
+				</hlayout>
+			</div>
+		</groupbox>
+	</window>
+</zk>
+

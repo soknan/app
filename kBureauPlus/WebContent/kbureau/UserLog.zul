@@ -1,0 +1,73 @@
+<zk>
+	<zscript>
+		<![CDATA[
+            String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
+            ListModelList model = new ListModelList(userName);
+		]]>
+	</zscript>
+
+<window id="kBureauUserList" apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.UserLogVM')" validationMessages="@id('vmsgs')">
+	<vbox hflex="true">
+		<toolbar>
+			<toolbarbutton label="View Message" image="/img/app/edit.png" disabled="@load(vm.selectedLog.id eq 0)" onClick="@command('onViewMessage')" visible="@load(vm.priviledge.canRead)"/>
+			<space bar="true" sclass="k-ver-bar"/>
+			<label value="Duration as Day(s): "/>
+			<intbox width="30px" onOK="@command('doSearch')"
+				focus="true" value="@bind(vm.day)"/>
+			<label value="Look for: "/>
+			<textbox onOK="@command('doSearch')"
+				focus="true" sclass="ksearch" value="@bind(vm.filter)"/>
+			<toolbarbutton label="Find" image="/img/app/find.png" onClick="@command('doSearch')"/>
+		</toolbar>	
+		  
+		<listbox model="@load(vm.userLogs)" selectedItem="@bind(vm.selectedLog)" hflex="true">
+			<listhead sizable="true">
+				<listheader label="DateTime" sort="auto(dateTime)" width="150px"/>
+				<listheader label="User ID" sort="auto(userId)" width="80px"/>
+				<listheader label="Login Name" sort="auto(loginName)" width="100px"/>
+				<listheader label="Sub Branch" sort="auto(subBranch)" width="120px"/>
+				<listheader label="PC Name" sort="auto(pcName)" width="150px"/>
+				<listheader label="PC Username" sort="auto(pcUsername)" width="150px"/>
+				<listheader label="App Version" sort="auto(appVersion)" width="90px"/>
+				<listheader label="Message"/>
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menu" onDoubleClick="@command('onViewMessage')">
+					 <listcell label="@load(item.dateTime)"/>
+					 <listcell label="@load(item.userId)"/>
+					 <listcell label="@load(item.loginName)"/>
+					 <listcell label="@load(item.subBranch)"/>
+					 <listcell label="@load(item.pcName)"/>
+					 <listcell label="@load(item.pcUsername)"/>
+					 <listcell label="@load(item.appVersion)"/>
+					 <listcell label="@load(item.message)"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter label="@load(vm.count)" sclass="k-listfooter-right"/>
+			</listfoot>
+		</listbox>
+	</vbox>
+	
+	<window title="Message" mode="modal" border="normal" width="400px" visible="@load(vm.visible)" closable="true" onClose="self.setVisible(false); event.stopPropagation();">
+		<groupbox id="resultMsg" style="align:center;">
+			<vbox hflex="true">
+				<label value="@load(vm.selectedLog.message)"/>
+			</vbox>
+		</groupbox>
+	</window>
+	
+	<menupopup id="menu">
+		<menuitem image="/img/app/edit.png" label="View Message" onClick="@command('onViewMessage')" visible="@load(vm.priviledge.canRead)"/>
+	</menupopup>
+</window>
+
+</zk>

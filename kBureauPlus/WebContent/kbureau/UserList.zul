@@ -1,0 +1,67 @@
+<window id="kBureauUserList" apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.KBureauUserVM')" validationMessages="@id('vmsgs')">
+	<vbox hflex="true">
+		<toolbar>
+			<toolbarbutton label="New" image="/img/app/new.png" onClick="@command('onNewUser')" visible="@load(vm.priviledge.canCreate)"/>
+			<toolbarbutton label="Open" image="/img/app/edit.png" disabled="@load(vm.selectedUser.id eq 0)" onClick="@command('onEditUser')" visible="@load(vm.priviledge.canRead)"/>
+			<toolbarbutton label="Delete" image="/img/app/delete.png" disabled="@load(vm.selectedUser.id eq 0)" onClick="@command('onConfirmDelete')" visible="@load(vm.priviledge.canDelete)"/>
+			<space bar="true" sclass="k-ver-bar"/>
+			<label value="Look for: "/>
+			<textbox onOK="@command('doSearch')"
+				focus="true" sclass="ksearch" value="@bind(vm.filter)"/>
+			<toolbarbutton id="searchSubject" label="Find" image="/img/app/find.png" onClick="@command('doSearch')"/>
+		</toolbar>	
+		  
+		<listbox model="@load(vm.kbureauUsers)" selectedItem="@bind(vm.selectedUser)" hflex="true">
+			<listhead sizable="true">
+				<listheader label="Username" sort="auto(username)" width="150px"/>
+				<listheader label="Email" sort="auto(email)" width="250px"/>
+				<listheader label="Sub Branch" sort="auto(subBranchCode)" width="120px"/>
+				<listheader label="Last Login" sort="auto(lastLoginDate)" width="150px"/>
+				<listheader label="Entered" sort="auto(dateCreated)" width="250px"/>
+				<listheader label="Status" sort="auto(status)"/>
+				<listheader label="Note" sort="auto(note)"/>
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menuKBureauUser" onDoubleClick="@command('onEditUser')">
+					 <listcell label="@load(item.username)"/>
+					 <listcell label="@load(item.email)"/>
+					 <listcell label="@load(item.subBranchCode)"/>
+					 <listcell label="@load(item.lastLoginDate)"/>
+					 <listcell label="@load(item.dateCreated)"/>
+					 <listcell label="@load(item.status)"/>
+					 <listcell label="@load(item.note)"/>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter/>
+				<listfooter label="@load(vm.countUser)" sclass="k-listfooter-right"/>
+			</listfoot>
+		</listbox>
+	</vbox>
+	
+	<include src="/kbureau/KBureauUser.zul"/>
+	<window title="Confirm" mode="modal" border="normal" width="300px" visible="@load(not empty vm.msgDelete)">
+		<vbox hflex="true">
+			<hlayout height="50px">
+				<image src="/img/app/delete.png"/>
+				<label value="@load(vm.msgDelete)"/>
+			</hlayout>
+			<hbox pack="center" hflex="true">
+				<button label="Delete" onClick="@command('onDeleteUser')"/>
+				<button label="Cancel" onClick="@command('onCancelDelete')"/>
+			</hbox>
+		</vbox>
+	</window>
+	
+	<menupopup id="menuKBureauUser">
+				<menuitem image="/img/app/new16.png" label="New" onClick="@command('onNewUser')" visible="@load(vm.priviledge.canCreate)"/>
+				<menuitem image="/img/app/delete16.png" label="Delete" onClick="@command('confirmDelete')" visible="@load(vm.priviledge.canDelete)"/>
+	</menupopup>
+	
+</window>

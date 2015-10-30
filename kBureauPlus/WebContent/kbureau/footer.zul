@@ -1,0 +1,16 @@
+<n:div class="k-footer" xmlns:n="native">
+	<n:div class="k-footer-version footer_bg_version">
+		<n:div>
+			Version 1.1
+			Support: MIS Unit
+		</n:div>
+	</n:div>
+	<n:div class="k-footer-copyright footer_bg">
+		<n:div>
+			Powered by IT Department
+		</n:div>
+		<n:div>
+			© 2012 KREDIT Micro Finance Institution
+		</n:div>
+	</n:div>
+</n:div>

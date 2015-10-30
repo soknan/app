@@ -1,0 +1,6 @@
+<?page title="Help" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Help" border="normal">
+New Content Here!
+</window>
+</zk>

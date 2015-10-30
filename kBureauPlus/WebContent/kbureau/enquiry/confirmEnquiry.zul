@@ -1,0 +1,69 @@
+<?page title="CBC" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="css/customize.css"?>
+<zk xmlns:n="native">
+	<window id="confirmation" title="Confirmation" border="normal" visible="@load(vm.visibleConf)"
+		mode="overlapped" closable="true" width="auto" height="auto" contentStyle="overflow:auto"
+		position="center"
+		onClose="self.setVisible(false);event.stopPropagation();">
+		<n:div class="conf_text">Are you sure you want to request to CBC?</n:div>
+	    <n:table  cellpadding="4">
+	    	<n:tr>
+	    		<n:td style="text-align:right">Phone Number:</n:td>
+	    		<n:td><textbox id="txtPhone" value="@bind(vm.cbcM.phone1.phoneNumber)"/></n:td>
+	    		<n:td style="text-align:right">Phone Number:</n:td>
+	    		<n:td><textbox id="txtPhone2" value="@bind(vm.cbcM.phone2.phoneNumber)"/></n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td></n:td>
+	    		<n:td style="text-align:left"><label class="red" value="No Phone number" visible="@load(vm.cbcM.phone1.phoneNumber eq '000')"/></n:td>
+	    		<n:td></n:td>
+	    		<n:td style="text-align:left"><label class="red" value="No Phone number" visible="@load(vm.cbcM.phone2.phoneNumber eq '000')"/></n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td style="text-align:right">Member Ref:</n:td>
+	    		<n:td><textbox id="txtMemRef" value="@bind(vm.cbcM.memberReference)" /></n:td>
+	    		<n:td style="text-align:right">Name:</n:td>
+	    		<n:td><textbox id="txtName" value="@bind(vm.cbcM.fullNameKH)"/></n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td style="text-align:right">Gender:</n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.sex eq 'M'?'Male':'Female')"/></n:td>
+	    		<n:td style="text-align:right">DOB</n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.dob) @converter('formatedDate', format='dd-MM-yyyy')"/></n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td style="text-align:right">Amount:</n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.amountCurrency)"/></n:td>
+	    		<n:td style="text-align:right">Charged by CBC:</n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.cbcFeeCurrency)"/></n:td>
+	    	</n:tr>
+	    </n:table>
+	    <n:table class="tbl_iden" cellpadding="4">
+	    	<n:tr><n:td class="blue_ident">Identification:</n:td></n:tr>	
+	    	<n:tr>
+	    		<n:td class="p_left" style="text-align:right">ID Type:</n:td>
+	    		<n:td></n:td>
+	    		<n:td class="p_left">ID Number:</n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td style="text-align:right"><label value="@load(vm.cbcM.idType1Desc)" visible="@load(vm.cbcM.idType1 ne null)"/></n:td>
+	    		<n:td></n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.idNumber1)" visible="@load(vm.cbcM.idType1 ne null)"/></n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td style="text-align:right"><label value="@load(vm.cbcM.idType2Desc)" visible="@load(vm.cbcM.idType2 ne null)"/></n:td>
+	    		<n:td></n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.idNumber2)" visible="@load(vm.cbcM.idType2 ne null)"/></n:td>
+	    	</n:tr>
+	    	<n:tr>
+	    		<n:td style="text-align:right"><label value="@load(vm.cbcM.idType3Desc)" visible="@load(vm.cbcM.idType3 ne null)"/></n:td>
+	    		<n:td></n:td>
+	    		<n:td><textbox value="@load(vm.cbcM.idNumber3)" visible="@load(vm.cbcM.idType3 ne null)"/></n:td>
+	    	</n:tr>
+	    </n:table>
+		<n:div class="div_yn">
+			<button width="60px" label="Yes" onClick="@command('onTestRequestCBC')"></button>
+			<button width="60px" label="No" onClick="confirmation.setVisible(false)"></button>
+		</n:div>
+	</window>
+</zk>

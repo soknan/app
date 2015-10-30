@@ -1,0 +1,149 @@
+<zk>
+	<window id="kBureauUser" title="@load(vm.winTitle)" border="normal"
+		width="600px" mode="modal" maximizable="false"
+		visible="@bind(vm.visible)" closable="true"
+		onClose="self.setVisible(false); event.stopPropagation();">
+		<toolbar>
+			<toolbarbutton label="New" image="/img/app/new.png"
+				onClick="@command('onNewUser')"
+				visible="@load(vm.priviledge.canCreate)" />
+			<toolbarbutton label="Save" image="/img/app/save.png"
+				disabled="@load(not vm.canSave)" onClick="@command('onSave')"
+				visible="@load(vm.priviledge.canUpdate)" />
+			<toolbarbutton label="Delete" image="/img/app/delete.png"
+				disabled="@load(vm.selectedUser.id eq 0)"
+				onClick="@command('onConfirmDelete')"
+				visible="@load(vm.priviledge.canDelete)" />
+			<toolbarbutton label="Cancel" image="/img/app/cancel.png"
+				onClick="@command('onCancelEdit')" visible="@load(vm.canSave)" />
+		</toolbar>
+		<grid hflex="true" style="border:none;" form="@id('fuser') @load(vm.selectedUser) @save(vm.selectedUser, before='onSave')">
+			<columns>
+				<column width="80px" />
+				<column />
+				<column width="80px" />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<cell>
+						<label style="color:#636363;">Username</label>
+						<label value="*" sclass="k-asterisk" />
+					</cell>
+					<textbox id="txtUsername"
+						value="@bind(fuser.username)" width="100%"
+						onChange="@command('notifyChangeUsername', txtUsername = txtUsername)" />
+					<cell>
+						<label style="color:#636363;">Email</label>
+					</cell>
+					<textbox id="txtEmail"
+						value="@bind(fuser.email) @validator(vm.emailValidator)"
+						width="100%"
+						onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername)" />
+				</row>
+				<row>
+					<cell>
+						<label style="color:#636363;">Branch</label>
+						<label value="*" sclass="k-asterisk" />
+					</cell>
+					<combobox id="cmbBranch" model="@load(vm.fBranches)"
+						readonly="true" value="@bind(fuser.branch.description)"
+						selectedItem="@bind(fuser.branch)"
+						onChange="@command('onChangeFBranch', cmbBranch = self, cmbSubBranch = cmbSubBranch)"
+						width="100%">
+						<template name="model" var="t">
+							<comboitem label="@load(t.description)"
+								description="@load(t.code)" />
+						</template>
+					</combobox>
+					<cell>
+						<label style="color:#636363;">First name</label>
+					</cell>
+					<textbox value="@bind(fuser.fName)" width="100%" />
+				</row>
+				<row>
+					<cell>
+						<label style="color:#636363;">Sub branch</label>
+						<label value="*" sclass="k-asterisk" />
+					</cell>
+					<combobox id="cmbSubBranch"
+						model="@load(vm.fSubBranches)" readonly="true"
+						value="@bind(fuser.subBranch.description)"
+						selectedItem="@bind(fuser.subBranch)"
+						onChange="@command('onChangeFSubBranch', cmbBranch = cmbBranch, cmbSubBranch = self)"
+						width="100%">
+						<template name="model" var="t">
+							<comboitem label="@load(t.description)"
+								description="@load(t.code)" />
+						</template>
+					</combobox>
+					<cell>
+						<label style="color:#636363;">Last name</label>
+					</cell>
+					<textbox value="@bind(fuser.lName)" width="100%" />
+				</row>
+				<row>
+					<cell>
+						<label style="color:#636363;">Status</label>
+					</cell>
+					<combobox model="@load(vm.fStatuses)"
+						readonly="true" value="@load(fuser.statusObj.description)"
+						selectedItem="@bind(fuser.statusObj)"
+						onChange="@command('onChangeFStatus')" width="100%">
+						<template name="model" var="t">
+							<comboitem label="@load(t.description)"
+								description="@load(t.code)" />
+						</template>
+					</combobox>
+					<cell>
+						<label style="color:#636363;">Sex:</label>
+					</cell>
+					<combobox model="@load(vm.fSexes)" readonly="true"
+						value="@load(fuser.sexObj.description)"
+						selectedItem="@bind(fuser.sexObj)"
+						onChange="@command('onChangeFSex')" width="100%">
+						<template name="model" var="t">
+							<comboitem label="@load(t.description)" />
+						</template>
+					</combobox>
+				</row>
+				<row>
+					Note:
+					<cell colspan="3">
+						<textbox id="txtNote" value="@bind(fuser.note)"
+							width="100%" multiline="true" rows="3" />
+					</cell>
+				</row>
+			</rows>
+		</grid>
+		<groupbox id="resultMsg" visible="@load(not empty vm.resultMsg)"
+			style="align:center;">
+			<div align="center">
+				<hlayout>
+					<image src="@load(vm.resultIcon)" />
+					<label sclass="@load(vm.resultMsgClass)"
+						value="@load(vm.resultMsg)" />
+				</hlayout>
+			</div>
+		</groupbox>
+
+		<!--  
+			<n:div class="red" xmlns:n="native">
+			<n:div>
+			<label id="m1" value="@bind(vmsgs[txtUsername])" />
+			</n:div>
+			</n:div>
+		-->
+		<!--  
+			<grid id="msggrid" model="@bind(vmsgs.texts[grdUser])" visible="@bind(not empty vmsgs.texts[grdUser])">
+			<template name="model" var="msg">
+			<row>
+			<label value="@bind(msg)" />
+			</row>
+			</template>
+			</grid>
+		-->
+	</window>
+
+</zk>
+

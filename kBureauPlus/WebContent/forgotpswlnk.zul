@@ -1,0 +1,75 @@
+<?link href="/img/app/favicon.ico" rel="shortcut icon" type="image/x-icon"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css.dsp?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/login.css?v=${desktop.webApp.build}"?>
+<?link rel="stylesheet" type="text/css" href="/css/resetpsw.css?v=${desktop.webApp.build}"?>
+<zk>
+<zscript><![CDATA[
+	String serverRoot = Executions.getCurrent().getContextPath();
+]]></zscript>
+	<window id="singIn" border="none"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.core.util.authentication.viewmodel.LoginVM')">
+		<n:div xmlns:n="native">
+			<div visible="@load(vm.flgInvalid)">
+				<n:div id="notify-wrapper">
+					<n:span id="notify" class="server-error">
+						<n:span id="notify-msg">
+							That link has either expired or is not valid.
+						</n:span>
+					</n:span>
+				</n:div>
+			</div>
+			<n:div id="outer-frame">
+				<n:div id="page-logo-header">
+					<n:a href="${serverRoot}">
+						<n:img id="db-logo" alt="kBureau Plus"
+							src="img/kbureau/KREDIT_short.png" />
+					</n:a>
+					<n:div id="header-border-div" />
+				</n:div>
+				<n:div id="login-container">
+					<n:div class="splash">
+						<n:img src="img/kbureau/resetpswlnk.png"
+							id="login_kite" alt="kBureau Plus" />
+					</n:div>
+					<n:form action="" method="post">
+						<n:p style="font-size:18px">
+							Forgot your password?
+						</n:p>
+						<n:p>
+							<label style='font-size:15px; font-family: "Open Sans","lucida grande","Segoe UI",arial,verdana,"lucida sans unicode",tahoma,sans-serif;' value="@load(vm.instructionMsg)" />
+						</n:p>
+						<div
+							visible="@load(vm.instructionMsg.indexOf('sent') eq -1)">
+
+							<n:div id="login-partial">
+								<n:div class="k-label-b login_label">
+									Your email
+								</n:div>
+								<n:div id="email-field"
+									class="sick-input2">
+									<textbox sclass="kh-textbox txtBox" focus="true"
+										value="@bind(vm.email)"
+										constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"  onOK="@command('submitEmail')"/>
+								</n:div>
+								<n:div id="login-footer"
+									class="clearfix">
+									<button label="Submit"
+										onClick="@command('submitEmail')"
+										style="float:right; margin-top:-10px;" height="30px"
+										width="80px" disabled="empty vm.email" />
+									<n:div>
+										<label
+											value="@load(vm.messageForgot)" sclass="errormsg" />
+									</n:div>
+								</n:div>
+							</n:div>
+						</div>
+						<n:br class="clear" />
+					</n:form>
+				</n:div>
+			</n:div>
+		</n:div>
+	</window>
+<script src="/js/forgot_psw.js"></script>
+</zk>

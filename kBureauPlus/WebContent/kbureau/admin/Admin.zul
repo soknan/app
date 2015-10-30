@@ -1,0 +1,74 @@
+<?page title="Admin" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="kBureauUserList" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.admin.UserVM')"
+	validationMessages="@id('vmsgs')">
+	<vbox hflex="true">
+		<toolbar>
+			<toolbarbutton label="Email All" image="/img/kbureau/email_production.png"
+				onClick="@command('onEmailAll', isTest = false)"
+				visible="@load(vm.priviledge.canCreate)" />
+			<toolbarbutton label="Email All (Test)" image="/img/kbureau/email_test.png"
+				onClick="@command('onEmailAll', isTest = true)"
+				visible="@load(vm.priviledge.canCreate)" />
+			<toolbarbutton label="Open" image="/img/app/edit.png"
+				disabled="@load(vm.selectedUser.id eq 0)"
+				onClick="@command('onEditUser')"
+				visible="@load(vm.priviledge.canRead)" />
+			<toolbarbutton label="Delete" image="/img/app/delete.png"
+				disabled="@load(vm.selectedUser.id eq 0)"
+				onClick="@command('onConfirmDelete')"
+				visible="@load(vm.priviledge.canDelete)" />
+			<space bar="true" sclass="k-ver-bar" />
+			<label value="Look for: " />
+			<textbox onOK="@command('doSearch')" focus="true"
+				sclass="ksearch" value="@bind(vm.filter)" />
+			<toolbarbutton id="searchSubject" label="Find"
+				image="/img/app/find.png" onClick="@command('doSearch')" />
+		</toolbar>
+
+		<listbox model="@load(vm.kbureauUsers)"
+			selectedItem="@bind(vm.selectedUser)" hflex="true" mold="paging"
+			checkmark="true" multiple="true">
+			<listhead sizable="true">
+				<listheader label="Username" sort="auto(username)"
+					width="150px" />
+				<listheader label="Email" sort="auto(email)"
+					width="250px" />
+				<listheader label="Sub Branch"
+					sort="auto(subBranchCode)" width="120px" />
+				<listheader label="Last Login"
+					sort="auto(lastLoginDate)" width="150px" />
+				<listheader label="Entered" sort="auto(dateCreated)"
+					width="250px" />
+				<listheader label="Status" sort="auto(status)" />
+				<listheader label="Note" sort="auto(note)" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menuKBureauUser"
+					onDoubleClick="@command('onEditUser')">
+					<listcell label="@load(item.username)" />
+					<listcell label="@load(item.email)" />
+					<listcell label="@load(item.subBranchCode)" />
+					<listcell label="@load(item.lastLoginDate)" />
+					<listcell label="@load(item.dateCreated)" />
+					<listcell label="@load(item.status)" />
+					<listcell label="@load(item.note)" />
+				</listitem>
+			</template>
+			<!--  
+			<listfoot>
+				<listfooter />
+				<listfooter />
+				<listfooter />
+				<listfooter />
+				<listfooter />
+				<listfooter />
+				<listfooter label="@load(vm.countUser)"
+					sclass="k-listfooter-right" />
+			</listfoot>
+			-->
+		</listbox>
+	</vbox>
+</window>
+</zk>

@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/kredit/web/kbureau/util/XmlHelper.java=UTF-8
+encoding//src/kredit/web/kbureau/viewmodel/KBureauUserVM.java=UTF-8
+encoding//src/org/datacontract/schemas/kservice/model/CbcAuthentication.java=UTF-8
+encoding//src/org/datacontract/schemas/kservice/model/datacontracts/Authentication.java=UTF-8
+encoding//src/org/datacontract/schemas/kservice/model/datacontracts/Log.java=UTF-8
+encoding//src/org/datacontract/schemas/kservice/model/datacontracts/RequestEnquiry.java=UTF-8
+encoding//src/org/datacontract/schemas/kservice/model/datacontracts/ViewEnquiry.java=UTF-8
+encoding//src/org/tempuri/BasicStub.java=UTF-8
+encoding//src/org/tempuri/IKservice.java=UTF-8
+encoding//src/org/tempuri/Kservice.java=UTF-8
+encoding//src/org/tempuri/KserviceLocator.java=UTF-8

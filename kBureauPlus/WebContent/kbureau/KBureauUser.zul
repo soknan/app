@@ -1,0 +1,86 @@
+<zk>
+	<window id="kBureauUser" title="@load(vm.winTitle)" border="normal" width="400px" mode="modal" maximizable="false"
+	visible="@bind(vm.visible)" closable="true" onClose="self.setVisible(false); event.stopPropagation();">
+	<toolbar>
+			<toolbarbutton label="New" image="/img/app/new.png" onClick="@command('onNewUser')" visible="@load(vm.priviledge.canCreate)"/>
+			<toolbarbutton label="Save" image="/img/app/save.png" disabled="@load(not vm.canSave)" onClick="@command('onSave')" visible="@load(vm.priviledge.canUpdate)"/>
+			<toolbarbutton label="Delete" image="/img/app/delete.png" disabled="@load(vm.selectedUser.id eq 0)" onClick="@command('onConfirmDelete')" visible="@load(vm.priviledge.canDelete)"/>
+			<toolbarbutton label="Cancel" image="/img/app/cancel.png" onClick="@command('onCancelEdit')" visible="@load(vm.canSave)"/>
+		</toolbar>
+		<grid id="grdUser" hflex="true" style="border:none;" form="@id('fuser') @load(vm.selectedUser) @save(vm.selectedUser, before='onSave')">
+			<columns>
+				<column width="130px"/>
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<cell>
+						<label value="*" sclass="k-asterisk"/> <label style="color:#636363;"> Username:</label>
+					</cell>
+					<textbox id="txtUsername" value="@bind(fuser.username) @validator(vm.usernameValidator)" width="100%" onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername, txtEmail = txtEmail, txtPassword = txtPwd, txtPasswordConfirm = txtPwdConfirm, txtSubCode = txtSubCode, txtNote = txtNote)"/> 
+				</row>
+				<row>
+					<cell>
+						<label value="*" sclass="k-asterisk"/> <label style="color:#636363;"> Email:</label>
+					</cell>
+					<textbox id="txtEmail" value="@bind(fuser.email) @validator(vm.emailValidator)" width="100%" onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername, txtEmail = txtEmail, txtPassword = txtPwd, txtPasswordConfirm = txtPwdConfirm, txtSubCode = txtSubCode, txtNote = txtNote)"/>
+				</row>
+				<row>
+					<cell>
+						<label value="*" sclass="k-asterisk"/> <label style="color:#636363;"> Password:</label>
+					</cell>
+					<textbox id="txtPwd" value="@bind(fuser.password) @validator(vm.passwordValidator)" type="password" width="100%" onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername, txtEmail = txtEmail, txtPassword = txtPwd, txtPasswordConfirm = txtPwdConfirm, txtSubCode = txtSubCode, txtNote = txtNote)"/>
+				</row>
+				<row>
+					<cell>
+						<label value="*" sclass="k-asterisk"/> <label style="color:#636363;"> Retype password:</label>
+					</cell>
+					<textbox id="txtPwdConfirm" value="@bind(vm.passwordConfirm) @validator(vm.passwordConfirmValidator, pwd=txtPwd)" type="password" width="100%" onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername, txtEmail = txtEmail, txtPassword = txtPwd, txtPasswordConfirm = txtPwdConfirm, txtSubCode = txtSubCode, txtNote = txtNote)"/>
+				</row>
+				<row>
+					<cell>
+						<label value="*" sclass="k-asterisk"/> <label style="color:#636363;"> Sub Branch code:</label>
+					</cell>
+				 	<textbox id="txtSubCode" value="@bind(fuser.subBranchCode) @validator(vm.subCodeValidator)" width="100%" onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername, txtEmail = txtEmail, txtPassword = txtPwd, txtPasswordConfirm = txtPwdConfirm, txtSubCode = txtSubCode, txtNote = txtNote)"/> 
+				</row>
+				<row>
+					Note:
+				 	<textbox id="txtNote" value="@bind(fuser.note)" width="100%" multiline="true" rows="3" onChange="@command('notifyChangingUserInfo', txtUsername = txtUsername, txtEmail = txtEmail, txtPassword = txtPwd, txtPasswordConfirm = txtPwdConfirm, txtSubCode = txtSubCode, txtNote = txtNote)"/> 
+				</row>
+			</rows>
+		</grid>
+		<groupbox id="resultMsg" visible="@load(not empty vm.resultMsg)" style="align:center;">
+			<div align="center"><hlayout><image src="@load(vm.resultIcon)"/> <label sclass="@load(vm.resultMsgClass)" value="@load(vm.resultMsg)"/></hlayout></div>
+		</groupbox>
+		  
+		<n:div class="red" xmlns:n="native">
+			<n:div>
+				<label id="m1" value="@bind(vmsgs[txtUsername])"/>
+			</n:div>
+			<n:div>
+				<label id="m2" value="@bind(vmsgs[txtEmail])"/>
+			</n:div>
+			<n:div>
+				<label id="m3" value="@bind(vmsgs[txtPwd])"/>
+			</n:div>
+			<n:div>
+				<label id="m4" value="@bind(vmsgs[txtPwdConfirm])"/>
+			</n:div>
+			<n:div>
+				<label id="m5" value="@bind(vmsgs[txtSubCode])"/>
+			</n:div>
+		</n:div>
+		
+		<!--  
+		<grid id="msggrid" model="@bind(vmsgs.texts[grdUser])" visible="@bind(not empty vmsgs.texts[grdUser])">
+		    <template name="model" var="msg">
+		        <row>
+		            <label value="@bind(msg)" />
+		        </row>
+		    </template>
+		</grid>
+		-->
+	</window>
+
+</zk>
+

@@ -1,0 +1,202 @@
+<zk>
+	<window id="kBureauUserList" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kbureau.viewmodel.UserLogVM')"
+		validationMessages="@id('vmsgs')">
+		<vbox hflex="true">
+			<groupbox open="true">
+				<caption label="Filter" />
+				<n:table xmlns:n="native">
+					<n:tr>
+						<n:td width="80px">Branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.branches)"
+								readonly="false" value="@bind(vm.param.branch.description)"
+								selectedItem="@bind(vm.param.branch)"
+								onChange="@command('onChangeBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td width="80px">
+							<label value="Start date:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<datebox value="@bind(vm.param.startDate)"
+								onChange="@command('onChangeStartDate')" format="dd-MM-yyyy" />
+						</n:td>
+						<n:td width="80px">
+							<label value="App Type:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.appTypes)"
+								readonly="false" value="@bind(vm.param.appType.description)"
+								selectedItem="@bind(vm.param.appType)"
+								onChange="@command('onChangeAppType')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td width="80px">
+							<label value="Action Type:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.logTypes)"
+								readonly="false" value="@bind(vm.param.logType.description)"
+								selectedItem="@bind(vm.param.logType)"
+								onChange="@command('onChangeLogType')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>Sub branch:</n:td>
+						<n:td>
+							<combobox model="@load(vm.subBranches)"
+								readonly="false" value="@load(vm.param.subBranch.description)"
+								selectedItem="@bind(vm.param.subBranch)"
+								onChange="@command('onChangeSubBranch')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td>
+							<label value="End date:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<datebox value="@bind(vm.param.endDate)"
+								onChange="@command('onChangeEndDate')" format="dd-MM-yyyy" />
+						</n:td>
+						<n:td width="80px">
+							<label value="User Type:"
+								style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td>
+							<combobox model="@load(vm.usrTypes)"
+								readonly="false" value="@bind(vm.param.usrType.description)"
+								selectedItem="@bind(vm.param.usrType)"
+								onChange="@command('onChangeUsrType')">
+								<template name="model" var="t">
+									<comboitem
+										label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<toolbar>
+				<toolbarbutton label="View Message"
+					image="/img/app/edit.png" disabled="@load(vm.selected.id eq 0)"
+					onClick="@command('onViewMessage')"
+					visible="@load(vm.priviledge.canRead)" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Look for: " />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)" />
+				<toolbarbutton label="Find" image="/img/app/find.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear"
+					image="/img/kbureau/edit-clear.png" onClick="@command('onClear')" />
+				
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox model="@load(vm.rows)" readonly="false"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('onChangeRowPerPage')" width="40px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+
+			<listbox id="listbox" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selected)" hflex="true" vflex="true"
+				mold="paging" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+					<![CDATA[
+	listbox.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="DateTime" sort="auto(date)"
+						width="150px" />
+					<listheader label="User ID" sort="auto(userId)"
+						width="80px" />
+					<listheader label="Login Name"
+						sort="auto(loginName)" width="100px" />
+					<listheader label="Sub Branch"
+						sort="auto(subBranch)" width="120px" />
+					<listheader label="Branch" sort="auto(branch)"
+						width="60px" />
+					<listheader label="PC Name" sort="auto(pcName)"
+						width="120px" />
+					<listheader label="PC Username"
+						sort="auto(pcUsername)" width="120px" />
+					<listheader label="App Version"
+						sort="auto(appVersion)" width="80px" />
+					<listheader label="Message" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menu"
+						onDoubleClick="@command('onViewMessage')">
+						<listcell label="@load(item.dateTime)" />
+						<listcell label="@load(item.userId)" />
+						<listcell label="@load(item.loginName)" />
+						<listcell label="@load(item.subBranch)" />
+						<listcell label="@load(item.branch)" />
+						<listcell label="@load(item.pcName)" />
+						<listcell label="@load(item.pcUsername)" />
+						<listcell label="@load(item.appVersion)" />
+						<listcell label="@load(item.messageSummary)" />
+					</listitem>
+				</template>
+				<listfoot>
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<listfooter />
+					<!-- <listfooter label="@load(vm.count)" sclass="k-listfooter-right"/> -->
+					<listfooter sclass="k-listfooter-right">
+						Count:
+						<label value="@load(vm.lst.getSize())" />
+					</listfooter>
+				</listfoot>
+			</listbox>
+		</vbox>
+
+		<window title="Message" mode="modal" border="normal"
+			width="400px" visible="@load(vm.visible)" closable="true"
+			onClose="self.setVisible(false); event.stopPropagation();">
+			<groupbox id="resultMsg" style="align:center;">
+				<vbox hflex="true">
+					<label value="@load(vm.selected.message)" />
+				</vbox>
+			</groupbox>
+		</window>
+
+		<menupopup id="menu">
+			<menuitem image="/img/app/edit.png" label="View Message"
+				onClick="@command('onViewMessage')"
+				visible="@load(vm.priviledge.canRead)" />
+		</menupopup>
+	</window>
+
+</zk>

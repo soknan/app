@@ -1,0 +1,22 @@
+<window title="Consumer Credit Report" mode="modal" id="rptCCR" 
+	border="normal" visible="@bind(vm.visible)" closable="true"
+	maximizable="true" width="800px" height="600px" maximized="true"
+	onClose="self.setVisible(false); event.stopPropagation();">
+
+	<toolbar>
+	<div class="toolbar">
+		<toolbarbutton class="img_aprDec" label="Approve and Close" image="/img/kbureau/tick.png"
+			onClick="@command('onApproveClose')" />
+		<toolbarbutton class="img_aprDec" label="Decision" image="/img/kbureau/dec.png"
+			onClick="@command('onDecision')" />
+	</div>
+	<div class="newref">	
+		<label visible="@load(vm.login.role eq 'ADM')" >New Reference Number: </label>
+		<textbox style="text-align:right"  id="txt" width="145px" visible="@load(vm.login.role eq 'ADM')" disabled="true" value="@bind(vm.selected.loanId)" />
+		<textbox id="txtChange" width="50px" visible="@load(vm.login.role eq 'ADM')" value="_"></textbox>
+		<toolbarbutton id="btnSave" image="/img/app/save.png" label="Save" onClick="@command('onSaveRefChange', change=txtChange.text)" visible="@load(vm.login.role eq 'ADM')" />
+	</div>
+	</toolbar>
+
+	<iframe src="@load(vm.rptUrl)" width="100%" height="100%" class="winReport"></iframe>
+</window>

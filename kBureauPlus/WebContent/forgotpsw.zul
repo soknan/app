@@ -1,0 +1,43 @@
+<zk xmlns:c="client">
+	<window id="forgotPsw" border="none"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.core.util.authentication.viewmodel.LoginVM')">
+		<n:div xmlns:n="native" class="about-bg">
+			<image src="img/kbureau/quit.png"
+				style="float:right; cursor: pointer;"
+				onClick="forgotPsw.setVisible(false);" />
+			<n:div class="k-forgot-psw">
+				<n:span class="k-forgot-key">
+					Forgot your password?
+				</n:span>
+				<n:div class="forgot-instr">
+					Please enter your email address in order to reset
+					your password. You may need to check your spam
+					folder or unblock noreply-it@kredit.com.kh.
+				</n:div>
+				<n:table class="myLabel" cellspacing="0">
+					<n:tr>
+						<n:td width="50px">Email:</n:td>
+						<n:td>
+							<textbox sclass="kh-textbox txtBoxForgotPsw"
+								value="@bind(vm.email)"
+								constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"
+								width="370px" />
+						</n:td>
+					</n:tr>
+				</n:table>
+				<n:div id="reset-footer" class="clearfix">
+					<button label="Submit"
+						onClick="@command('submitEmail')"
+						style="float:right; margin-right:32px; margin-top:0px;"
+						height="30px" width="80px" disabled="empy vm.email" />
+					<n:div>
+						<label
+							value="No account with that email exists."
+							sclass="errormsg  forgot-msg" />
+					</n:div>
+				</n:div>
+			</n:div>
+		</n:div>
+	</window>
+</zk>
