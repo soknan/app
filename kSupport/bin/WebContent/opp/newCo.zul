@@ -1,0 +1,75 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winNewCo" title="New CO" border="normal" visible="@load(vm.visibleNewCo)"
+	mode="overlapped" closable="true" width="665px" height="210px"
+	position="center" onClose="@command('onCloseNewCo')">
+
+	<vbox hflex="true">
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAllNewCo')" />	
+			<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSaveNewCo')"/>
+		</toolbar>
+		
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">Family Name KH</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedNewCo.lname_kh)" width="160px" />
+						</n:td>
+						<n:td>Given Name KH</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedNewCo.fname_kh)" width="160px" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Family Name EN</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedNewCo.lname_en)" width="160px" />
+						</n:td>
+						<n:td width="120px">
+							Given Name EN
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px" value="@bind(vm.selectedNewCo.fname_en)"  />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Gender</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox model="@load(vm.genders)"
+								value="@load(vm.selectedNewCo.genderC.description)"
+								selectedItem="@bind(vm.selectedNewCo.genderC)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td>Date of Birth</n:td>
+						<n:td align="left" class="k-padding">
+							<datebox width="160px" format="dd-MM-yyyy" value="@bind(vm.selectedNewCo.dob)"/>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Phone1</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedNewCo.phone1)" width="160px" />
+						</n:td>
+						<n:td width="120px">
+							Phone2
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px" value="@bind(vm.selectedNewCo.phone2)"  />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>			
+	</vbox>
+
+</window>
+</zk>

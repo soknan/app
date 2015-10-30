@@ -1,0 +1,166 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="kivals" title="Kiva Loan List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kiva.vm.KivaListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1000px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">		
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<groupbox hflex="true">
+				<caption label="Filters" />
+				<hbox width="100%">
+					<cell>
+						<label value="Branch" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterBranch)"
+							value="@bind(vm.param.branch.description)"
+							selectedItem="@bind(vm.param.branch)" onChange="@command('doSearch')"
+							width="162px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>
+					<cell>
+						<label value="Sub" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterSub)"
+							value="@bind(vm.param.sub.description)"
+							selectedItem="@bind(vm.param.sub)"
+							onChange="@command('doSub')" width="162px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell> 
+					<cell>
+						<label value="Status" />
+					</cell>
+					<cell>
+						<combobox id="lstStatus" model="@load(vm.lstStatus)"
+							value="@load(vm.param.status.description)"
+							selectedItem="@bind(vm.param.status)" onChange="@command('doSearch')"
+							 width="100px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)" />
+							</template>
+						</combobox>
+					</cell>
+					<cell>
+						<label>StartDate</label>
+					</cell>
+					<cell>
+						<datebox width="162px" format="dd-MM-yyyy"
+							value="@bind(vm.param.startDate)" onChange="@command('doSearch')" />
+					</cell>
+					<cell>
+						<label>EndDate</label>
+					</cell>
+					<cell>
+						<datebox width="162px" format="dd-MM-yyyy"
+							value="@bind(vm.param.endDate)" onChange="@command('doSearch')" />
+					</cell>
+				</hbox>
+			</groupbox>
+			
+			<toolbar hflex="true">
+			<toolbarbutton label="Import Raise Loan" image="/img/icon/import.png" upload="true, maxsize=-1" onUpload="@command('doRaise', upEvent=event)" />
+			<toolbarbutton label="Generate Repayment" image="/img/icon/dollar.png" upload="true, maxsize=-1" onUpload="@command('doRepay', upEvent=event)" />
+							
+				<toolbarbutton label="Deleted" image="/img/icon/delete.png" disabled="@bind(empty vm.selected.id)"
+					onClick="@command('onConfirmDelete')" />						
+				<space bar="true" sclass="k-ver-bar" />						
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					value="@bind(vm.param.filter)" placeholder="Search....." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<space bar="true" class="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>		
+				<div style="float:right">
+						<toolbarbutton label="Export List" image="/img/icon/export.png"
+					onClick="@command('onExport')"  disabled="@bind(empty vm.lstKiva)" />
+				</div>					
+			</toolbar>
+			<listbox id="lst" model="@load(vm.lstKiva)" width="100%"
+				mold="paging" selectedItem="@bind(vm.selected)"  pageSize="@load(vm.selectedNumRow.description)"
+				hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="Status" 
+					style="text-align: center" sort="auto(active)" width="70px" />
+					<listheader label="Kiva ID" 
+						style="text-align: center" sort="auto(id)" width="80px" />					
+					<listheader label="Loan ID" 
+						style="text-align: center" sort="auto(loanId)" width="120px"  />
+						<listheader label="Ref Acc" 
+						style="text-align: center" sort="auto(refAcc)" width="120px"  />
+					<listheader label="Loan Amount" 
+						style="text-align: center" sort="auto(loanAmount)" width="100px"  />
+					<listheader label="Date Raise" 
+						style="text-align: center" sort="auto(dateRaise)" width="80px"  />
+					<listheader label="Client Name"
+						style="text-align: center" sort="auto(clientName)" width="150px"  />					
+					<listheader label="Term" 
+					style="text-align: center" sort="auto(term)" width="70px"  />
+					<listheader label="Disburse Date" 
+					style="text-align: center" sort="auto(dateDisburse)" width="100px"  />
+					<listheader label="CO Name" 
+					style="text-align: center" sort="auto(coName)" width="150px"  />
+					<listheader label="Journal Date" 
+					style="text-align: center" sort="auto(journalStatus)"  width="100px" />					
+					<listheader label="Sub-Branch" 
+					style="text-align: center" sort="auto(subName)" width="150px" />					
+					<listheader label="Number Of Days" 
+					style="text-align: center" sort="auto(dayNumber)" width="100px" />					
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">
+						<listcell style="text-align: center"><image src="${item.active ?'/img/icon/Green' : '/img/icon/Red' }.png"/></listcell>												
+						<listcell label="@load(item.id)" />						
+						<listcell label="@load(item.loanId)" />
+						<listcell label="@load(item.refAcc)" />
+						<listcell label="@load(item.loanAmount)" />
+						<listcell label="@load(item.dateRaise) @converter('formatedDate', format='dd-MM-yyyy')"  />
+						<listcell label="@load(item.clientName)" />					
+						<listcell label="@load(item.term)" />
+						<listcell label="@load(item.dateDisburse) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(item.coName)" />
+						<listcell label="@load(item.journalStatus)" />
+						<listcell label="@load(item.subName)" />						
+						<listcell label="@load(item.dayNumber)" />						
+					</listitem>
+				</template>
+			</listbox>			 
+			<!-- <paging id="lstPaging" autohide="false" detailed="true"
+			totalSize="@load(vm.totalSize)"
+			pageSize="@load(vm.selectedNumRow.description)" mold="os"
+			activePage="@bind(vm.pageIndex)">
+			</paging> -->			
+		</vbox>	
+		
+		
+	</window>
+</zk>

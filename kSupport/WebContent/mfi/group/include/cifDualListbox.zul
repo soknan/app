@@ -1,0 +1,104 @@
+<!-- View of customized component DualListbox -->
+<hlayout>
+	<vbox width="50%" hflex="true" vflex="true">
+		<label value="Available Group Members:" />
+		<listbox id="availLb" model="@load(vm.availMbr)" hflex="true"
+			vflex="true" rows="6" selectedItems="@bind(vm.selectAvails)">
+			<attribute name="onCreate">
+				<![CDATA[
+	availLb.setMultiple(true);
+	availLb.setCheckmark(true);
+]]>
+				</attribute>
+			<listhead>
+				<listheader label="CIF" width="100px" sort="auto(cif)"></listheader>
+				<listheader label="Account" width="130px" sort="auto(account)"></listheader>
+				<listheader label="Full Name KH" width="150px" sort="auto(fullNameKH)"></listheader>
+				<listheader label="Disb. Amt." width="100px" align="right" sort="auto(amountDisbursed)"></listheader>
+				<listheader label="Outstanding Amt." width="110px" align="right" sort="auto(outstanding)"></listheader>
+				<listheader label="Currency" width="60px" sort="auto(currency)"></listheader>
+				<listheader label="Disb. Date" width="100px" sort="auto(valueDate)"></listheader>
+				<listheader label="Mat. Date" width="100px" sort="auto(maturityDate)"></listheader>
+				<listheader label="Mobilzer" width="150px" sort="auto(mobilizerName)"></listheader>
+				<listheader label="Village" width="300px" sort="auto(villageName)"></listheader>
+				<listheader label="Created By" width="150px" sort="auto(createBy)"></listheader>
+				<listheader label="Created On" width="150px" sort="auto(createOn)"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.cif)" />
+					<listcell label="@load(each.account)" />
+					<listcell label="@load(each.fullNameKH)" />
+					<listcell label="@load(each.amountDisbursed) @converter('formatedNumber', format='#,##0.##')" />
+					<listcell label="@load(each.outstanding)  @converter('formatedNumber', format='#,##0.##')" />
+					<listcell label="@load(each.currency)" />
+					<listcell label="@load(each.valueDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell label="@load(each.maturityDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell label="@load(each.mobilizerName)" />
+					<listcell label="@load(each.villageName)" />
+					<listcell label="@load(each.createBy)" />
+					<listcell label="@load(each.createOn) @converter('formatedDate', format='dd-MM-yyyy hh:mm:ss a')" />
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+	<vbox spacing="10px" width="24px">
+		<space />
+		<space />
+		<space />
+		<!-- <button class="btn-primary btn-sm" iconSclass="z-icon-angle-double-right" 
+			onClick="@command('onChooseAll')" tooltiptext="Add all groups" disabled="@load(vm.availMbr.getSize() 
+			eq 0)" /> -->
+		<button class="btn-primary btn-sm" iconSclass="z-icon-angle-right"
+			onClick="@command('onChoose')" style="width:28px" tooltiptext="Add selected group(s)"
+			disabled="@load(vm.selectAvails.size() eq 0)" />
+		<button class="btn-primary btn-sm" iconSclass="z-icon-angle-left"
+			onClick="@command('onRemove')" style="width:28px" tooltiptext="Remove all groups"
+			disabled="@load(vm.selectChosens.size() eq 0)" />
+		<!-- <button class="btn-primary btn-sm" iconSclass="z-icon-angle-double-left" 
+			onClick="@command('onRemoveAll')" style="width:28px" tooltiptext="Remove 
+			selected group(s)" disabled="@load(vm.chosenMbr.getSize() eq 0)" /> -->
+	</vbox>
+	<vbox width="50%" hflex="true">
+		<label value="Chosen Group Members:" />
+		<listbox id="chosenLb" model="@load(vm.chosenMbr)" hflex="true"
+			vflex="true" rows="6" selectedItems="@bind(vm.selectChosens)">
+			<attribute name="onCreate">
+				<![CDATA[
+	chosenLb.setMultiple(true);
+	chosenLb.setCheckmark(true);
+]]>
+				</attribute>
+			<listhead>
+				<listheader label="CIF" width="100px" sort="auto(cif)"></listheader>
+				<listheader label="Account" width="130px" sort="auto(account)"></listheader>
+				<listheader label="Full Name KH" width="150px" sort="auto(fullNameKH)"></listheader>
+				<listheader label="Disb. Amt." width="100px" align="right" sort="auto(amountDisbursed)"></listheader>
+				<listheader label="Outstanding Amt." width="110px" align="right" sort="auto(outstanding)"></listheader>
+				<listheader label="Currency" width="60px" sort="auto(currency)"></listheader>
+				<listheader label="Disb. Date" width="100px" sort="auto(valueDate)"></listheader>
+				<listheader label="Mat. Date" width="100px" sort="auto(maturityDate)"></listheader>
+				<listheader label="Mobilzer" width="150px" sort="auto(mobilizerName)"></listheader>
+				<listheader label="Village" width="300px" sort="auto(villageName)"></listheader>
+				<listheader label="Created By" width="150px" sort="auto(createBy)"></listheader>
+				<listheader label="Created On" width="150px" sort="auto(createOn)"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each.cif)" />
+					<listcell label="@load(each.account)" />
+					<listcell label="@load(each.fullNameKH)" />
+					<listcell label="@load(each.amountDisbursed) @converter('formatedNumber', format='#,##0.##')" />
+					<listcell label="@load(each.outstanding) @converter('formatedNumber', format='#,##0.##')" />
+					<listcell label="@load(each.currency)" />
+					<listcell label="@load(each.valueDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell label="@load(each.maturityDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell label="@load(each.mobilizerName)" />
+					<listcell label="@load(each.villageName)" />
+					<listcell label="@load(each.createBy)" />
+					<listcell label="@load(each.createOn) @converter('formatedDate', format='dd-MM-yyyy hh:mm:ss a')" />
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+</hlayout>

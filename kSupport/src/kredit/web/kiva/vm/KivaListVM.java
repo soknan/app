@@ -1,0 +1,807 @@
+package kredit.web.kiva.vm;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import kredit.web.core.util.db.Sql2oHelper;
+import kredit.web.core.util.model.CodeItem;
+import kredit.web.kiva.model.KivaLoanModel;
+import kredit.web.kiva.model.ParamModel;
+import kredit.web.kiva.model.facade.KivaFacade;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.sql2o.Connection;
+import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.media.AMedia;
+import org.zkoss.util.media.Media;
+import org.zkoss.zhtml.Filedownload;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Window;
+
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlUpdate;
+
+public class KivaListVM {
+	Media media;
+	String contentDownload = "";
+	private ListModelList<CodeItem> rows;
+	CodeItem selectedNumRow;
+	ListModelList<KivaLoanModel> lstKiva;
+	KivaLoanModel selected;
+	ParamModel param = new ParamModel();
+	ListModelList<CodeItem> lstStatus;
+	
+	ListModelList<CodeItem> lstFilterBranch;
+	ListModelList<CodeItem> lstFilterSub;
+
+	@Wire("#kivals")
+	private Window kivals;
+
+	AMedia fileContent;
+
+	@Init
+	public void init() {
+
+	}
+
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
+	}
+
+	@Command
+	@NotifyChange({ "lstKiva", "totalSize" })
+	public void doRaise(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
+		UploadEvent upEvent = null;
+		Object objUploadEvent = ctx.getTriggerEvent();
+		if (objUploadEvent != null && (objUploadEvent instanceof UploadEvent)) {
+			upEvent = (UploadEvent) objUploadEvent;
+		}
+		if (upEvent != null) {
+			media = upEvent.getMedia();
+
+			try {
+				// Check Valid file
+				if (!Arrays.asList("xlsx", "xls").contains(media.getFormat())) {
+					Clients.showNotification(
+							"invalid file name, should be xls or xlsx !",
+							Clients.NOTIFICATION_TYPE_ERROR, null,
+							"middle_center", 4100);
+					return;
+				}
+
+				if (media.getName().endsWith("csv")) {
+					Clients.showNotification(
+							"invalid file name, should be xls or xlsx !",
+							Clients.NOTIFICATION_TYPE_ERROR, null,
+							"middle_center", 4100);
+					return;
+				}
+				// end check file
+				InputStream excelFile = media.getStreamData();
+				Workbook wb = WorkbookFactory.create(excelFile);
+				Sheet sheet = wb.getSheetAt(0);
+				Row row;
+				// Cell cell;
+				Iterator<Row> rows = sheet.rowIterator();
+
+				String kivaId = "";
+				String loanId = "";
+				// String amount = "";
+				String raiseDate = "";
+				String sql = "";
+				Integer noOfColumns = sheet.getRow(0)
+						.getPhysicalNumberOfCells();
+				//Integer noOfRows = sheet.getPhysicalNumberOfRows() - 1;
+
+				String tmpNoLoan = "";
+				String tmpExistLoan = "";
+				String tmpOkLoan = "";
+				if (noOfColumns != 8) {
+					Clients.showNotification("Invalide Excel Format!",
+							Clients.NOTIFICATION_TYPE_ERROR, null,
+							"middle_center", 4100);
+					return;
+				}
+
+				while (rows.hasNext()) {
+					row = rows.next();
+					// just skip the rows if row number is 0
+					if (row.getRowNum() == 0) {
+						continue;
+					}
+					Iterator<Cell> cellIterator = row.cellIterator();
+					while (cellIterator.hasNext()) {
+						Cell cells = cellIterator.next();
+						cells.setCellType(Cell.CELL_TYPE_STRING);
+					}
+
+					kivaId = row.getCell(0, Row.CREATE_NULL_AS_BLANK)
+							.getStringCellValue();
+				
+					loanId = row.getCell(1, Row.CREATE_NULL_AS_BLANK)
+							.getStringCellValue();
+					raiseDate = row.getCell(7, Row.CREATE_NULL_AS_BLANK)
+							.getStringCellValue();
+
+					/*String regex = "[0-9]+";  
+					if(loanId.matches(regex)){
+						//System.out.println("yes");
+						Long n = Long.valueOf(loanId);
+						loanId = String.format("%016d%n", n);
+						
+					}*/
+					//System.out.println(loanId);
+					// Count NumDay
+					SimpleDateFormat format = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm");
+
+					Date d1 = new Date();
+					Date d2 = format.parse(raiseDate);
+					long diff = d1.getTime() - d2.getTime();
+					long diffDays = diff / (24 * 60 * 60 * 1000);
+
+					// Journal Status
+					String journalStatus;
+					if (diffDays <= 90) {
+						journalStatus = "Normal";
+					} else if (diffDays <= 180) {
+						journalStatus = "Need Journal";
+					} else {
+						journalStatus = "Overdue";
+					}
+					
+					// Check Loan
+					if (isExistKiva(kivaId)) {
+						tmpExistLoan += kivaId + " ; ";
+					} else if (isNoLoan(loanId)) {
+						tmpNoLoan += kivaId + " ; ";
+					} else {
+						if (loanId.startsWith("K")) {
+							String tmpLoanid;
+							tmpLoanid = getAccountFromKredit(loanId);
+							if (tmpLoanid == null) {
+								tmpLoanid = getGroupAccountKredit(loanId);
+							}
+							loanId = tmpLoanid;
+							if (loanId == null) {
+								tmpNoLoan += kivaId + " ; ";
+								continue;
+							}
+						}						
+						System.out.println(loanId.length());
+						if (loanId.length() ==16) {	
+							System.out.println(loanId);
+							// IDL							
+							sql = "insert into KIVA_LOAN("
+									+ "ID,"
+									+ "LOAN_ID,"
+									+ "ref_acc,"
+									+ "CLIENT_ID,"
+									+ "CLIENT_NAME,"
+									+ "LOAN_AMOUNT,"
+									+ "DATE_RAISE,"
+									+ "ACTIVE,"
+									+ "date_disburse,"
+									+ "branch_code,"
+									+ "CO_NAME,"
+									+ "term,"
+									+ "date_close,"
+									+ "day_number,"
+									+ "journal_status,"
+									+ "pay_state) "
+									+ "SELECT '"
+									+ kivaId
+									+ "',"
+									+ " am.ACCOUNT_NUMBER,am.alt_acc_no,cus.CUSTOMER_NO,cus.customer_name1,am.AMOUNT_FINANCED,"
+									+ "to_timestamp('"
+									+ raiseDate
+									+ "','yyyy-mm-dd hh24:mi:ss'),"
+									+ "'true',"
+									+ "am.VALUE_DATE,"
+									+ "am.branch_code,"
+									+ "am.FIELD_CHAR_1,"
+									+ "am.NO_OF_INSTALLMENTS,"
+									+ "am.MATURITY_DATE,"
+									+ diffDays
+									+ ", '"
+									+ journalStatus
+									+ "','Y' "
+									+ "FROM STTM_CUSTOMER cus inner join CLTB_ACCOUNT_APPS_MASTER am on cus.CUSTOMER_NO = am.CUSTOMER_ID "
+									+ "where am.ACCOUNT_NUMBER = '" + loanId
+									+ "'";
+						} else {
+							// GRL
+							sql = "insert into KIVA_LOAN(" + "ID," + "LOAN_ID,ref_acc,"
+									+ "CLIENT_ID," + "CLIENT_NAME,"
+									+ "LOAN_AMOUNT," + "DATE_RAISE,"
+									+ "ACTIVE," + "date_disburse,"
+									+ "branch_code," + "CO_NAME," + "term,"
+									+ "date_close," + "day_number,"
+									+ "journal_status," + "pay_state) "
+									+ "SELECT '"
+									+ kivaId
+									+ "',"
+									+ "'"
+									+ loanId
+									+ "',g.ref_grp,gt.gr_leader_cif,gt.gr_leader_name,sum(am.AMOUNT_FINANCED),"
+									+ "to_timestamp('"
+									+ raiseDate
+									+ "','yyyy-mm-dd hh24:mi:ss'),"
+									+ "'true',"
+									+ "am.VALUE_DATE,"
+									+ "am.branch_code,"
+									+ "am.FIELD_CHAR_1,"
+									+ "am.NO_OF_INSTALLMENTS,"
+									+ "am.MATURITY_DATE,"
+									+ diffDays
+									+ ", '"
+									+ journalStatus
+									+ "','Y' "
+									+ "from cltb_account_apps_master am "
+									+ "left join mfi_group_member gm on gm.account = am.account_number "
+									+ "left join mfi_group g on g.id = gm.group_id "
+									+ "left join vw_mfi_group_detail gt on gt.gr_id = g.id "
+									+ "where g.group_acc_no = '"
+									+ loanId
+									+ "' "
+									+ "group by g.group_acc_no,g.ref_grp,gt.gr_leader_cif,gt.gr_leader_name,am.value_date,am.field_char_1,am.NO_OF_INSTALLMENTS,am.maturity_date,am.branch_code ";
+						}
+						SqlUpdate update = Ebean.createSqlUpdate(sql);
+						Ebean.execute(update);
+						tmpOkLoan += kivaId + " ; ";
+					}
+				}
+				lstKiva = null;
+				Clients.showNotification("Import Successful",
+						Clients.NOTIFICATION_TYPE_INFO, null,
+						"middle_center", 4100);
+				/*@SuppressWarnings("rawtypes")
+				Map params = new HashMap();
+				params.put("width", 900);
+				Messagebox.show(" Imported Loan : " + tmpOkLoan + "\n"
+						+ " Exist Loan : " + tmpExistLoan + "\n"
+						+ " Unknown Loan : " + tmpNoLoan + "\n"
+						, "Infor", null, null, Messagebox.INFORMATION, null,
+				    null, params);*/
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Command
+	@NotifyChange({ "lstKiva", "totalSize" })
+	public void doRepay(@ContextParam(ContextType.BIND_CONTEXT) BindContext ctx) {
+		UploadEvent upEvent = null;
+		Object objUploadEvent = ctx.getTriggerEvent();
+		if (objUploadEvent != null && (objUploadEvent instanceof UploadEvent)) {
+			upEvent = (UploadEvent) objUploadEvent;
+		}
+		if (upEvent != null) {
+			media = upEvent.getMedia();
+			try {
+				// Check Valid file
+				if (!Arrays.asList("xlsx", "xls").contains(media.getFormat())) {
+					Clients.showNotification(
+							"invalid file name, should be xls or xlsx !",
+							Clients.NOTIFICATION_TYPE_ERROR, null,
+							"middle_center", 4100);
+					return;
+				}
+				if (media.getName().endsWith("csv")) {
+					Clients.showNotification(
+							"invalid file name, should be xls or xlsx !",
+							Clients.NOTIFICATION_TYPE_ERROR, null,
+							"middle_center", 4100);
+					return;
+				}
+				// end check file
+
+				InputStream excelFile = media.getStreamData();
+				Workbook wb = WorkbookFactory.create(excelFile);
+				Sheet sheet = wb.getSheetAt(0);
+
+				Iterator<Row> rows = sheet.rowIterator();
+				Integer noOfColumns = sheet.getRow(0)
+						.getPhysicalNumberOfCells();
+				//Integer noOfRows = sheet.getPhysicalNumberOfRows() - 1;
+				// Check Columns
+				/*if (noOfColumns != 16) {
+					Clients.showNotification(" Invalide Excel File !",
+							Clients.NOTIFICATION_TYPE_ERROR, null,
+							"middle_center", 4100);
+					return;
+				}*/
+				String tmpNoLoan = "";
+				String tmpOkLoan = "";
+				// Integer pay=0;
+				String sqlDeactive = "UPDATE KIVA_LOAN SET ACTIVE = 'false'";
+				SqlUpdate update1 = Ebean.createSqlUpdate(sqlDeactive);
+				Ebean.execute(update1);
+				while (rows.hasNext()) {
+					Row row = rows.next();
+					// just skip the rows if row number is 0
+					if (row.getRowNum() == 0) {
+						continue;
+					}
+
+					Iterator<Cell> cellIterator = row.cellIterator();
+					while (cellIterator.hasNext()) {
+						Cell cells = cellIterator.next();
+						cells.setCellType(Cell.CELL_TYPE_STRING);
+					}
+					String kivaId = row.getCell(0).getStringCellValue().trim();
+					String loanId = row.getCell(1).getStringCellValue().trim();
+					
+					/*String regex = "[0-9]+";  
+					if(loanId.matches(regex)){
+						//System.out.println("yes");
+						Long n = Long.valueOf(loanId);
+						loanId = String.format("%016d%n", n);
+						
+					}*/
+					//System.out.println(loanId);
+					// Check Loan
+					if (isNoKiva(kivaId)) {
+						tmpNoLoan+=kivaId +"; ";
+						// System.out.println(loanId);
+					} else {
+						String sql = "UPDATE KIVA_LOAN SET ACTIVE = 'true' WHERE ID = '"
+								+ kivaId + "'";
+						SqlUpdate update = Ebean.createSqlUpdate(sql);
+						Ebean.execute(update);
+						// check if kredit code
+						if (loanId.startsWith("K")) {
+							String tmpLoanid;
+
+							tmpLoanid = getAccountFromKredit(loanId);
+							if (tmpLoanid == null) {
+								tmpLoanid = getGroupAccountKredit(loanId);
+							}
+							loanId = tmpLoanid;
+							if (loanId == null) {
+								tmpNoLoan+=kivaId+"; ";
+								continue;
+							}
+						}
+						String sql1;
+						if (loanId.length() == 16) {
+							// IDL
+							/*sql1 = "SELECT p.account_number,sum(p.amount_paid) amount_paid FROM(select h.account_number,sum(h.amount_paid) amount_paid from cltb_amount_paid h "
+									+ "where upper(h.component_name) = upper('PRINCIPAL') and h.ACCOUNT_NUMBER = '"
+									+ loanId
+									+ "' "
+									+ "group by h.ACCOUNT_NUMBER UNION "
+									+ "SELECT m.ACCOUNT_NUMBER,-sum(k.COLUMN1ACCUM_PRN_PAID) amount_paid from CLTB_ACCOUNT_APPS_MASTER m "
+									+ "INNER JOIN KIVA_ACCUMULATE_PRN k on REPLACE(m.ALT_ACC_NO,'-','') = REPLACE(k.LOAN_ACC,'-','') where m.ACCOUNT_NUMBER = '"
+									+ loanId
+									+ "' "
+									+ "GROUP BY m.ACCOUNT_NUMBER) p GROUP BY p.account_number";*/
+							sql1= "select  "
+									+ "NVL(k.ln_amt,m.AMOUNT_DISBURSED) - (KREDIT_CLPKS_Loan.FN_CL_AMOUNT_BALANCE(m.ACCOUNT_NUMBER,m.BRANCH_CODE,'PRINCIPAL','','') "
+									+ " - nvl((select sum(en.amount_settled) amount_settled from cltb_event_entries en where en.event_code ='DSBR' and en.account_number =m.ACCOUNT_NUMBER and en.amount_tag ='PRINCIPAL' and en.value_date > k.mig_date),0)  )  amount_paid "
+									+ "from cltb_account_master m "
+									+ "left join kiva_accumulate_prn k on REPLACE(m.ALT_ACC_NO,'-','') = REPLACE(k.LOAN_ACC,'-','') "
+									+ "where m.ACCOUNT_NUMBER ='"+loanId+"'";
+						} else {
+							// GRL
+							sql1 = "SELECT sum(p2.amount_paid) amount_paid "
+									+ "FROM(SELECT g.GROUP_ACC_NO,sum(ap.amount_paid) amount_paid from MFI_GROUP_MEMBER gm"
+									+ " INNER JOIN MFI_GROUP g on g.ID = gm.GROUP_ID"
+									+ " INNER JOIN cltb_amount_paid ap on gm.ACCOUNT = ap.ACCOUNT_NUMBER "
+									+ "WHERE upper(ap.component_name) = upper('PRINCIPAL') and g.GROUP_ACC_NO = '"
+									+ loanId
+									+ "'"
+									+ " GROUP BY g.GROUP_ACC_NO UNION  "
+									+ "SELECT g.GROUP_ACC_NO,-sum(k.COLUMN1ACCUM_PRN_PAID) amount_paid from MFI_GROUP_MEMBER gm"
+									+ " INNER JOIN MFI_GROUP g on g.ID = gm.GROUP_ID "
+									+ "INNER JOIN KIVA_ACCUMULATE_PRN k on REPLACE(gm.REF_ACC_NO,'-','') = REPLACE(k.LOAN_ACC,'-','') "
+									+ "where g.GROUP_ACC_NO = '"
+									+ loanId
+									+ "' GROUP BY g.GROUP_ACC_NO) p2 GROUP BY p2.GROUP_ACC_NO";
+						}
+						CodeItem pri = Sql2oHelper.sql2o.open()
+								.createQuery(sql1)
+								.addColumnMapping("amount_paid", "code")
+								.executeAndFetchFirst(CodeItem.class);
+						CodeItem refAcc = Sql2oHelper.sql2o.open()
+								.createQuery("select ref_acc code from kiva_loan where id='"+kivaId+"'")
+								.addColumnMapping("ref_acc", "code")
+								.executeAndFetchFirst(CodeItem.class);
+						if(refAcc.getCode()==null) refAcc.setCode("");
+						if (pri != null) {
+							tmpOkLoan+=kivaId+"; ";
+							if (!contentDownload.isEmpty())
+								contentDownload += "\n";
+							contentDownload += kivaId + "," + pri.getCode()+","+refAcc.getCode();
+						}
+					}
+				}
+
+				lstKiva = null;
+				if (!contentDownload.isEmpty()) {
+					Filedownload.save(contentDownload,
+							"application/vnd.ms-excel", "repayment.csv");
+				}
+				Messagebox.show(" Generated Loan : " + tmpOkLoan + "\n"
+						+ " Unknown Loan : " + tmpNoLoan + "\n"
+						, "Generate Infor", 1,
+						Messagebox.INFORMATION);
+				/*@SuppressWarnings("rawtypes")
+				Map params = new HashMap();
+				params.put("width", 900);
+				Messagebox.show(" Generated Loan: " + tmpOkLoan + "\n"
+						+ "Unknown Loan :" + tmpNoLoan + "\n", "Generate Infor", null, null, Messagebox.INFORMATION, null,
+				    null, params);*/
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	private String getAccountFromKredit(String id) {
+		String sql = "SELECT m.ACCOUNT_NUMBER FROM CLTB_ACCOUNT_APPS_MASTER m where REPLACE(m.ALT_ACC_NO,'-','') = REPLACE('"
+				+ id + "','-','')";
+		CodeItem accNum = Sql2oHelper.sql2o.open().createQuery(sql)
+				.addColumnMapping("ACCOUNT_NUMBER", "code")
+				.executeAndFetchFirst(CodeItem.class);
+		if (accNum == null)
+			return null;
+		return accNum.getCode();
+	}
+
+	private String getGroupAccountKredit(String id) {
+		String sql = "SELECT g.ID FROM MFI_GROUP g WHERE REPLACE(g.REF_GRP ,'-','') = REPLACE('"
+				+ id + "','-','')";
+		CodeItem accNum = Sql2oHelper.sql2o.open().createQuery(sql)
+				.addColumnMapping("id", "code")
+				.executeAndFetchFirst(CodeItem.class);
+		if (accNum == null)
+			return null;
+		return accNum.getCode();
+	}
+
+	private boolean isExistKiva(String id) {
+		boolean itemExists = (Ebean.find(KivaLoanModel.class).where()
+				.eq("id", id).findRowCount() == 1) ? true : false;
+		return itemExists;
+	}
+
+	private boolean isNoKiva(String id) {
+		boolean itemNo = (Ebean.find(KivaLoanModel.class).where().eq("id", id)
+				.findRowCount() == 0) ? true : false;
+		return itemNo;
+	}
+
+	private boolean isNoLoan(String id) {
+		if (id.startsWith("K")) {
+			String tmpLoanid = getAccountFromKredit(id);
+			if (tmpLoanid == null) {
+				tmpLoanid = getGroupAccountKredit(id);
+			}
+			id = tmpLoanid;
+			if (id == null) {
+				return false;
+			}
+		}
+		String sql;
+		if (id.length() == 16) {
+			sql = "SELECT ACCOUNT_NUMBER FROM CLTB_ACCOUNT_APPS_MASTER where ACCOUNT_NUMBER = '"
+					+ id + "'";
+		} else {
+			sql = "SELECT Max(ACCOUNT) FROM MFI_GROUP_MEMBER gm INNER JOIN MFI_GROUP g on gm.GROUP_ID = gm.ID where g.GROUP_ACC_NO ='"
+					+ id + "'";
+		}
+		try (Connection con = Sql2oHelper.sql2o.open()) {
+			CodeItem item = con.createQuery(sql).executeAndFetchFirst(
+					CodeItem.class);
+
+			boolean itemNo = (item == null) ? true : false;
+			return itemNo;
+		}
+	}
+
+	@Command
+	@NotifyChange({ "lstKiva", "totalSize","lstFilterSub" })
+	public void doSearch() {		
+		lstFilterSub = null;
+		lstKiva = null;	
+		selected = null;
+		param.getSub().setCode("");
+		param.getSub().setDescription("All");
+	}
+	
+	@Command
+	@NotifyChange({"lstKiva"})
+	public void doSub(){
+		lstFilterSub = null;
+		lstKiva = null;	
+		selected = null;
+	}
+
+	@Command
+	@NotifyChange({ "filter", "lstKiva", "selected","param","lstFilterBranch","lstFilterSub" })
+	public void onClear() {		
+		lstKiva = null;
+		lstFilterBranch = null;
+		lstFilterSub = null;
+		selected = null;
+		param = new ParamModel();
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Command
+	public void onConfirmDelete() {
+		Messagebox.show("Are you sure you want to delete this record?",
+				"Delete Confirmation", Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+					public void onEvent(org.zkoss.zk.ui.event.Event evtt)
+							throws InterruptedException {
+						if (evtt.getName().equals("onOK")) {
+							onDelete();
+						}
+					}
+
+				});
+	}
+
+	@Command
+	@NotifyChange({ "selected", "lstKiva" })
+	public void onDelete() {
+		if(selected != null){
+			Ebean.delete(selected);
+			lstKiva.remove(selected);
+			selected = null;		
+			BindUtils.postNotifyChange(null, null, this, "*");
+		}	
+	}
+
+	@Command
+	public void onExport() {
+		try {
+			Workbook workbook = new HSSFWorkbook();
+			Iterator<KivaLoanModel> iterator = lstKiva.iterator();
+			Row row;
+			// List<KivaLoanModel> tmpSch = new ArrayList<KivaLoanModel>();
+			Integer rowIndex = 1;
+			Sheet sheet = workbook.createSheet();
+			row = sheet.createRow(0);
+			Cell cClientId = row.createCell(0);
+			Cell cLoanId = row.createCell(1);
+			Cell cAmount = row.createCell(2);
+			Cell cTerm = row.createCell(3);
+			Cell cClient = row.createCell(4);
+			Cell cDisburseDate = row.createCell(5);
+			Cell cRaisedDate = row.createCell(6);
+			Cell cCoName = row.createCell(7);
+			Cell cBrName = row.createCell(8);
+			Cell cSubName = row.createCell(9);
+			
+			cClientId.setCellValue("Client ID");
+			cLoanId.setCellValue("Loan ID");
+			cAmount.setCellValue("Loan Amount");
+			cTerm.setCellValue("Loan term");
+			cClient.setCellValue("Client Name");
+			cDisburseDate.setCellValue("Disburse Date");
+			cRaisedDate.setCellValue("Date Raised");
+			cCoName.setCellValue("CO Name");
+			cBrName.setCellValue("Branch");
+			cSubName.setCellValue("Sub-Branch");
+			while (iterator.hasNext()) {
+				KivaLoanModel c = iterator.next();
+				row = sheet.createRow(rowIndex++);
+				Cell clientId = row.createCell(0);
+				Cell loanId = row.createCell(1);
+				Cell amount = row.createCell(2);
+				Cell term = row.createCell(3);
+				
+				Cell clientName = row.createCell(4);
+				Cell disburseDate = row.createCell(5);
+				Cell raiseDate = row.createCell(6);
+				Cell coName = row.createCell(7);
+				Cell branch = row.createCell(8);
+				Cell sub = row.createCell(9);
+				
+				clientId.setCellValue(c.getClientId());
+				loanId.setCellValue(c.getLoanId());
+				amount.setCellValue(c.getLoanAmount());
+				term.setCellValue(c.getTerm());
+				clientName.setCellValue(c.getClientName());
+				disburseDate.setCellValue(new SimpleDateFormat("dd-MMM-yyyy")
+						.format(c.getDateDisburse()));
+				raiseDate.setCellValue(new SimpleDateFormat("dd-MMM-yyyy")
+						.format(c.getDateRaise()));
+				coName.setCellValue(c.getCoName());
+				branch.setCellValue(KivaFacade.getBranchBy(c.getBrCd()));
+				sub.setCellValue(c.getSubName());
+			}
+			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+			workbook.write(outByteStream);
+			byte[] outArray = outByteStream.toByteArray();
+			Filedownload
+					.save(outArray, "application/ms-excel", "kiva_incentive.xls");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@NotifyChange({ "lstKiva", "totalSize" })
+	public List<KivaLoanModel> getLstKiva() {		
+		if(lstKiva == null){
+			lstKiva = new ListModelList<KivaLoanModel>(KivaFacade.getLstKiva(param));
+		}
+	
+		return lstKiva;
+	}
+
+	public void setLstKiva(ListModelList<KivaLoanModel> lstKiva) {
+		this.lstKiva = lstKiva;
+	}
+
+	public Window getKivals() {
+		return kivals;
+	}
+
+	public void setKivals(Window kivals) {
+		this.kivals = kivals;
+	}
+
+	public CodeItem getSelectedNumRow() {
+		if (selectedNumRow != null)
+			return selectedNumRow;
+		selectedNumRow = new CodeItem();
+		selectedNumRow.setCode("10");
+		selectedNumRow.setDescription("10");
+		return selectedNumRow;
+	}
+
+	public void setSelectedNumRow(CodeItem selectedNumRow) {
+		this.selectedNumRow = selectedNumRow;
+	}
+
+
+	public ListModelList<CodeItem> getLstStatus() {
+		if (lstStatus != null)
+			return lstStatus;
+		lstStatus = new ListModelList<CodeItem>();
+		String[] desc = new String[] { "All", "Active", "DeActive" };
+		String[] code = new String[] { "%", "true", "false" };
+		for (int i = 0; i < code.length; i++) {
+			CodeItem item = new CodeItem();
+			item.setCode(code[i]);
+			item.setDescription(desc[i]);
+			lstStatus.add(item);
+		}
+		return lstStatus;
+	}
+
+	public void setLstStatus(ListModelList<CodeItem> lstStatus) {
+		this.lstStatus = lstStatus;
+	}
+
+	
+	public ListModelList<CodeItem> getRows() {
+		if (rows != null)
+			return rows;
+		rows = new ListModelList<CodeItem>();
+		String[] desc = new String[] { "5", "10", "15", "20", "25", "30", "40",
+				"50" };
+		String[] code = new String[] { "5", "10", "15", "20", "25", "30", "40",
+				"50" };
+		for (int i = 0; i < code.length; i++) {
+			CodeItem item = new CodeItem();
+			item.setCode(code[i]);
+			item.setDescription(desc[i]);
+			rows.add(item);
+		}
+		return rows;
+	}
+
+	public void setRows(ListModelList<CodeItem> rows) {
+		this.rows = rows;
+	}
+
+	@GlobalCommand
+	@NotifyChange("lstKiva")
+	public void notifyListCbChange() {
+		lstKiva = null;
+	}
+
+	public KivaLoanModel getSelected() {
+		return selected;
+	}
+
+	public void setSelected(KivaLoanModel selected) {
+		this.selected = selected;
+	}
+
+	
+	public Media getMedia() {
+		return media;
+	}
+
+	public void setMedia(Media media) {
+		this.media = media;
+	}
+
+	public String getContentDownload() {
+		return contentDownload;
+	}
+
+	public void setContentDownload(String contentDownload) {
+		this.contentDownload = contentDownload;
+	}
+
+	public AMedia getFileContent() {
+		return fileContent;
+	}
+
+	public void setFileContent(AMedia fileContent) {
+		this.fileContent = fileContent;
+	}
+
+	public ListModelList<CodeItem> getLstFilterBranch() {
+		if (lstFilterBranch == null) {
+			lstFilterBranch = new ListModelList<>(KivaFacade.getBranchesList());			
+		}
+		return lstFilterBranch;
+	}
+
+	public void setLstFilterBranch(ListModelList<CodeItem> lstFilterBranch) {
+		this.lstFilterBranch = lstFilterBranch;
+	}
+
+	public ListModelList<CodeItem> getLstFilterSub() {
+		if (lstFilterSub == null) {
+			lstFilterSub = new ListModelList<>(
+					KivaFacade.getSubBranchesList(param.getBranch().getId()));
+		}
+		return lstFilterSub;
+	}
+
+	public void setLstFilterSub(ListModelList<CodeItem> lstFilterSub) {
+		this.lstFilterSub = lstFilterSub;
+	}
+
+	public ParamModel getParam() {
+		return param;
+	}
+
+	public void setParam(ParamModel param) {
+		this.param = param;
+	}
+	
+}

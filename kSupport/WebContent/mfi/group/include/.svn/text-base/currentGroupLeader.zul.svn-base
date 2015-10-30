@@ -1,0 +1,79 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Current Leader</n:b>
+			</n:h6>
+			<button sclass="btn-primary btn-xs" label="New Leader"
+				disabled="@bind(empty fx2.currentLeader.id)"
+				onClick="@command('onConfirmAddNewLeader', txtLeaderCIF=txtLeaderCIF, txtLeaderName=txtLeaderName, txtLeaderNameKH=txtLeaderNameKH,dtStart=dtStart, dtEnd=dtEnd)" />
+		</n:div>
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="150px">Leader CIF</n:td>
+						<n:td align="left" class="k-padding">
+							<div class="row">
+								<div class="col-lg-6">
+									<div
+										class="input-group input-group-sm">
+										<textbox id="txtLeaderCIF"
+											class="form-control" width="145px"
+											value="@bind(fxLeader.cif)" readonly="true" />
+										<!-- Note: use @bind(fx2.currentLeader.cif) then it caused ZK crazy 
+											sometimes. It says it cannot find cif property in CbCycle. The error happened 
+											with some specific records. But I cannot define the exact pattern yet. if 
+											we just use @load then it will not cause error. Hmmm! I have no idea with 
+											this matter. :( -->
+										<span class="input-group-btn">
+											<button class="btn-primary"
+												onClick="@command('onShowFetchCIF', txtLeaderCIF=txtLeaderCIF, txtLeaderName=txtLeaderName, txtLeaderNameKH=txtLeaderNameKH, dtStart=dtStart, dtEnd=dtEnd)"
+												iconSclass="z-icon-search" width="8px" />
+										</span>
+									</div><!-- /input-group -->
+								</div><!-- /.col-lg-6 -->
+							</div><!-- /.row -->
+						</n:td>
+						<n:td></n:td>
+						<n:td align="left" class="k-padding"></n:td>
+					</n:tr>
+
+					<n:tr align="right">
+						<n:td>Full Name KH</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox id="txtLeaderNameKH" width="165px"
+								value="@bind(fxLeader.leaderNameKH)" readonly="true"
+								constraint="no empty: Please enter full name KH of group leader" />
+						</n:td>
+						<n:td>Start Date</n:td>
+						<n:td align="left" class="k-padding">
+							<datebox id="dtStart" width="162px"
+								format="dd-MM-yyyy" value="@bind(fxLeader.startDate)"
+								constraint="no empty: Please enter leader start date" />
+						</n:td>
+					</n:tr>
+
+					<n:tr align="right">
+						<n:td>Full Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox id="txtLeaderName" width="165px"
+								value="@bind(fxLeader.leaderName)" readonly="true"
+								constraint="no empty: Please enter full name of group leader" />
+						</n:td>
+						<n:td>End Date</n:td>
+						<n:td align="left" class="k-padding">
+							<datebox id="dtEnd" width="162px"
+								format="dd-MM-yyyy" value="@bind(fxLeader.endDate)"
+								constraint="no empty: Please enter leader end date" />
+						</n:td>
+					</n:tr>
+				</n:table>
+
+			</n:div>
+		</n:div>
+	</n:div>
+</zk>

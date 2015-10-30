@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/scm/svn/kSupport_SVN/!svn/ver/245/src/kredit/web/cbc/model
+END
+ParamCoGuaModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/scm/svn/kSupport_SVN/!svn/ver/195/src/kredit/web/cbc/model/ParamCoGuaModel.java
+END
+ValidationMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/208/src/kredit/web/cbc/model/ValidationMessage.java
+END
+Telco.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/scm/svn/kSupport_SVN/!svn/ver/200/src/kredit/web/cbc/model/Telco.java
+END
+CbcModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/scm/svn/kSupport_SVN/!svn/ver/24/src/kredit/web/cbc/model/CbcModel.java
+END
+Enquiry.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/scm/svn/kSupport_SVN/!svn/ver/24/src/kredit/web/cbc/model/Enquiry.java
+END
+CoGuaModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/scm/svn/kSupport_SVN/!svn/ver/209/src/kredit/web/cbc/model/CoGuaModel.java
+END

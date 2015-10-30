@@ -1,0 +1,152 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="cbip" title="Community Bank (CB) Input" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('kredit.web.mfi.cb.vm.CbInputVM')"
+		mode="overlapped" closable="true" width="800px" height="600px"
+		position="center"
+		onClose="@global-command('onCloseWin', id=self, postGlobal='notifyListCbChange')">
+		<caption iconSclass="icon-k k-green"></caption>
+		<div
+			form="@id('fx') @init(vm.frm) @load(vm.selected) @save(vm.selected, before='onSave')">
+
+			<include src="/common/ui/toolbarInput.zul" />
+
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Community Bank Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Branch Code</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(fx.brCd)" readonly="true" width="50px" />
+								</n:td>
+								<n:td>Seq.</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtVillageSeq" value="@bind(fx.villageSeq)"
+										readonly="true" width="50px" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i>
+									Village
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="input-group input-group-sm">
+												<textbox id="txtVillage" class="form-control" width="140px"
+													value="@bind(fx.villageName)" onOK="@command('onShowFetchVillage')" />
+												<span class="input-group-btn">
+													<button class="btn-primary" onClick="@command('onShowFetchVillage')"
+														iconSclass="z-icon-search" width="8px" />
+												</span>
+											</div>
+										</div>
+									</div>
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									CB - Name (EN)
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCbNameEN" constraint="no empty" width="160px"
+										value="@bind(fx.nameEN)" readonly="true" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Village ID</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtVillageID" value="@bind(fx.villageID)"
+										readonly="true" width="160px" />
+								</n:td>
+								<n:td width="120px">
+									CB - Name (KH)
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" constraint="no empty" value="@bind(fx.nameKH)" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td></n:td>
+								<n:td align="left" class="k-padding">
+									
+								</n:td>
+								<n:td width="120px">
+									Status 
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" value="@load(fx.recordStatDes)" readonly="true" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<n:div class="k-space" />
+		<tabbox vflex="true">
+			<tabs>
+				<tab label="Current Cycle" />
+				<tab label="Previous Cycles"
+					onClick="@command('onTabPrevCycle', tabPrevCycles = tabPrevCycles)" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<n:div class="widget-box transparent" style="opacity: 1;">
+						<n:div class="widget-header">
+							<n:h6 class="lighter">
+								<n:b>
+									Community Bank Cycle Info Summary
+								</n:b>
+							</n:h6>
+							<button sclass="btn-primary btn-xs" label="Edit Cycle"
+								onClick="@command('onEditCycle', id=vm.selected.currentCycleID, isCurrent = true)"
+								disabled="@load(vm.selected.currentCycleID eq 0 or vm.selected.recordStat eq 'C')" />
+							<button sclass="btn-primary btn-xs" label="New Cycle"
+								onClick="@command('onNewCycle')" disabled="@load(empty vm.selected.villageID or vm.selected.recordStat eq 'C')" />
+
+						</n:div>
+						<n:div class="widget-body">
+							<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+								<n:div class="k-space" />
+
+								<include src="/mfi/cb/include/currentCbCycle.zul" />
+
+							</n:div>
+						</n:div>
+					</n:div>
+				</tabpanel>
+				<tabpanel>
+					<n:div class="widget-box transparent" style="opacity: 1;">
+						<n:div class="widget-header">
+							<n:h6 class="lighter">
+								<n:b>
+									Previous Community Bank Cycles Info
+									Summary
+								</n:b>
+							</n:h6>
+						</n:div>
+						<n:div class="widget-body">
+							<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+								<n:div class="k-space" />
+								<div id="tabPrevCycles">
+									<!-- <include src="/mfi/cb/include/previousCbCycle.zul" /> -->
+								</div>
+							</n:div>
+						</n:div>
+					</n:div>
+
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<include src="/common/ui/statusBar.zul"></include>
+	</window>
+</zk>

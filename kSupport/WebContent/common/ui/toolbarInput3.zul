@@ -1,0 +1,10 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<toolbar hflex="true" width="100%">
+		<toolbarbutton label="New" image="/img/icon/new.png"
+			onClick="@command('onNew')" visible="@load(vm.privilege.canNew)"/>
+		<toolbarbutton label="Save" image="/img/icon/save.png"
+			onClick="@command('onSave')" disabled="@load(not fxStatus.dirty)" visible="@load(vm.privilege.canUpdate)"/>
+
+	</toolbar>
+</zk>

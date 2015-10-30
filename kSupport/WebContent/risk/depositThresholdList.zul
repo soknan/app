@@ -1,0 +1,168 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="dethrels" title="Deposit Threshold List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.risk.vm.DepositThresholdListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="900px"
+		height="300px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+				<style>
+.RATE {
+font-family: Arial,Sans-serif;
+font-size: 12px;
+font-weight: normal;
+font-style: normal;
+border-radius: 0;
+text-shadow: none;
+color:#000000;
+padding: 1px 5px 3px;
+}
+.RATE.A{
+background-color: #5cb85c;
+}
+.RATE.B{
+background-color: #FFFC00;
+}
+.RATE.C{
+background-color: #FFB800;
+}
+.RATE.D{
+background-color: #FFB800;
+}
+.RATE.E{
+background-color: #d9534f;
+}
+.RATE.F{
+background-color: #d9534f;
+}
+</style>			
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<!-- <groupbox hflex="true">
+				<caption label="Filters" />
+				<hbox width="100%">
+					<cell>
+						<label>Date</label>
+					</cell>
+					<cell>
+						<datebox width="120px" format="dd-MM-yyyy"
+							value="@bind(vm.param.vDate)" onChange="@command('doSearch')" />
+					</cell>
+					<cell>
+						<label value="Branch" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterBranch)"
+							value="@bind(vm.param.branch.description)"
+							selectedItem="@bind(vm.param.branch)" onChange="@command('doSearch')"
+							width="162px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>	
+					<cell>
+						<label value="Sub" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterSub)"
+							value="@bind(vm.param.sub.description)"
+							selectedItem="@bind(vm.param.sub)"
+							onChange="@command('doSub')" width="162px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell> 				
+					<cell>
+						<label value="Tran. Type" />
+					</cell>
+					<cell>
+						<combobox id="lstTranType" model="@load(vm.lstTranType)"
+							value="@load(vm.param.tranType.description)"
+							selectedItem="@bind(vm.param.tranType)" onChange="@command('doSearch')"
+							 width="80px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)" />
+							</template>
+						</combobox>
+					</cell> 
+					<cell>
+						<label value="Tran. Status" />
+					</cell>
+					<cell>
+						<combobox id="lstTranStatus" model="@load(vm.lstTranStatus)"
+							value="@load(vm.param.tranStatus.description)"
+							selectedItem="@bind(vm.param.tranStatus)" onChange="@command('doSearch')"
+							 width="80px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)" />
+							</template>
+						</combobox>
+					</cell>				
+				</hbox>
+			</groupbox> --> 			
+			<toolbar hflex="true">						
+								
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					value="@bind(vm.param.filter)" placeholder="Search....." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<space bar="true" class="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>		
+									
+			</toolbar>
+			<listbox id="lst" model="@load(vm.lstDepositThreshold)" width="100%"
+				mold="paging" selectedItem="@bind(vm.selected)"  pageSize="@load(vm.selectedNumRow.description)"
+				hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="No" 
+					style="text-align: center" sort="auto(id)" />
+					<listheader label="Rating Class" 
+					style="text-align: center" sort="auto(rating_class)" />
+					<listheader label="Daily Deposit" 
+						style="text-align: center" sort="auto(per_day_deposit)" />					
+					<listheader label="Monthly Deposit" 
+						style="text-align: center" sort="auto(per_month_deposit)" />
+						<listheader label="Title" 
+						style="text-align: center" sort="auto(title)"/>		
+									
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onDoubleClick="@command('onOpen')">																		
+						<listcell label="@load(item.id)" />						
+						<listcell><label class="RATE ${item.rating_class}" value="@load(item.rating_class)"/></listcell>
+						<listcell label="@load(item.per_day_deposit)" />						
+						<listcell label="@load(item.per_month_deposit)" />
+						<listcell label="@load(item.title)"/>																			
+					</listitem>
+				</template>
+			</listbox>			 
+			<!-- <paging id="lstPaging" autohide="false" detailed="true"
+			totalSize="@load(vm.totalSize)"
+			pageSize="@load(vm.selectedNumRow.description)" mold="os"
+			activePage="@bind(vm.pageIndex)">
+			</paging> -->			
+		</vbox>		
+	</window>
+</zk>

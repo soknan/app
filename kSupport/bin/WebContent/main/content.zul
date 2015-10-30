@@ -1,0 +1,10 @@
+<?page title="Content" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	  
+	<!-- <button label="Authenticate BI"
+		onClick="@command('onAuthenticateBI')" />
+	<button label="Contract VSU" onClick="@command('onViewRpt')" />
+	<button label="Contract TB" onClick="@command('onViewRpt2')" />
+	<iframe src="@load(vm.autologin)" visible="false"/> -->
+	
+</zk>

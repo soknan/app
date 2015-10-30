@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/incentive/model
+END
+ParamIncentive.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/scm/svn/kSupport_SVN/!svn/ver/168/src/kredit/web/util/incentive/model/ParamIncentive.java
+END
+IncentiveLoanVSU.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/scm/svn/kSupport_SVN/!svn/ver/170/src/kredit/web/util/incentive/model/IncentiveLoanVSU.java
+END
+IncentiveLoan.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/scm/svn/kSupport_SVN/!svn/ver/168/src/kredit/web/util/incentive/model/IncentiveLoan.java
+END
+IncentiveSaving.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/scm/svn/kSupport_SVN/!svn/ver/162/src/kredit/web/util/incentive/model/IncentiveSaving.java
+END

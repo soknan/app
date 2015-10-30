@@ -1,0 +1,71 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="kgpls" title="Kiva Community Raise" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kiva.vm.KivaGroupPostVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1000px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">		
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<toolbar hflex="true">				
+					<toolbarbutton label="Add Account" image="/img/icon/new.png"
+					onClick="@command('onShowFetchCIF')" />	
+					<toolbarbutton label="Generate Post" image="/img/icon/export.png"
+					onClick="@command('onPost')" disabled="@load(empty(vm.tmpLstCIF))" />
+					<space bar="true" class="k-ver-bar" />
+					<toolbarbutton id="btnDel" label="Delete" image="/img/icon/delete.png" 
+					onClick="@command('onConfirmDelete')"  disabled="@load(vm.tmpSelected eq null)"/>					
+					<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onConfirmDeleteAll')" disabled="@load(empty(vm.tmpLstCIF))" />					
+			</toolbar>
+			<listbox id="lst" model="@load(vm.tmpLstCIF)" width="100%"
+				mold="paging" selectedItem="@bind(vm.tmpSelected)"
+				hflex="true" vflex="true" 	pagingPosition="bottom">
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+				<listheader label="Brd.Code" width="80px"
+						sort="auto(branchCode)" />
+					<listheader label="Group Acc No." width="150px"
+						sort="auto(groupAccNo)" />
+					<listheader label="Ref.Group" width="185px"
+						sort="auto(refGrp)" />
+						<listheader label="Mbr" width="80px"
+						sort="auto(mbr)" />
+						<listheader label="Leader Name" width="150px"
+						sort="auto(leaderName)" />
+						<listheader label="Cb Name" width="150px"
+						sort="auto(cbName)" />
+						<listheader label="Cycle" width="80px"
+						sort="auto(cycle)" />	
+						<listheader label="Village" width="180px"
+						sort="auto(village)" />				
+				</listhead>
+				<template name="model">
+					<listitem height="35px">
+						<listcell label="@load(each.branchCode)" />
+						<listcell label="@load(each.groupAccNo)" />
+						<listcell label="@load(each.refGrp)" />
+						<listcell label="@load(each.mbr)" />
+						<listcell label="@load(each.leaderName)" />
+						<listcell label="@load(each.cbName)" />
+						<listcell label="@load(each.cycle)" />
+						<listcell label="@load(each.village)" />						
+					</listitem>
+				</template>
+			</listbox>
+			<!--  
+				<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+				</paging>
+			-->
+		</vbox>
+	</window>
+</zk>

@@ -1,0 +1,17 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<listbox hflex="1" vflex="true" multiple="true" rows="7">
+		<listhead>
+			<listheader label="Full Name" width="120px"></listheader>
+			<listheader label="CIF" width="80px"></listheader>
+			<listheader label="Account"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each.firstName }" />
+				<listcell label="${each.lastName }" />
+				<listcell label="${each.fullName }" />
+			</listitem>
+		</template>
+	</listbox>
+</zk>

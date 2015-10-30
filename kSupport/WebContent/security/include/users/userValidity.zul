@@ -1,0 +1,68 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<vbox>
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onNewValidity')"/>
+			<toolbarbutton label="Open" image="/img/icon/edit.png" disabled="@load(vm.selectedValidity.id eq null)"
+				onClick="@command('onOpenValidity')"/>
+				
+			<space bar="true" sclass="k-ver-bar" />
+			<!-- 
+			<label value="Look for: " style="padding: 0 0 0 5px;" />
+			<textbox onOK="@command('doSearch')" focus="true"
+				sclass="ksearch" value="@bind(vm.param.filter)"
+				placeholder="Search..." />
+			<toolbarbutton label="Find" image="/img/icon/search.png"
+				onClick="@command('doSearch')" />
+			<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+				onClick="@command('onClearAll')" />
+			<space bar="true" sclass="k-ver-bar" />
+			<label value="Rows per page:" />
+			<combobox id="rowPerPage" model="@load(vm.rows)"
+				value="@load(vm.selectedNumRow.description)"
+				selectedItem="@bind(vm.selectedNumRow)"
+				onChange="@command('doSearch')" width="50px">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" />
+				</template>
+			</combobox>
+			 -->
+		</toolbar>
+		
+		<hbox align="center">
+			<listbox id="lstValidity" model="@load(vm.selectedUser.userValidities)" rows="10" mold="paging"
+				selectedItem="@bind(vm.selectedValidity)" width="100%" height="100%">
+				<attribute name="onCreate">
+					<![CDATA[lstValidity.pagingChild.mold = "os";]]>
+				</attribute>
+				<listhead sizable="false">
+					<listheader label="Type" width="90px" style="text-align: center"/>
+					<listheader label="Branch" width="100px" style="text-align: center"/>
+					<listheader label="User As" width="150px" style="text-align: center"/>
+					<listheader label="Start Date" width="140px" style="text-align: center"/>
+					<listheader label="End Date" width="140px" style="text-align: center"/>
+				</listhead>
+				<template name="model">
+					<listitem onDoubleClick="@command('onOpenValidity')">
+						<listcell>
+							<label value="@load(each.type eq 'A'?'Acting':'Replace')"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.branch.description)"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.userAs.username)"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.start_on) @converter('formatedDate', format='dd-MM-yyyy')"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.end_on) @converter('formatedDate', format='dd-MM-yyyy')"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</vbox>
+</zk>

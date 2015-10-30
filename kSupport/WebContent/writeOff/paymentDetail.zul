@@ -1,0 +1,134 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		repayment.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="repayment" title="Repayment Information" border="normal" visible="@load(vm.visiblePayment)"
+		mode="overlapped" closable="true" width="650px" height="330px"
+		position="center" onClose="@command('onClosePayment')">
+		
+		<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSavePayment')"/>
+	</toolbar>
+	
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Repayment Info</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td>Branch Code</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedRepayment.brCd)" width="60px" />
+						</n:td>
+						<n:td>Value Date</n:td>
+						<n:td align="left" class="k-padding">
+							<datebox value="@bind(vm.selectedRepayment.valueDt)" width="160px" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>
+							<n:i class="red">*</n:i>
+								CO Full Name
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="input-group input-group-sm">
+										<textbox class="form-control" width="140px"
+											value="@bind(vm.selectedRepayment.coFullName)" />
+										<span class="input-group-btn">
+											<button class="btn-primary" onClick="@command('onShowFetchCo')"
+												iconSclass="z-icon-search" width="8px" />
+										</span>										
+									</div>
+								</div>
+							</div>
+						</n:td>
+						<n:td>CO Short Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedRepayment.coShortName)" width="160px" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Amount</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedRepayment.amount)" width="160px" />
+						</n:td>
+						<n:td width="120px">Currency</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox model="@load(vm.filterCurrency)" value="@load(vm.selectedRepayment.ccy)"
+								selectedItem="@bind(vm.selectedRepayment.currency)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Remark</n:td>
+						<n:td align="left" class="k-padding" colspan="3">
+							<textbox width="485px" rows="2" value="@bind(vm.selectedRepayment.remark)"/>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 10px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRepayment.createBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRepayment.createOn)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRepayment.changeBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRepayment.changeOn)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+	</window>
+</zk>

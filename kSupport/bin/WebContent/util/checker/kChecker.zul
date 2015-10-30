@@ -1,0 +1,159 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="ckls" title="Checker" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.checker.vm.CheckerVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1100px"
+		sizable="true" height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox vflex="true" hflex="true">
+
+			<toolbar hflex="true" width="100%" xmlns:w="client">
+				<label visible="@load(vm.visibleBr)" value="Branch" />
+				<combobox model="@load(vm.filterBranches)"
+					visible="@load(vm.visibleBr)"
+					value="@load(vm.param.branch.description)"
+					selectedItem="@bind(vm.param.branch)" width="150px"
+					onChange="@command('onSelectBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)"
+							description="@load(t.code)" />
+					</template>
+				</combobox>
+
+				<label visible="@load(vm.visibleSbr)"
+					value="Sub Branch" />
+				<!-- 
+					<combobox model="@load(vm.filterSubBranches)" visible="@load(vm.visibleSbr)"
+					value="@load(vm.param.subBranch.description)"
+					selectedItem="@bind(vm.param.subBranch)" width="150px"
+					onChange="@command('onSelectSubBranch')">
+					<template name="model" var="t">
+					<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+					</combobox>
+				-->
+
+				<bandbox id="bd" mold="rounded" autodrop="true"
+					width="300px" visible="@load(vm.visibleSbr)"
+					value="@load(vm.showSelectedSubs(vm.param.sbrList))">
+					<bandpopup>
+						<listbox id="lstSub" height="250px"
+							width="300px" model="@load(vm.filterSubBranches)"
+							visible="@load(vm.visibleSbr)"
+							selectedItems="@bind(vm.param.sbrList)">
+							<attribute name="onCreate">
+								<![CDATA[
+	lstSub.setMultiple(true);
+	lstSub.setCheckmark(true);
+]]>
+							</attribute>
+							<listhead>
+								<listheader label="All" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px">
+									<listcell
+										label="@load(item.description)" />
+								</listitem>
+							</template>
+						</listbox>
+					</bandpopup>
+				</bandbox>
+				<toolbarbutton label="Check" id="btnCheck"
+					sclass="z-icon-check-square-o fa-lg blue"
+					onClick="@command('onCheckJS')" />
+
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<!-- <toolbarbutton label="About"
+					sclass="z-icon-question-circle fa-lg blue"
+					onClick="@command('onAbout')" /> -->
+				<n:span id="spanStatus"
+					style="float: right; color: #369de1">
+				</n:span>
+			</toolbar>
+
+			<tabbox vflex="true" id="tab"
+				selectedIndex="@bind(vm.selectedTab)">
+				<tabs>
+					<tab label="Check List" />
+					<tab label="Result" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<vbox vflex="true">
+							<hbox hflex="true">
+							<textbox value="@bind(vm.filter)" width="200px" placeholder="Search rule..."
+								onOK="@command('doSearch')" />
+							<button sclass="btn-primary btn-xs"
+								label="Search" iconSclass="z-icon-search"
+								onClick="@command('doSearch')" />
+								</hbox>
+							<listbox id="availChecker"
+								model="@load(vm.lstChecker)" hflex="true" vflex="true"
+								selectedItems="@bind(vm.selectAvails)" >
+								<attribute name="onCreate">
+				<![CDATA[
+	availChecker.setMultiple(true);
+	availChecker.setCheckmark(true);
+]]>
+				</attribute>
+								<listhead>
+									<listheader label="Title"
+										width="350px" sort="auto(title)" />
+									<listheader label="Description" />
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell
+											label="@load(each.title)" />
+										<listcell
+											label="@load(each.summary)"
+											tooltiptext="@load(each.validationMsg)" />
+									</listitem>
+								</template>
+							</listbox>
+						</vbox>
+					</tabpanel>
+					<tabpanel>
+						<div id="checkerContainer" vflex="true"
+							style="overflow:auto;">
+							<n:div class="widget-box transparent"
+								style="opacity: 1;">
+								<n:div class="widget-header">
+									<n:h6 class="lighter">
+										<n:b>
+											<n:i
+												class="z-icon-warning">
+											</n:i>
+											Result:
+										</n:b>
+										<n:a href="#">
+											<label value="@load(vm.msg)"
+												onClick="@command('onGoToCheckList')" />
+										</n:a>
+									</n:h6>
+									<!-- <n:span id="spanStatus"></n:span> -->
+								</n:div>
+								<n:div class="widget-body">
+									<n:div
+										class="widget-main padding-6 no-padding-left no-padding-right">
+										<n:div id="divAjaxResult"
+											style="overflow:auto;" class="page-content">
+										</n:div>
+									</n:div>
+								</n:div>
+							</n:div>
+						</div>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</vbox>
+		<n:script type="text/javascript"
+			src="assets/js/ace.min.js?t=23467" />
+		<n:script type="text/javascript" src="js/common.js?t=123367" />
+	</window>
+</zk>

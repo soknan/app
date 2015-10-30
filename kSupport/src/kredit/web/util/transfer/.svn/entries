@@ -1,0 +1,37 @@
+10
+
+dir
+278
+http://soknan_mean@w.kredit.com:8080/scm/svn/kSupport_SVN/src/kredit/web/util/transfer
+http://soknan_mean@w.kredit.com:8080/scm/svn/kSupport_SVN
+
+
+
+2014-10-10T09:00:54.589000Z
+199
+puthi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+272d0e1c-4501-0010-9d43-2b88fba134b1
+
+model
+dir
+
+utility
+dir
+
+vm
+dir
+

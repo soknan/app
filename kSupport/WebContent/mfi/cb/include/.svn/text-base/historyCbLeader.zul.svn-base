@@ -1,0 +1,37 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>History Leaders</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<div id="divHistoryLeader">
+					<listbox hflex="1" vflex="true" rows="6"
+						model="@load(vm.selectedCycle.historyLeaders)">
+						<listhead sizable="true">
+							<listheader label="Full Name" width="140px">
+							</listheader>
+							<listheader label="CIF" width="100px"></listheader>
+							<listheader label="Start Date" width="100px">
+							</listheader>
+							<listheader label="End Date"></listheader>
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.leaderName)" />
+								<listcell label="@load(each.cif)" />
+								<listcell
+									label="@load(each.startDate) @converter('formatedDate', format='dd-MMM-yyyy')" />
+								<listcell
+									label="@load(each.endDate) @converter('formatedDate', format='dd-MMM-yyyy')" />
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+			</n:div>
+		</n:div>
+	</n:div>
+</zk>

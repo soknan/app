@@ -1,0 +1,18 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<toolbar hflex="true" width="100%">
+		<toolbarbutton label="New" image="/img/icon/new.png"
+			onClick="@command('onNew')" />
+		<toolbarbutton label="Enter Query" image="/img/icon/database_go.png"
+			onClick="@command('onEnterQuery')" />
+		<toolbarbutton label="Save" image="/img/icon/save.png"
+			onClick="@command('onSave')" />
+		<toolbarbutton label="Delete" image="/img/icon/delete.png"
+			onClick="@command('onDelete')" />
+	</toolbar>
+	<groupbox mold="3d">
+		<caption label="test">
+		</caption>
+		<button label="Test" />
+	</groupbox>
+</zk>

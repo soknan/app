@@ -1,0 +1,52 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Community Bank Cycle</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">Cycle No.</n:td>
+						<n:td align="left" class="k-padding" width="160px">
+							<intbox value="@load(fx2.cycleNo)" disabled="true" width="50px"
+								readonly="true" />
+						</n:td>
+						<n:td>
+							<n:i class="red">*</n:i>
+							Start Date
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<datebox width="160px" format="dd-MM-yyyy" value="@bind(fx2.startDate)"
+								constraint="no empty" />
+						</n:td>
+						<n:td>
+							<n:i class="red">*</n:i>
+							End Date
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<datebox width="160px" format="dd-MM-yyyy" value="@bind(fx2.endDate)"
+								constraint="no empty" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Max Indiv Amount</n:td>
+						<n:td align="left" class="k-padding">
+							<intbox value="@bind(fx2.amountMaxIndiv)" format="#,##0.##"
+								width="160px"
+								onChange="@command('translateToLetter', amount = fx2.amountMaxIndiv, txtNumLetter=txtNumLetter)" />
+						</n:td>
+						<n:td align="left" colspan="4" class="k-padding">
+							<textbox sclass="k-orange" id="txtNumLetter"
+								value="@bind(fx2.amountMaxIndivTxt)" width="255px" readonly="true" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+	</n:div>
+</zk>

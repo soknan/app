@@ -1,0 +1,82 @@
+<?page title="Coborrower List" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="cgls" title="Coborrower / Guarantor List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.cbc.vm.CoGuaVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1000px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">		
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">			
+			<toolbar hflex="true">
+			<toolbarbutton label="New Guarantor" image="/img/icon/new.png" 
+					onClick="@command('onNewGuarantor')" visible="@load(vm.privilege.canNew)" />
+			<toolbarbutton label="Open" image="/img/icon/edit.png" disabled="@bind(empty vm.selected.accountNumber)"
+					onClick="@command('onOpen')" visible="@load(vm.privilege.canUpdate)"/>
+			
+					<space bar="true" class="k-ver-bar" />
+					<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true" width="200px"
+					value="@bind(vm.param.filter)" placeholder="accountNo..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<space bar="true" class="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+				<combobox model="@load(vm.lstType)"
+					value="@load(vm.param.type.description)"
+					onChange="@command('doSearch')"
+					selectedItem="@bind(vm.param.type)"
+					 width="150px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+			<listbox id="lst" model="@load(vm.lstCoGua)" width="100%"
+				mold="paging" selectedItem="@bind(vm.selected)"  pageSize="@load(vm.selectedNumRow.description)" hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">								
+					<listheader label="Type" 
+					style="text-align: left" sort="auto(customerName)"  />
+					<listheader label="Name" 
+					style="text-align: left" sort="auto(productType)"   />					
+					<listheader label="Customer Acc" 
+					style="text-align: left" sort="auto(fullNameKH)" />					
+					<listheader label="Customer Name" 
+					style="text-align: left" sort="auto(customerAmount)" />	
+					<listheader label="Validated" 
+					style="text-align: left" sort="auto(accountNumber)" />	
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onDoubleClick="@command('onOpen')">						
+						<listcell label="${item.type eq 'C'?'Coborrower':'Guarantor'}" />
+						<listcell label="@load(item.fullNameKH)"/>
+						<listcell label="@load(item.accountNumber)" />					
+						<listcell label="@load(item.customerName)" />	
+						<listcell><image src="${item.validated eq 'Y'?'/img/icon/check_small.png' : '' }"/></listcell>											
+					</listitem>
+				</template>
+			</listbox>			 
+			<!-- <paging id="lstPaging" autohide="false" detailed="true"
+			totalSize="@load(vm.totalSize)"
+			pageSize="@load(vm.selectedNumRow.description)" mold="os"
+			activePage="@bind(vm.pageIndex)">
+			</paging> -->			
+		</vbox>		
+	</window>
+</zk>

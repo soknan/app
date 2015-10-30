@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/scm/svn/kSupport_SVN/!svn/ver/73/src/kredit/web/core/util/model
+END
+CodeItem.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/util/model/CodeItem.java
+END
+ScalarDouble.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/73/src/kredit/web/core/util/model/ScalarDouble.java
+END
+ScalarString.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/util/model/ScalarString.java
+END
+Scalar.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/util/model/Scalar.java
+END
+ScalarBoolean.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/util/model/ScalarBoolean.java
+END
+UserIdentity.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/util/model/UserIdentity.java
+END

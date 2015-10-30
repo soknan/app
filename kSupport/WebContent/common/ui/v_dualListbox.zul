@@ -1,0 +1,51 @@
+<!-- View of customized component DualListbox -->
+<hlayout height="300px">
+	<vbox width="50%" hflex="true">
+		<label value="Available Groups:" />
+		<listbox id="candidateLb" hflex="1" vflex="true" multiple="true"
+			rows="8">
+			<listhead>
+				<listheader label="Group Acc. Number" width="120px"></listheader>
+				<listheader label="Leader" width="80px"></listheader>
+				<listheader label="Village"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each.firstName }" />
+					<listcell label="${each.lastName }" />
+					<listcell label="${each.fullName }" />
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+	<zscript><![CDATA[
+	String imgPath = "/img/dual_listbox";
+]]></zscript>
+	<vbox spacing="10px" width="24px">
+		<space />
+		<image style="cursor:pointer" id="chooseAllBtn"
+			src="${imgPath}/rightrightarrow_g.png" />
+		<image style="cursor:pointer" id="chooseBtn" src="${imgPath}/rightarrow_g.png" />
+		<image style="cursor:pointer" id="removeBtn" src="${imgPath}/leftarrow_g.png" />
+		<image style="cursor:pointer" id="removeAllBtn"
+			src="${imgPath}/leftleftarrow_g.png" />
+	</vbox>
+	<vbox width="50%" hflex="true">
+		<label value="Choosen Groups:" />
+		<listbox id="chosenLb" hflex="1" vflex="true" multiple="true"
+			rows="8">
+			<listhead>
+				<listheader label="Group Acc. Number" width="120px"></listheader>
+				<listheader label="Leader" width="80px"></listheader>
+				<listheader label="Village"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each.firstName }" />
+					<listcell label="${each.lastName }" />
+					<listcell label="${each.fullName }" />
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+</hlayout>

@@ -1,0 +1,143 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winPlnCo" title="Plan CO" border="normal" visible="@load(vm.visiblePlnCo)"
+	mode="overlapped" closable="true" width="665px" height="650px"
+	position="center" onClose="@command('onClosePlnCo')">
+	
+	<vbox hflex="true">
+	
+		<hbox width="100%">
+			<label>CO</label>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="input-group input-group-sm">
+						<textbox class="form-control" width="140px"
+							value="@bind(vm.selectedCo.full_name)" />
+						<span class="input-group-btn">
+							<button class="btn-primary" onClick="@command('onOpenCoList')"
+								iconSclass="z-icon-search" width="8px" />
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<button label="Save" class="btn-primary btn-xs" onClick="@command('onSavePlanCo')"></button>
+			
+			<label style="margin-left: 150px">BRANCH:</label>
+			<combobox model="@load(vm.planCOSubBranchlist)" disabled="@load(vm.disableBrPlanCo)"
+				value="@load(vm.selectedPlanCo.branch.description)"
+				selectedItem="@bind(vm.selectedPlanCo.branch)" width="160px">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" description="@load(t.code)" />
+				</template>
+			</combobox>
+		</hbox>
+	
+		<tabbox selectedIndex="@bind(vm.planCoTabIndex)" hflex="true">
+			<tabs>
+				<tab label="Loan" />
+				<tab label="Saving" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<vbox hflex="true">
+						<toolbar hflex="true">
+							<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canUpdate)"
+								onClick="@command('onNewLoanList')" disabled="@load(vm.disablePlanCo)" />
+							<toolbarbutton label="Open" image="/img/icon/edit.png"
+								onClick="@command('onOpenLoanList')" disabled="@load(vm.selectedLoan.id eq null)"/>
+							<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canUpdate)"
+								onClick="@command('onConfirmDeleteLoan')" disabled="@load(vm.selectedLoan.id eq null)"/>
+								
+							<space bar="true" sclass="k-ver-bar" />
+							
+							<label value="Look for: " style="padding: 0 0 0 5px;" />
+							<textbox onOK="@command('doSearchLoanList')" focus="true"
+								sclass="ksearch" value="@bind(vm.param.filter)"
+								placeholder="Search..." />
+							<toolbarbutton label="Find" image="/img/icon/search.png"
+								onClick="@command('doSearchLoanList')" />
+							<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+								onClick="@command('onClearAllLoanList')" />
+						</toolbar>
+						
+						<listbox id="lstCommune" model="@load(vm.selectedPlanCo.loans)"
+							selectedItem="@bind(vm.selectedLoan)" hflex="true" mold="paging"
+							vflex="true" pageSize="10">
+							<attribute name="onCreate">
+							<![CDATA[lstCommune.pagingChild.mold = "os";]]>
+						</attribute>
+							<listhead sizable="true">
+								<listheader label="N. Product" sort="auto(n_loan)" style="text-align: center"
+									width="90px" />
+								<listheader label="Auth. Status" sort="auto(auth_status)" style="text-align: center"
+									width="90px" />
+								<listheader label="Create Date" style="text-align: left" width="160px" />
+								<listheader label="Note" style="text-align: left" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser"
+									onDoubleClick="@command('onOpenLoanList')">
+									<listcell label="@load(item.n_loan)" style="text-align: center"/>
+									<listcell label="@load(item.auth_status)" style="text-align: center"/>
+									<listcell label="@load(item.createOn) @converter('formatedDate', format='dd-MM-yyyy hh:mm:ss a')" style="text-align: left"/>
+									<listcell label="@load(item.note)" style="text-align: left"/>
+								</listitem>
+							</template>
+						</listbox>
+					</vbox>
+				</tabpanel>
+				<tabpanel>
+					<vbox hflex="true">
+						<toolbar hflex="true">
+							<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canUpdate)"
+								onClick="@command('onNewSavingList')" disabled="@load(vm.disablePlanCo)" />
+							<toolbarbutton label="Open" image="/img/icon/edit.png"
+								onClick="@command('onOpenSavingList')" disabled="@load(vm.selectedSaving.id eq null)"/>
+							<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canUpdate)"
+								onClick="@command('onConfirmDeleteSaving')" disabled="@load(vm.selectedSaving.id eq null)"/>
+								
+							<space bar="true" sclass="k-ver-bar" />
+							
+							<label value="Look for: " style="padding: 0 0 0 5px;" />
+							<textbox onOK="@command('doSearchSavingList')" focus="true"
+								sclass="ksearch" value="@bind(vm.param.filter)"
+								placeholder="Search..." />
+							<toolbarbutton label="Find" image="/img/icon/search.png"
+								onClick="@command('doSearchSavingList')" />
+							<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+								onClick="@command('onClearAllSavingList')" />
+						</toolbar>
+						
+						<listbox id="lstSaving" model="@load(vm.selectedPlanCo.savings)"
+							selectedItem="@bind(vm.selectedSaving)" hflex="true" mold="paging"
+							vflex="true" pageSize="10">
+							<attribute name="onCreate">
+							<![CDATA[lstSaving.pagingChild.mold = "os";]]>
+						</attribute>
+							<listhead sizable="true">
+								<listheader label="N. Product" sort="auto(n_saving)" style="text-align: center"
+									width="90px" />
+								<listheader label="Auth. Status" sort="auto(auth_status)" style="text-align: center"
+									width="90px" />
+								<listheader label="Create Date" style="text-align: left" width="160px" />
+								<listheader label="Note" style="text-align: left" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser"
+									onDoubleClick="@command('onOpenSavingList')">
+									<listcell label="@load(item.n_saving)" style="text-align: center"/>
+									<listcell label="@load(item.auth_status)" style="text-align: center"/>
+									<listcell label="@load(item.createOn) @converter('formatedDate', format='dd-MM-yyyy hh:mm:ss a')" style="text-align: left"/>
+									<listcell label="@load(item.note)" style="text-align: left"/>
+								</listitem>
+							</template>
+						</listbox>
+					</vbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</vbox>
+	
+</window>
+</zk>

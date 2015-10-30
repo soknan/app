@@ -1,0 +1,29 @@
+<html>
+<head>
+<script>
+<!--
+function login() {
+document.loginform.action="http://192.168.2.14:7001/xmlpserver/~krdreport/kSupport/Report/Blank.xdo?_xpt=1";
+document.loginform.submit();
+}
+//-->
+</script>
+</head>
+<body onLoad="login()">
+<form name="loginform" method="POST">                          
+	<!--  Username -->
+	<input type="text" id="id" class="margin-top5" name="id" size="50" style="width: 250px;" value="krdreport"/>
+
+	<!--  Password -->
+	<input type="password" id="passwd" class="margin-top5" name="passwd" size="50" style="width: 250px;" autocomplete="off" value="KRD4Reppwd"/>
+
+	<!--  Locale (hidden param) -->
+	<input type="hidden" value="en_US" id="_xuil" name="_xuil"/>                            
+
+	<input type="submit" style="width: 120px;" class="submitButtonEnable button" name="SUBMIT_BUTTON" title="Please enter username and password" value="Sign In" onclick="normalLogin(event);"/>
+
+</form>
+</body>
+</html>  
+						  
+						  

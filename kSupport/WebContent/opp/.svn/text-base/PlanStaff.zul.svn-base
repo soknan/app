@@ -1,0 +1,136 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winPlnStaff" title="Staff Recruitment Input" border="normal" visible="@load(vm.visiblePlnStaff)"
+	mode="overlapped" closable="true" width="600px" height="520px"
+	position="center" onClose="@command('onClosePlnStaff')">
+	<vbox hflex="true">
+		<toolbar width="680px">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSavePlanStaff')"/>
+	</toolbar>
+	
+	<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Position Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td>
+									Position
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstPosition)"
+										value="@load(vm.selectedPlanStaff.position.description)"
+										selectedItem="@bind(vm.selectedPlanStaff.position)" width="180px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.plan_year)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny0)" width="70px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.year_01)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Q1 Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny1q1)" width="70px" />
+								</n:td>
+								
+								<n:td width="120px">Q2 Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny1q2)" width="70px" />
+								</n:td>
+							</n:tr>
+													
+							<n:tr align="right">
+								<n:td width="120px">Q3 Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny1q3)" width="70px" />
+								</n:td>
+								
+								<n:td width="120px">Q4 Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny1q4)" width="70px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.year_02)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny2)" width="70px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.year_03)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Number: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedPlanStaff.ny3)" width="70px" />
+								</n:td>
+							</n:tr>							
+						</n:table>
+					</n:div>
+				</n:div>
+		</n:div>
+	</vbox>
+</window>
+</zk>

@@ -1,0 +1,115 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		validity.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="validity" title="Validity Information" border="normal" visible="@load(vm.visibleValidity)"
+		mode="overlapped" closable="true" width="650px" height="300px"
+		position="center" onClose="validity.detach();">
+		
+		<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSaveValidity')"/>
+	</toolbar>
+	<n:div class="k-space" />
+	<n:table width="100%" cellspacing="5">
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Username</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedUser.username)" readonly="true"/></n:td>
+			<n:td align="left" style="padding-left: 15px" valign="top">Start Date</n:td>
+			<n:td><datebox width="162px" format="dd-MM-yyyy" value="@bind(vm.selectedValidity.start_on)"/></n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Type</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterValidities)"
+					value="@load(vm.selectedValidity.typeC.description)"
+					selectedItem="@bind(vm.selectedValidity.typeC)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+			</n:td>
+			<n:td align="left" style="padding-left: 15px" valign="top">End Date</n:td>
+			<n:td><datebox width="162px" format="dd-MM-yyyy" value="@bind(vm.selectedValidity.end_on)"/></n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Branch</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterBranchesValidity)" onChange="@command('onChangeValidityBranch')"
+					value="@load(vm.selectedValidity.branch.description)"
+					selectedItem="@bind(vm.selectedValidity.branch)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+			</n:td>
+			<n:td align="left" style="padding-left: 15px" valign="top">User As</n:td>
+			<n:td align="right" style="padding-left: 15px">
+				<combobox model="@load(vm.selectedValidity.lstUserAs)" disabled="@load(vm.disableUserAs)"
+					value="@load(vm.selectedValidity.userAs.username)"
+					selectedItem="@bind(vm.selectedValidity.userAs)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.username)"/>
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Note</n:td>
+			<n:td colspan="3" align="right" style="padding-left: 52px">
+				<textbox width="100%" rows="2" value="@bind(vm.selectedValidity.note)"/>
+			</n:td>
+		</n:tr>
+	</n:table>
+	
+	<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 40px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedValidity.create_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedValidity.create_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedValidity.change_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedValidity.change_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+	</window>
+</zk>

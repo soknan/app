@@ -1,0 +1,49 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="importAll" title="Import Loans Information" border="normal" visible="@load(vm.visibleIL)"
+		mode="overlapped" closable="true" width="760px" height="500px" position="center" onClose="@command('onCloseImportAll')">
+		<vbox id="mVbox" hflex="true">
+ 			
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="Import" visible="@load(vm.privilege.canNew)" iconSclass="z-icon-download"
+					onClick="@command('onImport')" />
+						
+			</toolbar>
+		
+			<listbox id="lstAcc" model="@load(vm.lstAcc)"
+				width="100%" selectedItem="@bind(vm.selectedImport)" vflex="true"
+				pagingPosition="top" paginal="${lstAccPaging}">
+				<listhead sizable="true">
+					<listheader label="Customer Info" sort="auto(cif)" style="text-align: center"
+						width="100px" />
+					<listheader label="Name" sort="auto(nameEn)" style="text-align: center"
+						width="160px" />
+					<listheader label="Branch Code" style="text-align: center"
+						sort="auto(brCd)" width="90px" />
+					<listheader label="Account No" style="text-align: center"
+						sort="auto(accountNo)" width="120px" />
+					<listheader label="Product Code" style="text-align: center"
+						sort="auto(prodCode)" width="90px" />
+					<listheader label="Write-Off Date" style="text-align: center"
+						sort="auto(woffDate)" width="120px" />
+					<listheader label="Currency" sort="auto(ccy)" style="text-align: center"
+						width="63px" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="@command('onSelectAcc')">
+						<listcell label="@load(item.cif)" />
+						<listcell label="@load(item.nameEn)" />
+						<listcell label="@load(item.brCd)" />
+						<listcell label="@load(item.accountNo)" />
+						<listcell label="@load(item.prodCode)"/>
+						<listcell label="@load(item.woffDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(item.ccy)"/>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstAccPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSizeAcc)" pageSize="10" mold="os">
+			</paging>
+		</vbox>
+	</window>
+</zk>

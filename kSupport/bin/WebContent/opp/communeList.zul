@@ -1,0 +1,43 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winCommuneList" title="Retrieve Commune" border="normal" visible="@load(vm.visibleCommuneList)"
+	mode="overlapped" closable="true" width="490px" height="500px"
+	position="center" onClose="@command('onCloseCommuneList')">
+
+	<vbox hflex="true"> 
+		<toolbar hflex="true" width="100%">
+			<label value="Look for: " style="padding: 0 0 0 5px;" />
+			<textbox onOK="@command('doSearchCommune')" focus="true"
+				sclass="ksearch" value="@bind(vm.paramCommune.filter)"
+				placeholder="Search..." />
+			<toolbarbutton label="Find" image="/img/icon/search.png"
+				onClick="@command('doSearchCommune')" />
+		</toolbar>
+		
+		<listbox id="lstCommune" model="@load(vm.lstCommune)"
+			selectedItem="@bind(vm.selectedSysCommune)" hflex="true" mold="paging"
+			vflex="true" pageSize="7">
+			<attribute name="onCreate">
+				<![CDATA[lstCommune.pagingChild.mold = "os";]]>
+			</attribute>
+			<listhead sizable="true">
+				<listheader label="Commune" sort="auto(commune)" style="text-align: center"
+					width="160px" />
+				<listheader label="District" sort="auto(district)" style="text-align: center"
+					width="160px" />
+				<listheader label="Province" style="text-align: center"
+					sort="auto(province)" width="160px" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menuKBureauUser"
+					onDoubleClick="@command('onSelectCommune')">
+					<listcell label="@load(item.commune)" style="text-align: center"/>
+					<listcell label="@load(item.district)" style="text-align: center"/>
+					<listcell label="@load(item.province)" style="text-align: center"/>
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+	
+</window>
+</zk>

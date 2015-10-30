@@ -1,0 +1,80 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="vwls" title="CASA Account Summary"
+		border="normal" mode="modal" closable="true" width="950px"
+		height="600px">	
+		<vbox hflex="true" vflex="true">
+			<groupbox hflex="true">
+				<caption label="Customer Info" />
+		<n:table width="100%" border="0">			
+			<n:tr>
+				<n:td align="right" width="120px">Account Number : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.accNo)"/></n:td>
+				<n:td rowspan="8"><image src="@load(vm.selectedDetail.photo)" width="120px" height="140px"/></n:td>
+				<n:td rowspan="8"><image src="@load(vm.selectedDetail.signature)" width="300px" height="140px"/></n:td>				
+			</n:tr>
+			<n:tr>
+				<n:td align="right">CIF : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.cif)"/></n:td>
+			</n:tr>
+			<n:tr>
+				<n:td align="right">Customer Name : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.cusName)"/></n:td>
+			</n:tr>
+			<n:tr>
+				<n:td align="right">Account Class : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.accClass)"/></n:td>
+			</n:tr>						
+			<n:tr>
+				<n:td align="right">Account Type : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.accType)"/></n:td>
+			</n:tr>
+			<n:tr>
+				<n:td align="right">Mode Of Operation : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.mop)"/></n:td>
+			</n:tr>
+			<n:tr>
+				<n:td align="right">Currency : </n:td>
+				<n:td><label value="@load(vm.selectedDetail.ccy)"/></n:td>
+			</n:tr>
+			<n:tr>
+				<n:td align="right">Balance : </n:td>	
+				<n:td><label class="${vm.selectedDetail.bal eq 'N/A'?'red':''}" value="@load(vm.selectedDetail.bal)"/></n:td>					
+			</n:tr>	
+					
+		</n:table>	
+		</groupbox>
+		<!-- <groupbox hflex="true">
+				<caption label="Join Holder Info" /> -->
+		<listbox id="lst" model="@load(vm.lstJoin)" width="100%"
+				mold="paging" selectedItem="@bind(vm.jHolder)"  
+				hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="Join Holder Name" 
+						style="text-align: center" sort="auto(joinHolder)" width="120px" />
+					<listheader label="Join Holder CIF" 
+						style="text-align: center" sort="auto(jCode)" width="120px"/>
+					<listheader label="Photo" 
+						style="text-align: center" sort="auto(jPhoto)" />					
+					<listheader label="Signature" 
+						style="text-align: center" sort="auto(jSignature)"  />								
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">
+						<listcell label="@load(item.joinHolder)" />	
+						<listcell label="@load(item.jCode)" />									
+						<listcell><image src="@load(item.jPhoto)" width="120px" height="140px"/></listcell> 						
+						<listcell><image src="@load(item.jSignature)" width="300px" height="140px"/></listcell>								
+					</listitem>
+				</template>
+			</listbox>	
+			<!-- </groupbox> -->
+		</vbox>
+	</window>
+</zk>

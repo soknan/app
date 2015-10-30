@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/scm/svn/kSupport_SVN/!svn/ver/93/WebContent/security/include/roles
+END
+roleFunction.zul
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/scm/svn/kSupport_SVN/!svn/ver/75/WebContent/security/include/roles/roleFunction.zul
+END
+roleUser.zul
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/scm/svn/kSupport_SVN/!svn/ver/75/WebContent/security/include/roles/roleUser.zul
+END
+roleInfo.zul
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/scm/svn/kSupport_SVN/!svn/ver/93/WebContent/security/include/roles/roleInfo.zul
+END

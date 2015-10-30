@@ -1,0 +1,187 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="dels" title="DE Upload" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.deupload.vm.DeUploadListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1024px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<style>	
+			
+		.myColor div.z-listcell-content { 
+			color: red;
+		}
+		.z-listbox-emptybody td	{ 
+			text-align: left;
+			color: red;
+		}
+		
+</style> 		
+		<caption iconSclass="icon-k k-green"></caption>		
+		<borderlayout hflex="1" vflex="1">		  
+	        <west width="360px" border="none" collapsible="true" splittable="true" open="false">	        		        
+	            <vbox hflex="true" vflex="true">	            	
+	            	<toolbar hflex="true">	
+	            		<label value="History : " style="padding: 0 0 0 5px;" />
+						<textbox onOK="@command('onSearchHist')" focus="true"
+						value="@bind(vm.filter)" placeholder="Search....." />
+						<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('onSearchHist')" />
+	            	</toolbar>
+		            <listbox id="lstHis" model="@load(vm.lstDeHist)" width="100%"
+					mold="paging" selectedItem="@bind(vm.selectedHist)" hflex="true" vflex="true" pagingPosition="bottom">
+					<attribute name="onCreate">
+					<![CDATA[
+						lstHist.pagingChild.mold = "os";
+					]]>
+					</attribute>
+					<listhead sizable="true">
+						<listheader label="Batch.No" width="70px"
+							sort="auto(batchNo)" />
+						<listheader label="Br.Code" width="60px"
+							sort="auto(brCode)" />
+							<listheader label="Currency" width="60px"
+							sort="auto(currency)" />
+						<listheader label="Value Date"
+							sort="auto(uploadDate)"  />
+					</listhead>
+					<template name="model" var="item">
+						<listitem height="35px" onClick="@command('onOpen')">												
+							<listcell label="@load(item.batchNo)" />
+							<listcell label="@load(item.brCode)" />
+							<listcell label="@load(item.currency)" />
+							<listcell label="@load(item.uploadDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+						</listitem>
+					</template>
+					</listbox>
+				</vbox>				
+	        </west>
+	        <center id="mainContent" >
+	            		<vbox hflex="true" vflex="true">
+			<toolbar>				 
+					<toolbarbutton label="Browse" image="/img/icon/database_back.png" upload="true, maxsize=5120" onUpload="@command('onUpload', upEvent=event)" />					
+					<toolbarbutton label="Upload" image="/img/icon/database_go.png" 
+					onClick="@command('onConfirmUpload')"/>						
+					<space bar="true" class="k-ver-bar" />
+					<label value="UserName on Flexcube : " style="padding: 0 0 0 5px;" />
+					<n:i class="red">*</n:i>
+					<textbox width="120px" value="@bind(vm.userFlexcube)"/>
+					<label value="Value Date : " style="padding: 0 0 0 5px;" />
+					<n:i class="red">*</n:i>
+					<datebox width="100px" format="dd-MM-yyyy"	value="@bind(vm.valueDate)" disabled="@load(vm.hqRole)"/>
+					<label value="TranDate : "/><n:i class="red">*</n:i>
+					<textbox value="@load(vm.tranDate) @converter('formatedDate', format='dd-MM-yyyy')" width="120px"  readonly="true"/>
+					<label value="Batch No : " style="padding: 0 0 0 5px;"  />
+					<n:i class="red">*</n:i>
+					<textbox value="@bind(vm.batch)" width="50px" maxlength="4" readonly="true"/>
+					<label value="Br.Code : " style="padding: 0 0 0 5px;"  /><n:i class="red">*</n:i>
+					<textbox value="@bind(vm.area)" width="50px" maxlength="4" readonly="true"/>							
+					<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />	
+					<label value="Upload Status : " style="padding: 0 0 0 5px;"  />
+					<combobox model="@load(vm.lstUpload)"
+							value="@bind(vm.errUpload.description)"
+							selectedItem="@bind(vm.errUpload)" onChange="@command('onOpen')"
+							width="50px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>					
+			</toolbar>
+			<listbox id="lstde" model="@load(vm.lstDe)" width="100%" emptyMessage="@load(vm.msg)"
+				mold="paging" selectedItem="@bind(vm.selected)" hflex="true" vflex="true" 	pagingPosition="bottom">
+				<attribute name="onCreate">
+				<![CDATA[
+	lstde.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="No." width="30px"
+						sort="auto(no)" />
+						<listheader label="Upload Status"  width="200px"
+						sort="auto(tranDes)" />
+					<listheader label="Trans. Des"  width="200px"
+						sort="auto(tranDes)" />
+					<listheader label="Voucher No." width="100px"
+						sort="auto(voucherNo)"  />
+					<listheader label="Br.Code" width="80px" 
+						sort="auto(brCode)"/>
+				    <listheader label="Br.Name" width="80px" 
+						sort="auto(brCode)"/>
+					<listheader label="CDV/OFF" width="80px"
+						sort="auto(cdvOff)"/>					
+					<listheader label="REF No" width="100px"
+						sort="auto(refNo)"/>
+					<listheader label="Acc.Des" width="350px"
+						sort="auto(accDes)" />
+						<listheader label="Account" width="80px"
+						sort="auto(acc)" />
+						<listheader label="Tr.Code" width="80px"
+						sort="auto(trCode)" />
+						<listheader label="Tran.Code.Des" width="100px"
+						sort="auto(tranCodeDes)" />
+						<listheader label="Instrument No" width="100px"
+						sort="auto(insNo)" />
+						<listheader label="D/C" width="50px"
+						sort="auto(dc)" />
+						<listheader label="Currency" width="80px"
+						sort="auto(currency)" />
+						<listheader label="Amount" width="80px"
+						sort="auto(amount)" />
+						<listheader label="Exc.Rate" width="80px"
+						sort="auto(excRate)" />
+						<listheader label="LCY Amount" width="100px"
+						sort="auto(lcyAmount)" />
+						<listheader label="Checking" width="100px"
+						sort="auto(checking)" />
+						<listheader label="Checking LCY" width="100px"
+						sort="auto(checkingLcy)" />	
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" zclass="${item.uploadStat eq null or item.uploadStat eq 'Y'?'':'myColor'}">												
+						<listcell label="@load(item.no)" />
+						<listcell label="@load(item.uploadStat)" />
+						<listcell label="@load(item.tranDes)" />
+						<listcell label="@load(item.voucherNo)" />						
+						<listcell label="@load(item.accBrCode)" />
+						<listcell label="@load(item.brName)" />
+						<listcell label="@load(item.cdvOff)" />
+						<listcell label="@load(item.refNo)" />
+						<listcell label="@load(item.accDes)" />
+						<listcell label="@load(item.acc)" />
+						<listcell label="@load(item.trCode)" />
+						<listcell label="@load(item.tranCodeDes)" />
+						<listcell label="@load(item.insNo)" />
+						<listcell label="@load(item.dc)" />
+						<listcell label="@load(item.currency)" />
+						<listcell label="@load(item.amount)" />
+						<listcell label="@load(item.excRate)" />
+						<listcell label="@load(item.lcyAmount)" />
+						<listcell label="@load(item.checking)" />
+						<listcell label="@load(item.checkingLcy)" />
+					</listitem>
+				</template>
+			</listbox>
+											
+			 <div style="float:right">			 
+					<label value="Total Amount : " style="padding: 0 0 0 5px;" />
+					<textbox value="@bind(vm.debit)" readonly="true"/>
+					<textbox value="@bind(vm.credit)"  readonly="true"/>					
+				</div>
+				<div style="float:right">										
+					<label value="Total LCY Amount : " style="padding: 0 0 0 5px;"  />
+					<textbox value="@bind(vm.lcyDebit)" readonly="true"/>									
+					<textbox value="@bind(vm.lcyCredit)"  readonly="true"/>
+				</div>		
+				<!-- <paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+				</paging> -->				
+		</vbox>
+	        </center>
+        </borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/scm/svn/kSupport_SVN/!svn/ver/3/WebContent/other/email_tmpl
+END
+reset_psw.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/scm/svn/kSupport_SVN/!svn/ver/3/WebContent/other/email_tmpl/reset_psw.html
+END
+req_reset_psw.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/3/WebContent/other/email_tmpl/req_reset_psw.html
+END

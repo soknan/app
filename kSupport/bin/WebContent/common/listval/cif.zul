@@ -1,0 +1,63 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winCIF" title="List Value - CIF" border="normal"
+		mode="modal" closable="true" width="700px" height="400px">
+		<vbox vflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Customer No</n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<textbox value="@bind(vm.paramCIF.custNo)" width="200px" onOK="@command('onSearchCIF')"/>
+						</n:td>
+						<n:td width="130px">Short Name</n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<textbox value="@bind(vm.paramCIF.shortName)" width="200px" onOK="@command('onSearchCIF')"/>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Full Name</n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<textbox value="@bind(vm.paramCIF.fullName)" width="200px" onOK="@command('onSearchCIF')"/>
+						</n:td>
+						<n:td width="20px"></n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<button sclass="btn-primary btn-xs" iconSclass="z-icon-search"
+								onClick="@command('onSearchCIF')">
+								Find
+							</button>
+							<space />
+							<button sclass="btn-primary btn-xs" iconSclass="z-icon-eraser"
+								onClick="@command('onResetSearchCIF')">
+								Reset
+							</button>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<listbox id="lst" model="@load(vm.lstFetchCIF)" width="100%"
+				selectedItem="@bind(vm.selectedCIF)" mold="paging" pageSize="10"
+				vflex="true" pagingPosition="top">
+
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "default";
+]]>
+				</attribute>
+
+				<listhead sizable="true">
+					<listheader label="Customer No" width="200px" sort="auto(custNo)" />
+					<listheader label="Full Name" width="200px" sort="auto(fullName)" />
+					<listheader label="Short Name" sort="auto(shortName)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="winCIF.detach();">
+						<listcell label="@load(item.custNo)" />
+						<listcell label="@load(item.fullName)" />
+						<listcell label="@load(item.shortName)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

@@ -1,0 +1,202 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="risk_reg_ls" title="Rate Register List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.risk_reg.vm.RiskRegListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="900px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+<style>
+.RATE {
+font-family: Arial,Sans-serif;
+font-size: 12px;
+font-weight: normal;
+font-style: normal;
+border-radius: 5;
+text-shadow: none;
+color:#000000;
+padding: 1px 5px 3px;
+display: inline-block;
+width: 50px;
+}
+.RATE.L{
+background-color: #5cb85c;
+}
+.RATE.M{
+background-color: #FDFA03;
+}
+.RATE.H{
+background-color: #F9920B;
+}
+.RATE.E{
+background-color: #FD0303;
+}
+
+</style>				
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<groupbox hflex="true">
+				<caption label="Filters" />
+				<hbox width="100%">
+					<cell>
+						<label value="Month" />
+					</cell>
+					<cell>
+						<combobox id="lstFinMonth" model="@load(vm.lstFinMonth)"
+							value="@load(vm.param.fMonth.code)"
+							selectedItem="@bind(vm.param.fMonth)" onChange="@command('doSearch')"
+							 width="60px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>	
+					<cell>
+						<label value="Year" />
+					</cell>
+					<cell>
+						<combobox id="lstFinYear" model="@load(vm.lstFinYear)"
+							value="@load(vm.param.fYear.code)"
+							selectedItem="@bind(vm.param.fYear)" onChange="@command('doSearch')"
+							 width="70px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>					
+					<cell>
+						<label value="Branch " />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterBranch)"
+							value="@bind(vm.param.branch.description)"
+							selectedItem="@bind(vm.param.branch)" onChange="@command('onChangeBranch')" disabled="@load(vm.notAdmin)"
+							width="130px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>	
+					<cell>
+						<label value="Sub-branch" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterSub)"
+							value="@bind(vm.param.sub.description)"
+							selectedItem="@bind(vm.param.sub)" disabled="@load(vm.notAdmin)"
+							onChange="@command('onChangeSubBranch')" width="130px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>						
+				</hbox>
+			</groupbox> 			
+			<toolbar hflex="true">				
+				<toolbarbutton label="New" image="/img/icon/new.png" 
+					onClick="@command('onNew')"/>
+				<!-- <toolbarbutton label="Open" image="/img/icon/edit.png" 
+					onClick="@command('onOpen')"/> -->				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					value="@bind(vm.param.filter)" placeholder="Search....." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<space bar="true" class="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>		
+				<div style="float:right">
+						<toolbarbutton label="Export List" image="/img/icon/excel.png"
+					onClick="@command('onExport')"  />
+				</div>						
+			</toolbar>			
+			<listbox id="lst" model="@load(vm.lstRiskReg)" width="100%"
+				mold="paging" selectedItem="@bind(vm.selected)"  pageSize="@load(vm.selectedNumRow.description)"
+				hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="No" 
+					style="text-align: center" sort="auto(no)"  width="30px" />
+					<listheader label="Code" 
+					style="text-align: center" sort="auto(code)"  width="120px"/>
+					<listheader label="Process" 
+					style="text-align: center" sort="auto(process)"  width="70px"/>
+					<listheader label="Risk Desc" 
+						style="text-align: center" sort="auto(risk_desc)" width="200px"/>
+					<listheader label="Indicator" 
+						style="text-align: center" sort="auto(indicator)" width="200px"/>
+					<listheader label="Existing Control" 
+						style="text-align: center" sort="auto(risk_desc)" width="200px"/>					
+					<listheader label="Likelihood" 
+						style="text-align: center" sort="auto(risk_likelihood)"   width="80px"/>
+						<listheader label="Impact" 
+						style="text-align: center" sort="auto(risk_impact)"  width="80px"/>
+					<listheader label="RR" 
+						style="text-align: center" sort="auto(risk_rr)"  width="50px"/>
+					<listheader label="4Ts" 
+						style="text-align: center" sort="auto(for_ts)"   width="80px"/>
+					<listheader label="Additional Control" 
+						style="text-align: center" sort="auto(additional_control)"   width="120px"/>
+					<listheader label="Risk Owner"
+						style="text-align: center" sort="auto(risk_owner)"  width="80px"/>					
+					<listheader label="Due Date" 
+					style="text-align: center" sort="auto(due_date)"  width="80px"/>
+					<listheader label="Likelihood" 
+					style="text-align: center" sort="auto(af_risk_likelihood)" width="80px"/>
+					<listheader label="Impact" 
+					style="text-align: center" sort="auto(af_risk_impact)" width="80px"/>
+					<listheader label="ER" 
+					style="text-align: center" sort="auto(af_risk_er)"  width="50px"/>					
+					<listheader label="Satus" 
+					style="text-align: center" sort="auto(status)" width="120px"/>					
+					<listheader label="Summitted Date" 
+					style="text-align: center" sort="auto(summitted_date)"  width="120px"/>					
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onDoubleClick="@command('onOpen')">																		
+						<listcell label="@load(item.rownum)" />						
+						<listcell label="@load(item.code)"/>
+						<listcell label="@load(item.process)" />
+						<listcell label="@load(item.risk_desc)" />
+						<listcell label="@load(item.indicator)" />
+						<listcell label="@load(item.existing_control)" />							
+						<listcell label="@load(item.risk_likelihood)" />
+						<listcell label="@load(item.risk_impact)" />
+						<listcell><label class="RATE ${item.color_rr}" value="@load(item.risk_rr)"/></listcell>	
+						<listcell label="@load(item.for_ts)"/>
+						<listcell label="@load(item.additional_control)"/>
+						<listcell label="@load(item.risk_owner)"/>
+						<listcell label="@load(item.due_date) @converter('formatedDate', format='dd-MM-yyyy')"/>
+						<listcell label="@load(item.af_risk_likelihood)"/>
+						<listcell label="@load(item.af_risk_impact)"/>
+						<listcell><label class="RATE ${item.color_er}" value="@load(item.af_risk_er)"/></listcell>	
+						<listcell label="@load(item.status)"/>
+						<listcell label="@load(item.submmitted_date) @converter('formatedDate', format='dd-MM-yyyy')"/>												
+					</listitem>
+				</template>
+			</listbox>			 
+			<!-- <paging id="lstPaging" autohide="false" detailed="true"
+			totalSize="@load(vm.totalSize)"
+			pageSize="@load(vm.selectedNumRow.description)" mold="os"
+			activePage="@bind(vm.pageIndex)">
+			</paging> -->			
+		</vbox>		
+	</window>
+</zk>

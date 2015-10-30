@@ -1,0 +1,48 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<vbox>
+		<toolbar width="620px">
+			<toolbarbutton label="Save"
+				image="/img/icon/save.png" onClick="@command('onSave')"
+				visible="@load(vm.priviledge.canUpdate)" />
+		</toolbar>
+		<hbox align="center">
+			<listbox id="lstAvailable" model="@load(vm.selectedUser.availableRole)" style="margin-left: 49px"
+				selectedItem="@bind(vm.selectedUser.selectedAvailable)" width="243px" height="100%">
+				<listhead sizable="false">
+					<listheader label="Available Right" width="243px"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell style="text-align: left">
+							<label value="@load(each.rolecode)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<vbox style="margin-top: 33px">
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-forward" width="30px" onClick="@command('')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-chevron-right" width="30px" onClick="@command('')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-chevron-left" width="30px" onClick="@command('')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-backward" width="30px" onClick="@command('')" />
+			</vbox>
+			<listbox id="lstOwn" model="@load(vm.selectedUser.ownRole)"
+				selectedItem="@bind(vm.selectedUser.selectedOwn)" width="243px" height="100%">
+				<listhead sizable="false">
+					<listheader label="User own Right" width="243px"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell style="text-align: left">
+							<label value="@load(each.rolecode)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</vbox>
+</zk>

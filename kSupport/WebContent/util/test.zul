@@ -1,0 +1,27 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Account Matching" border="normal">
+
+		<div id="main" apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('kredit.web.util.TestVM')">
+			<vbox>
+				<groupbox>
+					<caption label="@load(vm.connection)"></caption>
+					<hbox>
+						<label value="IP:" />
+						<textbox value="@bind(vm.ip)" />
+						<label value="DB:" />
+						<textbox value="@bind(vm.db)" />
+						<label value="Username:" />
+						<textbox value="@bind(vm.usrid)" />
+						<label value="Pwd:" />
+						<textbox type="password" value="@bind(vm.pwd)" />
+					</hbox>
+					
+					<button style="maring-top:10px;" label="Test Connection" onClick="@command('onTestConnection')"></button>
+				</groupbox>
+			</vbox>
+		</div>
+
+	</window>
+</zk>

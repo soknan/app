@@ -1,0 +1,44 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winEnv" title="Environment Config" border="normal" visible="@load(vm.visibleEnv)"
+		mode="overlapped" closable="true" width="270px" height="200px"
+		position="center" onClose="@command('onCloseEnv')">
+		
+	<n:table width="100%">
+		<n:tr>
+			<n:td width="150px" align="right">
+				<label value="Environment:" style="margin: 0 0 0 10px;" />
+			</n:td>
+			<n:td align="left" style="padding:0 0 0 15px">
+				<textbox value="@bind(vm.env.environment)"></textbox>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td colspan="2">
+				<radiogroup selectedItem="@bind(vm.env.mode)" onCheck="@command('onChangeAuthenMode')" orient="vertical">
+					<radio value="0" selected="@load(vm.env.mode eq 0)" label="Default Authentication" />
+					<radio value="1" selected="@load(vm.env.mode eq 1)" label="Other Authentication" />
+				</radiogroup>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td width="150px" align="right">
+				<label value="Username:" style="margin: 0 0 0 10px;" />
+			</n:td>
+			<n:td align="left" style="padding:0 0 0 15px">
+				<textbox value="@bind(vm.env.username)" disabled="@load(vm.disableMode)"></textbox>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td width="150px" align="right">
+				<label value="Password:" style="margin: 0 0 0 10px;" />
+			</n:td>
+			<n:td align="left" style="padding:0 0 0 15px">
+				<textbox value="@bind(vm.env.password)" disabled="@load(vm.disableMode)"></textbox>
+			</n:td>
+		</n:tr>
+	</n:table>
+	
+	<button label="Config" style="margin-top: 5px; float: right" class="btn-success" onClick="@command('onConfig')" />
+</window>
+</zk>

@@ -1,0 +1,45 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="syncUsers" title="Sync User Information" border="normal" visible="@load(vm.visibleSync)"
+		mode="overlapped" closable="true" width="735px" height="500px" position="center" onClose="@command('onCloseSync')">
+		<vbox id="mVbox" hflex="true">
+ 			
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="Sync" visible="@load(vm.privilege.canUpdate)" iconSclass="z-icon-refresh"
+					onClick="@command('onSync')" />
+						
+			</toolbar>
+		
+			<listbox id="lstSyncUser" model="@load(vm.syncUserlst)" hflex="true" mold="paging"
+				vflex="true" pageSize="10">
+				<attribute name="onCreate">
+				<![CDATA[lstSyncUser.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Full Name" sort="auto(full_name)" style="text-align: center"
+						width="160px" />
+					<listheader label="Username" sort="auto(username)" style="text-align: center"
+						width="140px" />
+					<listheader label="Branch Name" style="text-align: center"
+						sort="auto(branch_name)" width="160px" />
+					<listheader label="Branch Code" style="text-align: center"
+						sort="auto(branch_code)" width="90px" />
+					<listheader label="Authorized" sort="auto(authorized)" style="text-align: center"
+						width="100px" />
+					<listheader label="Status" sort="auto(status)" style="text-align: center"
+						width="60px" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser">
+						<listcell label="@load(item.full_name)" />
+						<listcell label="@load(item.username)" />
+						<listcell label="@load(item.branch_name)" />
+						<listcell label="@load(item.branch_code)" />
+						<listcell label="@load(item.authorized)" />
+						<listcell label="@load(item.status eq 'A'?'Active':'Inactive')"/>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

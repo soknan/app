@@ -1,0 +1,55 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winProfile" title="Profile Page" border="normal" visible="@load(vm.visibleProfile)"
+		mode="overlapped" closable="true" width="300px" height="230px"
+		position="center" onClose="@command('onCloseProfile')">
+	<caption iconSclass="z-icon-edit k-orange"></caption>
+	
+	<n:h6 class="lighter">
+		<n:b>kSupport Info</n:b>
+	</n:h6>
+	<n:table>
+		<n:tr>
+			<n:td>
+				<n:i class="z-icon-user k-orange"></n:i>  
+				<label value="@load(vm.user.username)"></label>
+				(
+					<n:i class="z-icon-sitemap k-orange"></n:i>
+					<label value="@load(vm.emp.position)"></label>
+				)
+			</n:td>
+		</n:tr>
+	</n:table>
+	
+	<n:h6 class="lighter">
+		<n:b>User Info</n:b>
+	</n:h6>	
+	<n:table>
+		<n:tr>
+			<n:td>
+				<n:i class="z-icon-info k-orange"></n:i>
+				<label value="@load(vm.user.fullName)"></label>
+				(
+					<n:i class="z-icon-gift k-orange"></n:i>
+					<label value="@load(vm.emp.birth_date) @converter('formatedDate', format='dd-MM-yyyy')"></label>
+				)
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				<n:i class="z-icon-mobile k-orange"></n:i>
+				<label value="@load(vm.emp.phone1)"></label>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				<n:i class="z-icon-envelope k-orange"></n:i>
+				<label value="@load(vm.emp.fEmail)"></label> 
+			</n:td>
+		</n:tr>
+	</n:table>
+	<!-- 
+		<button label="Sync Pwd Flexcube" class="btn-primary btn-xs" iconSclass="z-icon-refresh" style="margin-left: 150px; margin-top: 10px;" onClick="@command('onConfirmSync')"></button>
+	 -->
+</window>
+</zk>

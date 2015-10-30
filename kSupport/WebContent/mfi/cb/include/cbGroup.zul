@@ -1,0 +1,10 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<hlayout>
+		<textbox value="@bind(vm.groupFilter)" />
+		<button sclass="btn-primary btn-xs" label="Search" iconSclass="z-icon-search"
+			onClick="@command('onSearchGroup')">
+		</button>
+	</hlayout>
+	<include src="/mfi/cb/include/groupDualListbox.zul"></include>
+</zk>

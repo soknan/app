@@ -1,0 +1,68 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="kipls" title="Kiva IDL Raise" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.kiva.vm.KivaPostVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1000px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">		
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<toolbar hflex="true">				
+					<toolbarbutton label="Add Account" image="/img/icon/new.png"
+					onClick="@command('onShowFetchCIF')" />
+					<toolbarbutton label="Generate Post" image="/img/icon/export.png"
+					onClick="@command('onPost')" disabled="@load(empty(vm.tmpLstCIF))"/>
+					<space bar="true" class="k-ver-bar" />	
+					<toolbarbutton id="btnDel" label="Delete" image="/img/icon/delete.png" 
+					onClick="@command('onConfirmDelete')"  disabled="@load(vm.tmpSelected eq null)"/>										
+					<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onConfirmClear')" disabled="@load(empty(vm.tmpLstCIF))" />					
+			</toolbar>
+			<listbox id="lst" model="@load(vm.tmpLstCIF)" width="100%"
+				mold="paging" selectedItem="@bind(vm.tmpSelected)"
+				hflex="true" vflex="true" 	pagingPosition="bottom">
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="First Name" width="80px"
+						sort="auto(fnameEn)"/>
+					<listheader label="Last Name" width="180px"
+						sort="auto(lnameEn)" />
+					<listheader label="Gender"
+						sort="auto(sex)" width="120px" />
+					<listheader label="Amount Disburse"
+						sort="auto(amountDisburse)" width="120px" />
+					<listheader label="Account No" sort="auto(accountNo)"
+						width="150px" />
+						<listheader label="Ref.Acc" sort="auto(refAcc)"
+						width="150px" />
+					<listheader label="Customer No"
+						sort="auto(customerNo)"/>					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">												
+						<listcell label="@load(item.fnameEn)" />
+						<listcell label="@load(item.lnameEn)" />
+						<listcell label="@load(item.sex)" />
+						<listcell label="@load(item.amountDisburse)" />
+						<listcell label="@load(item.accountNo)" />
+						<listcell label="@load(item.refAcc)" />
+						<listcell label="@load(item.customerNo)" />						
+					</listitem>
+				</template>
+			</listbox>
+			<!--  
+				<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+				</paging>
+			-->
+		</vbox>
+	</window>
+</zk>

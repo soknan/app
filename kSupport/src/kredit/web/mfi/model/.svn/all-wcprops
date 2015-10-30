@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/scm/svn/kSupport_SVN/!svn/ver/262/src/kredit/web/mfi/model
+END
+CB.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/scm/svn/kSupport_SVN/!svn/ver/219/src/kredit/web/mfi/model/CB.java
+END
+Group.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/scm/svn/kSupport_SVN/!svn/ver/262/src/kredit/web/mfi/model/Group.java
+END
+Coborrower.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/scm/svn/kSupport_SVN/!svn/ver/15/src/kredit/web/mfi/model/Coborrower.java
+END
+GroupMember.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/scm/svn/kSupport_SVN/!svn/ver/254/src/kredit/web/mfi/model/GroupMember.java
+END
+Leader.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/scm/svn/kSupport_SVN/!svn/ver/60/src/kredit/web/mfi/model/Leader.java
+END
+CbCycle.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/scm/svn/kSupport_SVN/!svn/ver/3/src/kredit/web/mfi/model/CbCycle.java
+END
+Mobilizer.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/scm/svn/kSupport_SVN/!svn/ver/219/src/kredit/web/mfi/model/Mobilizer.java
+END

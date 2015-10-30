@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/scm/svn/kSupport_SVN/!svn/ver/257/src/kredit/web/core/util
+END
+NumberTranslater.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/220/src/kredit/web/core/util/NumberTranslater.java
+END
+Common.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/scm/svn/kSupport_SVN/!svn/ver/257/src/kredit/web/core/util/Common.java
+END
+CMD.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/scm/svn/kSupport_SVN/!svn/ver/225/src/kredit/web/core/util/CMD.java
+END
+EmailHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/scm/svn/kSupport_SVN/!svn/ver/3/src/kredit/web/core/util/EmailHelper.java
+END
+EmailThread.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/scm/svn/kSupport_SVN/!svn/ver/3/src/kredit/web/core/util/EmailThread.java
+END
+Pager.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/util/Pager.java
+END

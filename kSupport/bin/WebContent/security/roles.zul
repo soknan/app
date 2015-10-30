@@ -1,0 +1,75 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript><![CDATA[
+	String path = "/security/include";
+]]></zscript>
+	<window id="rols" title="Role Information" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.security.vm.RoleVM')"
+		mode="overlapped" closable="true" width="720px" height="500px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+		
+		<vbox id="mVbox" hflex="true">
+ 			
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('onNew')"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpen')" disabled="@load(vm.selectedRole.id eq null)"/>
+				<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+					onClick="@command('onConfirmDelete')" disabled="@load(vm.selectedRole.id eq null)"/>
+					
+				<space bar="true" sclass="k-ver-bar" />
+				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAll')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+ 			
+			<listbox id="lstUser" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selectedRole)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstUser.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Name" sort="auto(name)" style="text-align: center"
+						width="150px" />
+					<listheader label="Role Code" sort="auto(name)" style="text-align: center"
+						width="90px" />
+					<listheader label="Status" sort="auto(status)" style="text-align: center"
+						width="70px" />
+					<listheader label="Created Date" sort="auto(create_on)" style="text-align: center"
+						width="160px" />
+					<listheader label="Note" sort="auto(note)" style="text-align: center"
+						width="100%" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpen')">
+						<listcell label="@load(item.name)" />
+						<listcell label="@load(item.role_code)" />
+						<listcell label="@load(item.status eq 'A'?'Active':'Inactive')" />
+						<listcell label="@load(item.create_on) @converter('formatedDate', format='dd-MM-yyyy hh:mm:ss a')" />
+						<listcell label="@load(item.note)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

@@ -1,0 +1,64 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winPlnInput" title="Plan Input" border="normal" visible="@load(vm.visiblePlnInput)"
+	mode="overlapped" closable="true" width="665px" height="650px"
+	position="center" onClose="@command('onClosePlnInput')">
+	
+	<vbox hflex="true">
+		<hbox>
+			<label>Plan Year:</label>
+			<textbox value="@bind(vm.selectedPlan.plan_year)"></textbox>
+			
+			<label style="margin-left: 25px">Plan Month:</label>
+			<combobox model="@load(vm.months)"
+				value="@load(vm.selectedMonth.description)"
+				selectedItem="@bind(vm.selectedMonth)" width="100px">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" />
+				</template>
+			</combobox>
+			
+			<button label="Save" class="btn-primary btn-xs" onClick="@command('onSavePlanInput')"></button>
+		</hbox>
+		
+		<toolbar hflex="true" width="100%">
+				<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('onNewPlnCo')" disabled="@load(vm.disableNewCo)"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpenPlnCo')" disabled="@load(vm.selectedPlanCo.id eq null)"/>
+				<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+					onClick="@command('onConfirmDeletePlnCo')" disabled="@load(vm.selectedPlanCo.id eq null)"/>			
+		</toolbar>
+		
+		<listbox id="lstPlanCo" model="@load(vm.selectedPlan.planCo)"
+				selectedItem="@bind(vm.selectedPlanCo)" hflex="true" mold="paging"
+				vflex="true" pageSize="10">
+				<attribute name="onCreate">
+				<![CDATA[lstPlanCo.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Name" style="text-align: left"
+						width="170px" />
+					<listheader label="Gender" style="text-align: center"
+						width="100px" />
+					<listheader label="N. Communes" style="text-align: center"
+						sort="auto(n_communes)" width="100px" />
+					<listheader label="N. Savings" style="text-align: center"
+						sort="auto(n_savings)" width="100px" />
+					<listheader label="Create Date" style="text-align: left" width="100%" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpenPlnCo')">
+						<listcell label="@load(item.co.full_name)" style="text-align: left"/>
+						<listcell label="@load(item.co.gender)" style="text-align: center"/>
+						<listcell label="@load(item.n_communes)" style="text-align: center"/>
+						<listcell label="@load(item.n_savings)" style="text-align: center"/>
+						<listcell label="@load(item.createOn) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: left"/>
+					</listitem>
+				</template>
+			</listbox>
+	</vbox>
+	
+</window>
+</zk>

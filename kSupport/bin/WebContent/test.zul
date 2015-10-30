@@ -1,0 +1,65 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<div id="main" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('test.TestVM')">
+		<vbox>
+			<!--  
+				<button label="test CB" onClick="@command('onTestCB')"></button>
+				<button label="test Logger"
+				onClick="@command('onTestLogger')">
+				</button>
+				<button label="test User"
+				onClick="@command('onTestUser')">
+				</button>
+				<button label="Download Log Sol"
+				onClick="@command('onDownloadLog', i = 0)">
+				</button>
+				<button label="Download Log Win"
+				onClick="@command('onDownloadLog', i = 1)">
+				</button>
+				
+			-->
+
+			<vbox vflex="true">
+				<listbox id="lst" model="@load(vm.lstFetchCIF)"
+					width="100%" paginal="${lstPaging}"
+					vflex="true" pagingPosition="top">
+
+					<attribute name="onCreate">
+				<![CDATA[
+
+]]>
+				</attribute>
+
+					<listhead sizable="true">
+						<listheader label="Customer No" width="80px"
+							sort="auto(custNo)" align="right" />
+						<listheader label="Full Name" width="180px"
+							sort="auto(fullName)" />
+						<listheader label="Account No"
+							sort="auto(accountNo)" width="120px" />
+						<listheader label="Prod. Code"
+							sort="auto(prdCd)" width="70px" align="right" />
+						<listheader label="Prod. Category"
+							sort="auto(prdCat)" />
+					</listhead>
+					<template name="model" var="item">
+						<listitem height="35px"
+							onClick="winCIF.detach();">
+							<listcell label="@load(item.custNo)" />
+							<listcell label="@load(item.fullName)" />
+							<listcell label="@load(item.accountNo)" />
+							<listcell label="@load(item.prdCd)" />
+							<listcell label="@load(item.prdCat)" />
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="lstPaging" autohide="true" detailed="true"
+					totalSize="@load(vm.totalSize)" pageSize="@load(vm.pageSize)"
+					mold="os" activePage="@bind(vm.pageIndex)">
+				</paging>
+			</vbox>
+
+		</vbox>
+	</div>
+</zk>

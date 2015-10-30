@@ -1,0 +1,85 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSave')"/>
+			
+	</toolbar>
+	<n:div class="k-space" />
+	<n:table width="100%" cellspacing="5">
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Name</n:td>
+			<n:td style="padding-right: 82px"><textbox width="162px" value="@bind(vm.selectedRole.name)"/></n:td>
+			<n:td align="right" style="padding-left: 15px" valign="top">Status</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterStatus)"
+					value="@load(vm.selectedRole.statusC.description)"
+					selectedItem="@bind(vm.selectedRole.statusC)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Role Code</n:td>
+			<n:td style="padding-right: 82px"><textbox width="162px" value="@bind(vm.selectedRole.role_code)"/></n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Note</n:td>
+			<n:td colspan="3" align="right" style="padding-left: 42px">
+				<textbox width="100%" rows="2" value="@bind(vm.selectedRole.note)"/>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td colspan="4">
+				<n:hr width="100%" />
+			</n:td>
+		</n:tr>
+	</n:table>
+	
+	<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 110px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRole.create_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRole.create_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRole.change_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedRole.change_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+</zk>

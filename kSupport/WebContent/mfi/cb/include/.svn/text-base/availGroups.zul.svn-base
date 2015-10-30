@@ -1,0 +1,25 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<listbox id="availLb" model="@load(vm.availGrps)" mold="paging"
+		pageSize="5" hflex="1" vflex="true" selectedItems="@bind(vm.selectAvails)">
+		<attribute name="onCreate">
+				<![CDATA[
+	availLb.pagingChild.mold = "os";
+	availLb.setMultiple(true);
+	availLb.setCheckmark(true);
+]]>
+				</attribute>
+		<listhead>
+			<listheader label="Group Acc. No." width="140px"></listheader>
+			<listheader label="Leader" width="150px"></listheader>
+			<listheader label="Village"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.groupAccNo)" />
+				<listcell label="@load(each.leaderName)" />
+				<listcell label="@load(each.villageName)" />
+			</listitem>
+		</template>
+	</listbox>
+</zk>

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/scm/svn/kSupport_SVN/!svn/ver/219/WebContent/mfi/group/include
+END
+groupInfo.zul
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/219/WebContent/mfi/group/include/groupInfo.zul
+END
+currentGroupLeader.zul
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/scm/svn/kSupport_SVN/!svn/ver/60/WebContent/mfi/group/include/currentGroupLeader.zul
+END
+cifDualListbox.zul
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/144/WebContent/mfi/group/include/cifDualListbox.zul
+END
+historyGroupLeader.zul
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/scm/svn/kSupport_SVN/!svn/ver/3/WebContent/mfi/group/include/historyGroupLeader.zul
+END
+memberDualListbox.zul
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/scm/svn/kSupport_SVN/!svn/ver/40/WebContent/mfi/group/include/memberDualListbox.zul
+END
+groupLeader.zul
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/1/WebContent/mfi/group/include/groupLeader.zul
+END
+groupMembers.zul
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/48/WebContent/mfi/group/include/groupMembers.zul
+END
+mbrListDetail.zul
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/3/WebContent/mfi/group/include/mbrListDetail.zul
+END

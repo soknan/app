@@ -1,0 +1,44 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="k-space-2px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.domain.createBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.domain.createOn)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.domain.changeBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.domain.changeOn)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+
+		</n:div>
+	</n:div>
+</zk>

@@ -1,0 +1,66 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="kivawinAcc" title="List Value - CIF and Account"
+		border="normal" mode="modal" closable="true" width="950px"
+		height="400px">
+		<vbox vflex="true" hflex="true">			
+			<toolbar hflex="true">
+				<toolbarbutton label="Add to List"  disabled="@load(empty vm.lstFetchCIF)"
+					onClick="@command('onAddList')" />
+					<space bar="true" sclass="k-ver-bar" />						
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('onSearchCIF')" focus="true"
+					value="@bind(vm.paramCIF.filter)" placeholder="Search....." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('onSearchCIF')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onResetSearchCIF')" />
+			</toolbar>		
+			
+			<listbox id="lstAcc" model="@load(vm.lstFetchCIF)" width="100%"
+				selectedItems="@bind(vm.selectedCIF)" mold="paging" pageSize="10"
+				vflex="true" hflex="true" pagingPosition="top">
+				<attribute name="onCreate">
+				<![CDATA[
+	lstAcc.setMultiple(true);
+	lstAcc.setCheckmark(true);
+	   
+]]>
+				</attribute>
+
+				<listhead sizable="true">				
+					<listheader label="First Name" width="120px"
+						sort="auto(fnameEn)" />
+					<listheader label="Last Name" width="120px"
+						sort="auto(lnameEn)" />
+					<listheader label="Sex"
+						sort="auto(sex)" width="50px" />
+					<listheader label="Amount Disburse"
+						sort="auto(amountDisburse)" width="120px" />
+					<listheader label="Account No" sort="auto(accountNo)"
+						width="150px" />
+						<listheader label="Ref.Acc" sort="auto(refAcc)"
+						width="150px" />
+						<listheader label="Customer No"
+						sort="auto(customerNo)" width="120px"/>	
+						<listheader label="Prd Cat"
+						sort="auto(prdCat)" width="120px"/>		
+				</listhead>
+				<template name="model">
+					<listitem height="35px">
+					
+						<listcell label="@load(each.fnameEn)" />
+						<listcell label="@load(each.lnameEn)" />
+						<listcell label="@load(each.sex)" />
+						<listcell label="@load(each.amountDisburse)" />	
+						<listcell label="@load(each.accountNo)" />
+						<listcell label="@load(each.refAcc)" />					
+						<listcell label="@load(each.customerNo)" />
+						<listcell label="@load(each.prdCat)" />						
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+
+</zk>

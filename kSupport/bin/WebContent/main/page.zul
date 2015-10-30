@@ -1,0 +1,46 @@
+<zk xmlns:n="native">
+	<n:div class="main-content">
+		<n:div class="breadcrumbs" id="breadcrumbs">
+			<n:ul class="breadcrumb">
+				<n:li>
+					<n:i class="icon-home home-icon"></n:i>
+					<n:a href="#">Home</n:a>
+
+					<n:span class="divider">
+						<n:i class="icon-angle-right arrow-icon"></n:i>
+					</n:span>
+				</n:li>
+
+				<n:li>
+					<n:a href="#">Other Pages</n:a>
+
+					<n:span class="divider">
+						<n:i class="icon-angle-right arrow-icon"></n:i>
+					</n:span>
+				</n:li>
+				<n:li class="active">Blank Page</n:li>
+			</n:ul><!--.breadcrumb -->
+
+			<n:div class="nav-search" id="nav-search">
+				<n:form class="form-search">
+					<n:span class="input-icon">
+						<n:input type="text" placeholder="Search ..."
+							class="input-small nav-search-input" id="nav-search-input"
+							autocomplete="off" />
+						<n:i class="icon-search nav-search-icon"></n:i>
+					</n:span>
+				</n:form>
+			</n:div><!--#nav-search -->
+		</n:div>
+
+		<n:div class="page-content">
+			<n:div class="row-fluid">
+				<n:div class="span12">
+					<!--PAGE CONTENT BEGINS -->
+					<include src="content.zul" />
+					<!--PAGE CONTENT ENDS -->
+				</n:div><!--/.span -->
+			</n:div><!--/.row-fluid -->
+		</n:div><!--/.page-content -->
+	</n:div><!--/.main-content -->
+</zk>

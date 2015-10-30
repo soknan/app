@@ -1,0 +1,7 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<vbox id="cbLeader">
+		<include src="/mfi/cb/include/currentCbLeader.zul" />
+		<include src="/mfi/cb/include/historyCbLeader.zul" />
+	</vbox>
+</zk>

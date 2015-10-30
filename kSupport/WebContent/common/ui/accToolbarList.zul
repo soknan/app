@@ -1,0 +1,33 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<toolbar hflex="true">
+		<label value="Look for: " style="padding: 0 0 0 5px;" />
+		<combobox id="search" model="@load(vm.lstSearch)"
+				value="@load(vm.searchType.description)"
+				selectedItem="@bind(vm.searchType)"
+				 width="150px">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" />
+				</template>
+			</combobox>
+		<!-- <label value=" Like " style="padding: 0 0 0 5px;" /> -->
+		<textbox onOK="@command('doSearch')" focus="true" width="200px"
+			value="@bind(vm.filter)" placeholder="Search by..." />
+		<toolbarbutton label="Find" image="/img/icon/search.png"
+			onClick="@command('doSearch')" />
+		<toolbarbutton label="Clear" image="/img/icon/clear.png"
+			onClick="@command('onClear')" />
+		<space bar="true" class="k-ver-bar" />
+		<label value="Rows per page:" />
+		<combobox id="rowPerPage" model="@load(vm.rows)"
+			value="@load(vm.selectedNumRow.description)"
+			selectedItem="@bind(vm.selectedNumRow)"
+			onChange="@command('doSearch')" width="50px">
+			<template name="model" var="t">
+				<comboitem label="@load(t.description)" />
+			</template>
+		</combobox>
+		<space/>
+		<label sclass="k-orange" value="Note: There are two lists: (1) Loan (2) CASA and TD"/>
+	</toolbar>
+</zk>

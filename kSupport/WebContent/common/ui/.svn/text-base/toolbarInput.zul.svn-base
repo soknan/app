@@ -1,0 +1,12 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<toolbar hflex="true" width="100%">
+		<toolbarbutton label="New" image="/img/icon/new.png"
+			onClick="@command('onNew')" visible="@load(vm.privilege.canNew)"/>
+		<toolbarbutton label="Save" image="/img/icon/save.png"
+			onClick="@command('onSave')" disabled="@load(not fxStatus.dirty or vm.selected.recordStat eq 'C')" visible="@load(vm.privilege.canUpdate)"/>
+			
+		<toolbarbutton label="@load(vm.lStatus)" image="${vm.selected.recordStat eq 'C'?'/img/icon/eye-open.png':'/img/icon/eye-close.png'}"
+			onClick="@command('onStatus')"  visible="@load(!empty vm.selected.id)"/>
+	</toolbar>
+</zk>

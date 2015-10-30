@@ -1,0 +1,29 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		userDetail.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="userDetail" title="User Information" border="normal" visible="@load(vm.visible)"
+		mode="overlapped" closable="true" width="650px" height="500px" position="center" onClose="@command('onCloseDetail')">
+		<tabbox selectedIndex="@bind(vm.selectedTabIndex)" onSelect="@command('onSelectTab', tab = self.selectedPanel)">
+			<tabs>
+				<tab label="User" />
+				<tab label="Validity" />
+				<tab label="Role" />
+				<tab label="Function" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<include src="/security/include/users/info.zul" />
+				</tabpanel>
+				<tabpanel id="tabValidity"></tabpanel>
+				<tabpanel id="tabURole"></tabpanel>
+				<tabpanel id="tabUFunction"></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

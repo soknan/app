@@ -1,0 +1,71 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="panel panel-default">
+		<n:div class="panel-heading">
+			<n:h3>
+				Navigation
+			</n:h3>
+		</n:div>
+		<n:div id="sidebar" class="list-group">
+			<n:a href="#" class="list-group-item active">
+				<n:i class="icon-dashboard">
+				</n:i>
+				Dashboard
+			</n:a>
+			<n:a href="#users" class="list-group-item" data-toggle="collapse"
+				data-parent="#sidebar">
+				<n:i class="icon-group">
+				</n:i>
+				Users
+				<span class="badge bg_danger">
+					0
+				</span>
+			</n:a>
+			<n:div id="users" class="list-group subitem collapse in">
+				<n:a href="#" class="list-group-item">
+					<n:i class="icon-caret-right">
+					</n:i>
+					Users
+					<span class="badge bg_danger">
+						0
+					</span>
+				</n:a>
+				<n:a href="#" class="list-group-item">
+					<n:i class="icon-caret-right">
+					</n:i>
+					Create User
+				</n:a>
+				<n:a href="#" class="list-group-item">
+					<n:i class="icon-caret-right">
+					</n:i>
+					Create Group
+				</n:a>
+			</n:div>
+			<n:a href="#articles" class="list-group-item" data-toggle="collapse"
+				data-parent="#sidebar">
+				<n:i class="icon-file-text">
+				</n:i>
+				Articles
+				<span class="badge bg_danger">
+					0
+				</span>
+			</n:a>
+			<n:div id="articles" class="list-group subitem collapse">
+				<n:a href="#" class="list-group-item bg_warning">
+					<n:i class="icon-caret-right">
+					</n:i>
+					Articles
+					<span class="badge bg_danger">
+						0
+					</span>
+				</n:a>
+				<n:a href="#" class="list-group-item">
+					<n:i class="icon-caret-right">
+					</n:i>
+					Create Article
+				</n:a>
+			</n:div>
+		</n:div>
+	</n:div>
+
+</zk>

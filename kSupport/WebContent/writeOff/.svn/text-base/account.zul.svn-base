@@ -1,0 +1,97 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winAcc" title="List of Value - Account" onClose="@command('onCloseAcc')" visible="@load(vm.visibleAcc)"
+		border="normal" mode="modal" closable="true" width="760px" position="center" height="400px">
+		<vbox vflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table id="ctr_detail" width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.paramAcc.name)" width="162px" onOK="@command('onSearchAcc')"/>
+						</n:td>
+						<n:td width="20px">Branch</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<combobox model="@load(vm.filterBranches)" value="@load(vm.paramAcc.branch.description)" onSelect="@command('onSearchAcc')"
+								selectedItem="@bind(vm.paramAcc.branch)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Account No</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.paramAcc.account)" width="162px" onOK="@command('onSearchAcc')"/>
+						</n:td>
+						<n:td width="20px">Currency</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<combobox model="@load(vm.filterCurrency)" value="@load(vm.paramAcc.currency.description)" onSelect="@command('onSearchAcc')"
+								selectedItem="@bind(vm.paramAcc.currency)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">CIF</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.paramAcc.cif)" width="162px" onOK="@command('onSearchAcc')"/>
+						</n:td>
+						<n:td></n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-search"
+								onClick="@command('onSearchAcc')">
+								Find
+							</button>
+							<space />
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-eraser"
+								onClick="@command('onResetSearchAcc')">
+								Reset
+							</button>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<listbox id="lstAcc" model="@load(vm.lstAcc)"
+				width="100%" selectedItem="@bind(vm.selectedImport)" vflex="true"
+				pagingPosition="top">
+				<listhead sizable="true">
+					<listheader label="CIF" sort="auto(cif)" style="text-align: right"
+						width="100px" />
+					<listheader label="Name" sort="auto(nameEn)" style="text-align: left"
+						width="160px" />
+					<listheader label="Branch Code" style="text-align: right"
+						sort="auto(brCd)" width="90px" />
+					<listheader label="Account No" style="text-align: right"
+						sort="auto(accountNo)" width="120px" />
+					<listheader label="Product Code" style="text-align: right"
+						sort="auto(prodCode)" width="90px" />
+					<listheader label="Write-Off Date" style="text-align: left"
+						sort="auto(woffDate)" width="120px" />
+					<listheader label="Ccy" sort="auto(ccy)" style="text-align: left"
+						width="63px" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="@command('onSelectAcc')">
+						<listcell label="@load(item.cif)" style="text-align: right"/>
+						<listcell label="@load(item.nameEn)" style="text-align: left"/>
+						<listcell label="@load(item.brCd)" style="text-align: right"/>
+						<listcell label="@load(item.accountNo)" style="text-align: right"/>
+						<listcell label="@load(item.prodCode)" style="text-align: right"/>
+						<listcell label="@load(item.woffDate) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: left"/>
+						<listcell label="@load(item.ccy)" style="text-align: left"/>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

@@ -1,0 +1,45 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="cbls" title="Community Bank List" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('kredit.web.mfi.cb.vm.CbListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="800px"
+		height="600px" position="center" onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<include src="/common/ui/toolbarList.zul"></include>
+			<listbox id="lst" model="@load(vm.lstCB)" width="100%"
+				hflex="true" vflex="true"
+				selectedItem="@bind(vm.selected)" paginal="${lstPaging}">
+				<listhead sizable="true">
+					<listheader label="No." width="40px" align="right" sort="auto(id)"/>
+					<listheader label="Br. Code" width="60px" align="right" sort="auto(brCd)"/>
+					<listheader label="Name EN" width="160px" sort="auto(nameEN)"/>
+					<listheader label="Name KH" width="160px" sort="auto(nameKH)"/>
+					<listheader label="Status" width="50px" sort="auto(recordStat)"/>
+					<listheader label="Cur. Cycle" width="80px" align="right" sort="auto(lastCycleNo)"/>
+					<listheader label="Total Group" align="right" width="80px" sort="auto(countGroup)"/>
+					<listheader label="Village" sort="auto(villageName)"/>
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px"
+						onDoubleClick="@global-command('onCmd', cmd = vm.cmdNew, obj = vm.selected)">
+						<listcell label="@load(item.id)" />
+						<listcell label="@load(item.brCd)" />
+						<listcell label="@load(item.nameEN)" />
+						<listcell label="@load(item.nameKH)" />
+						<listcell label="@load(item.recordStatDes)" />
+						<listcell label="@load(item.lastCycleNo)" />
+						<listcell label="@load(item.countGroup)" />
+						<listcell label="@load(item.villageName)" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging>
+		</vbox>
+	</window>
+</zk>

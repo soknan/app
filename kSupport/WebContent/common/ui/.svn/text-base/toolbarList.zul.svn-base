@@ -1,0 +1,37 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<toolbar hflex="true">
+		<toolbarbutton label="New" image="/img/icon/new.png"
+			onClick="@global-command('onCmd', cmd = vm.cmdNew)" visible="@load(vm.privilege.canNew)"/>
+		<toolbarbutton label="Edit" image="/img/icon/edit.png"
+			onClick="@global-command('onCmd', cmd = vm.cmdNew, obj = vm.selected)"
+			disabled="@load(empty vm.selected)" visible="@load(vm.privilege.canView)"/>
+		<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+			onClick="@command('onConfirmDelete')" disabled="@load(empty vm.selected)" />
+		<space bar="true" class="k-ver-bar" />
+		<label value="Look for: " style="padding: 0 0 0 5px;" />
+		<textbox onOK="@command('doSearch')" focus="true" value="@bind(vm.filter)"
+			placeholder="Search..." />
+		<toolbarbutton label="Find" image="/img/icon/search.png"
+			onClick="@command('doSearch')" />
+		<label value="Status: " style="padding: 0 0 0 5px;" />
+		<combobox id="status" model="@load(vm.lstStatus)"
+			value="@load(vm.status.description)" selectedItem="@bind(vm.status)" onChange="@command('doSearch')"
+			 width="70px">
+			<template name="model" var="t">
+				<comboitem label="@load(t.description)"  />
+			</template>
+		</combobox>
+		<toolbarbutton label="Clear" image="/img/icon/clear.png"
+			onClick="@command('onClear')" />
+		<space bar="true" class="k-ver-bar" />
+		<label value="Rows per page:" />
+		<combobox id="rowPerPage" model="@load(vm.rows)"
+			value="@load(vm.selectedNumRow.description)" selectedItem="@bind(vm.selectedNumRow)"
+			onChange="@command('doSearch')" width="50px">
+			<template name="model" var="t">
+				<comboitem label="@load(t.description)" />
+			</template>
+		</combobox>
+	</toolbar>
+</zk>

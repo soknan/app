@@ -1,0 +1,310 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>General Info</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">Account No.</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selectedLoan.accountNo)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td>Branch Code</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedLoan.brCd)"
+								readonly="true" width="50px" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>CIF</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedLoan.cif)"
+								readonly="true" width="160px" />
+						</n:td>
+						<n:td width="120px">Branch Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selectedLoan.branchName)" readonly="true" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Full Name (EN)</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selectedLoan.nameEn)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">Full Name (KH)</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selectedLoan.nameKh)" readonly="true" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+
+		<tabbox vflex="true">
+			<tabs>
+				<tab label="Loan Info" />
+				<tab label="Credit Officer" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<!-- <n:div class="widget-header">
+						<n:h6 class="lighter">
+						<n:b>Loan Info</n:b>
+						</n:h6>
+						</n:div> -->
+					<n:div class="widget-body">
+						<n:div
+							class="widget-main padding-6 no-padding-left no-padding-right">
+							<n:div class="k-space" />
+							<n:table width="100%" cellspacing="5">
+								<n:tr align="right">
+									<n:td>Amount Disbursed</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.amtDisbursed)" readonly="true"
+											width="160px" />
+									</n:td>
+									<n:td width="120px">Currency</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox width="160px"
+											value="@bind(vm.selectedLoan.ccy)" readonly="true" />
+									</n:td>
+								</n:tr>
+								<n:tr align="right">
+									<n:td>Write-Off Date</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<datebox width="160px"
+											format="dd-MM-yyyy" disabled="true"
+											value="@bind(vm.selectedLoan.woffDate)" />
+									</n:td>
+									<n:td>Product Code</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.prodCode)" readonly="true"
+											width="160px" />
+									</n:td>
+								</n:tr>
+							</n:table>
+						</n:div>
+					</n:div>
+					<n:div class="widget-body">
+						<n:div
+							class="widget-main padding-6 no-padding-left no-padding-right">
+							<n:div class="k-space" />
+							<n:table width="100%" cellspacing="5">
+								<n:tr align="right">
+									<n:td width="120px">
+										Total Write-Off
+									</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.totWoff)" readonly="true"
+											width="160px" />
+									</n:td>
+									<n:td width="120px">
+										Acc. Loan Rec.
+									</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.accuLnRec)" readonly="true"
+											width="160px" />
+									</n:td>
+								</n:tr>
+								<n:tr align="right">
+									<n:td>Net Loss</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.netLoss)" readonly="true"
+											width="160px" />
+									</n:td>
+								</n:tr>
+							</n:table>
+						</n:div>
+					</n:div>
+					<n:div class="widget-body">
+						<n:div
+							class="widget-main padding-6 no-padding-left no-padding-right">
+							<n:div class="k-space" />
+							<n:table width="100%" cellspacing="5">
+								<n:tr align="right">
+									<n:td width="120px">Principal</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.principle)" readonly="true"
+											width="160px" />
+									</n:td>
+									<n:td>Interest</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.interest)" readonly="true"
+											width="160px" />
+									</n:td>
+								</n:tr>
+								<n:tr align="right">
+									<n:td>Penalty Principal</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.penPrin)" readonly="true"
+											width="160px" />
+									</n:td>
+									<n:td width="120px">
+										Penalty Interest
+									</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox width="160px"
+											value="@bind(vm.selectedLoan.penInt)" readonly="true" />
+									</n:td>
+								</n:tr>
+								<n:tr align="right">
+									<n:td>Continue Interest</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox width="160px"
+											value="@bind(vm.selectedLoan.contInt)" readonly="true" />
+									</n:td>
+								</n:tr>
+							</n:table>
+						</n:div>
+					</n:div>
+
+					<n:div class="widget-body">
+						<n:div
+							class="widget-main padding-6 no-padding-left no-padding-right">
+							<n:div class="k-space" />
+							<n:table width="100%" cellspacing="5">
+								<n:tr align="right">
+									<n:td width="120px">
+										Loan WOF. Cat.
+									</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<combobox
+											model="@load(vm.wCategory)"
+											value="@load(vm.selectedLoan.category)" width="160px"
+											selectedItem="@bind(vm.selectedLoan.categoryC)"
+											onChange="@command('infoChanging')">
+											<template name="model"
+												var="t">
+												<comboitem
+													label="@load(t.description)" />
+											</template>
+										</combobox>
+									</n:td>
+									<n:td align="left">
+										<button label="Save"
+											class="btn-primary btn-xs" disabled="@load(vm.infoChange)"
+											onClick="@command('onSave')" style="margin-right: 250px;" />
+									</n:td>
+								</n:tr>
+								<n:tr align="right">
+									<n:td>Customer Situation</n:td>
+									<n:td align="left" class="k-padding"
+										colspan="3">
+										<textbox
+											value="@bind(vm.selectedLoan.reason)" rows="2"
+											onChanging="@command('infoChanging')" width="470px" />
+									</n:td>
+								</n:tr>
+							</n:table>
+						</n:div>
+					</n:div>
+				</tabpanel>
+				<tabpanel id="tabLeader">
+					<n:div class="widget-body">
+						<n:div
+							class="widget-main padding-6 no-padding-left no-padding-right">
+							<n:div class="k-space" />
+							<n:table width="100%" cellspacing="5">
+								<n:tr align="right">
+									<n:td width="115px">
+										CO Full Name
+									</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.coFullName)" readonly="true"
+											width="160px" />
+									</n:td>
+									<n:td width="120px">CO Short Name</n:td>
+									<n:td align="left"
+										class="k-padding">
+										<textbox
+											value="@bind(vm.selectedLoan.coShortName)" readonly="true"
+											width="160px" />
+									</n:td>
+								</n:tr>
+							</n:table>
+						</n:div>
+					</n:div>
+
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+
+
+	</n:div>
+
+	<!-- Status Bar -->
+
+	<n:div class="k-space-1px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedLoan.createBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedLoan.createOn)" />
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedLoan.changeBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedLoan.changeOn)" />
+					</n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+
+	<!-- Status Bar -->
+</zk>

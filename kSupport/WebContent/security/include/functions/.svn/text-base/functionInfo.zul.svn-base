@@ -1,0 +1,145 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSave')"/>
+	</toolbar>
+	<n:div class="k-space" />
+	<n:table width="100%" cellspacing="5">
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Name</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedFunction.name)"/></n:td>
+			<n:td align="right" style="padding-left: 15px" valign="top">Type</n:td>
+			<n:td>
+			<combobox model="@load(vm.filterFunctions)"
+					value="@load(vm.selectedFunction.typeC.description)"
+					selectedItem="@bind(vm.selectedFunction.typeC)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Code</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedFunction.code)"/></n:td>
+			<n:td align="right" style="padding-left: 15px" valign="top">Status</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterStatus)"
+					value="@load(vm.selectedFunction.statusC.description)"
+					selectedItem="@bind(vm.selectedFunction.statusC)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">HREF</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedFunction.href)"/></n:td>
+			<n:td align="right" style="padding-left: 15px" valign="top">Parent Code</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedFunction.parent_code)"/></n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Sequence</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedFunction.seq)"/></n:td>
+			<n:td align="right" style="padding-left: 15px" valign="top">ICON</n:td>
+			<n:td><textbox width="162px" value="@bind(vm.selectedFunction.icon)"/></n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Menu</n:td>
+			<n:td align="center">
+				<checkbox checked="@bind(vm.selectedFunction.menuB)"></checkbox>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td width="80px" valign="top">Note</n:td>
+			<n:td colspan="3" align="right" style="padding-left: 42px">
+				<textbox width="100%" rows="2" value="@bind(vm.selectedFunction.note)"/>
+			</n:td>
+		</n:tr>
+	</n:table>
+	<hbox align="center" style="margin-top: 10px">
+			<listbox id="lstAvailable" model="@load(vm.lstAll)" style="margin-left: 49px"
+				selectedItem="@bind(vm.selectedAll)" width="243px" height="180px">
+				<listhead sizable="false">
+					<listheader label="All Right" width="241px" style="text-align: center"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell style="text-align: left">
+							<label value="@load(each.description)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<vbox style="margin-top: 33px">
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-forward" width="30px" onClick="@command('allLeftToRight')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-chevron-right" width="30px" onClick="@command('leftToRight')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-chevron-left" width="30px" onClick="@command('rightToLeft')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-backward" width="30px" onClick="@command('allRightToLeft')" />
+			</vbox>
+			<listbox id="lstOwn" model="@load(vm.lstAva)"
+				selectedItem="@bind(vm.selectedAva)" width="243px" height="180px">
+				<listhead sizable="false">
+					<listheader label="Available Right for this function" width="241px" style="text-align: center"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell style="text-align: left">
+							<label value="@load(each.description)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+	</hbox>
+	
+	<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 10px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedFunction.create_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedFunction.create_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedFunction.change_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedFunction.change_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+</zk>

@@ -1,0 +1,103 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="mzip" title="Mobilizer Input" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.mfi.mobilizer.vm.MobilizerInputVM')"
+		mode="overlapped" closable="true" width="650px" height="400px"
+		position="center"
+		onClose="@global-command('onCloseWin', id=self, postGlobal='notifyListMzChange')">
+		<div vflex="true"
+			form="@id('fx') @init(vm.frm) @load(vm.selected) @save(vm.selected, before='onSave')">
+			<include src="/common/ui/toolbarInput.zul" />
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Mobilizer Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Branch Code</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(fx.brCd)" readonly="true" width="50px" />
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									Sex
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="180px" selectedItem="@bind(fx.sex)"
+										constraint="no empty">
+										<comboitem label="Male" value="M" />
+										<comboitem label="Female" value="F" />
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i>
+									Full Name (EN)
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" value="@bind(fx.nameEN)"
+										constraint="no empty" />
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									ID Type
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstFetchIDType)"
+										selectedItem="@bind(fx.idTypeItem)" width="180px"
+										value="@load(fx.idTypeItem.description)" constraint="no empty">
+										<template name="model">
+											<comboitem value="@load(each.code)" label="@load(each.description)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i>
+									Full Name (KH)
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(fx.nameKH)" width="160px"
+										constraint="no empty" />
+								</n:td>
+								<n:td width="120px">
+									<n:i class="red">*</n:i>
+									ID No.
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="180px" constraint="no empty" value="@bind(fx.idNo)" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red"></n:i>
+									Status
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@load(fx.recordStatDes)" width="160px"
+										readonly="true" />
+								</n:td>
+								<n:td width="120px">
+									
+								</n:td>
+								<n:td align="left" class="k-padding">
+									
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<include src="/common/ui/statusBar.zul"></include>
+	</window>
+</zk>

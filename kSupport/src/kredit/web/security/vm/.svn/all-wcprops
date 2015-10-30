@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/scm/svn/kSupport_SVN/!svn/ver/231/src/kredit/web/security/vm
+END
+FunctionVM.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/scm/svn/kSupport_SVN/!svn/ver/46/src/kredit/web/security/vm/FunctionVM.java
+END
+RoleVM.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/scm/svn/kSupport_SVN/!svn/ver/46/src/kredit/web/security/vm/RoleVM.java
+END
+UserVM.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/scm/svn/kSupport_SVN/!svn/ver/231/src/kredit/web/security/vm/UserVM.java
+END

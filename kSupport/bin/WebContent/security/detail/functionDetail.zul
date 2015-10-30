@@ -1,0 +1,28 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		functionDetail.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="functionDetail" title="Function Information" border="normal" visible="@load(vm.visible)"
+		mode="overlapped" closable="true" width="650px" height="540px"
+		position="center" onClose="@command('onCloseDetail')">
+		<tabbox selectedIndex="@bind(vm.selectedTabIndex)" onSelect="@command('onSelectTab', tab = self.selectedPanel)">
+			<tabs>
+				<tab label="Function" />
+				<tab label="Role" />
+				<tab label="User" />
+			</tabs>
+			<tabpanels vflex="true">
+				<tabpanel id="tabInfo">
+					<include src="/security/include/functions/functionInfo.zul" />
+				</tabpanel>
+				<tabpanel id="tabRole"></tabpanel>
+				<tabpanel id="tabUser" vflex="true"></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

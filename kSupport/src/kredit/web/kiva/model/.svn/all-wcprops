@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/scm/svn/kSupport_SVN/!svn/ver/209/src/kredit/web/kiva/model
+END
+KivaLoanModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/198/src/kredit/web/kiva/model/KivaLoanModel.java
+END
+ParamModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/scm/svn/kSupport_SVN/!svn/ver/141/src/kredit/web/kiva/model/ParamModel.java
+END
+KivaScheduleModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/171/src/kredit/web/kiva/model/KivaScheduleModel.java
+END
+KivaGroupModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/scm/svn/kSupport_SVN/!svn/ver/198/src/kredit/web/kiva/model/KivaGroupModel.java
+END
+KivaIDLModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/198/src/kredit/web/kiva/model/KivaIDLModel.java
+END

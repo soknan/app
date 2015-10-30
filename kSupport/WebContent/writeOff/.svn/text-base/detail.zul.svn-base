@@ -1,0 +1,19 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="loanDetail" title="Loan Information" border="normal" visible="@load(vm.visible)"
+		mode="overlapped" closable="true" width="650px" height="680px"
+		position="center" onClose="@command('onCloseDetail')">
+	<tabbox selectedIndex="@bind(vm.selectedTabIndex)" onSelect="@command('onSelectTab', tab = self.selectedPanel)">
+			<tabs>
+				<tab label="Info" />
+				<tab label="Repayment" />
+			</tabs>
+			<tabpanels>
+				<tabpanel id="tabInfo">
+					<include src="/writeOff/info.zul" />
+				</tabpanel>
+				<tabpanel id="tabPayment"></tabpanel>
+			</tabpanels>
+		</tabbox>
+</window>
+</zk>

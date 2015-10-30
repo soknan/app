@@ -1,0 +1,8 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="test" title="new page title" border="normal" width="400px"
+		height="400px" closable="true" mode="overlapped" maximizable="true"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+		<textbox value="Hello World"></textbox>
+	</window>
+</zk>

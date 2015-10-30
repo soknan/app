@@ -1,0 +1,46 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="mzls" title="Mobilizer List" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('kredit.web.mfi.mobilizer.vm.MobilizerListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="950px"
+		height="600px" position="center" onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<include src="/common/ui/toolbarList.zul"></include>
+			<listbox id="lst" model="@load(vm.lstMobilzer)" width="100%"
+				mold="paging" pageSize="@load(vm.selectedNumRow.description)" hflex="true"
+				vflex="true" selectedItem="@bind(vm.selected)" pagingPosition="bottom">
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="No." width="40px" align="right" sort="auto(id)" />
+					<listheader label="Br. Code" width="60px" align="right"
+						sort="auto(brCd)" />
+					<listheader label="Name EN" width="160px" sort="auto(nameEN)" />
+					<listheader label="Name KH" width="120px" sort="auto(nameKH)" />
+					<listheader label="Sex" width="50px" sort="auto(sex)" />
+					<listheader label="ID Type" width="240px" sort="auto(idType)" />
+					<listheader label="ID No." sort="auto(idNo)" />
+					<listheader label="Status" sort="auto(recordStat)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px"
+						onDoubleClick="@global-command('onCmd', cmd = vm.cmdNew, obj = vm.selected)">
+						<listcell label="@load(item.id)" />
+						<listcell label="@load(item.brCd)" />
+						<listcell label="@load(item.nameEN)" />
+						<listcell label="@load(item.nameKH)" />
+						<listcell label="@load(item.sex)" />
+						<listcell label="@load(item.idTypeDesc)" />
+						<listcell label="@load(item.idNo)" />
+						<listcell label="@load(item.recordStatDes)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

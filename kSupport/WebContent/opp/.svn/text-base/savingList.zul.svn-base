@@ -1,0 +1,105 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winSavingList" title="Saving - Product List" border="normal" visible="@load(vm.visibleSavingList)"
+	mode="overlapped" closable="true" width="1040px" height="600px"
+	position="center" onClose="@command('onCloseSavingList')">
+	<vbox hflex="true">
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="New" image="/img/icon/add-icon.png" onClick="@command('onNewSavingInput')" />
+			<toolbarbutton label="Open" image="/img/icon/edit.png" disabled="@load(vm.selectedSavingDetail.id eq null)"
+				onClick="@command('onOpenSavingInput')"/>
+			<toolbarbutton label="Delete" image="/img/icon/delete.png" disabled="@load(vm.selectedSavingDetail.id eq null)"
+				onClick="@command('onConfirmDeleteSavingDetail')"/>
+		</toolbar>
+		
+		<tabbox>
+			<tabs>
+				<tab label="Summary" />
+				<tab label="Detail" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<vbox>
+						<listbox id="lstSummary" model="@load(vm.lstCoSavingSummary)" height="450px"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="2" class="topic" label="PRODUCT"  style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.plan_year)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_02)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_03)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="PRODUCT" style="text-align: left" width="160px" />
+								<listheader label="CCY" style="text-align: center" width="50px" />
+								<listheader label="CLIENT" style="text-align: center" width="100px" />
+								<listheader label="LOAN" style="text-align: center" width="100px" />
+								<listheader label="CLIENT" style="text-align: center" width="100px" />
+								<listheader label="LOAN" style="text-align: center" width="100px" />
+								<listheader label="CLIENT" style="text-align: center" width="100px" />
+								<listheader label="LOAN" style="text-align: center" width="100px" />
+								<listheader label="CLIENT" style="text-align: center" width="100px" />
+								<listheader label="LOAN" style="text-align: center" width="100px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.description)" style="text-align: left" />
+									<listcell label="@load(item.currency)" style="text-align: center" />
+									<listcell label="@load(item.y0_cli)" style="text-align: center" />
+									<listcell label="@load(item.y0_amt)" style="text-align: center" />
+									<listcell label="@load(item.y1_cli)" style="text-align: center" />
+									<listcell label="@load(item.y1_amt)" style="text-align: center" />
+									<listcell label="@load(item.y2_cli)" style="text-align: center" />
+									<listcell label="@load(item.y2_amt)" style="text-align: center" />
+									<listcell label="@load(item.y3_cli)" style="text-align: center" />
+									<listcell label="@load(item.y3_amt)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>
+					
+						<grid>
+							<columns>
+								<column width="210px" label="TOTAL" style="background-color: #26a69a; color: #FFF;" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY0Cli)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY0Amt)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY1Cli)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY1Amt)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY2Cli)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY2Amt)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY3Cli)" />
+								<column width="100px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstCoSavingSummaryTotal.totalY3Amt)" />
+							</columns>
+						</grid>
+					</vbox>
+				</tabpanel>
+				<tabpanel>
+					<listbox id="lstSavingD" model="@load(vm.selectedSaving.savingDetails)"
+							 hflex="true" mold="paging" selectedItem="@bind(vm.selectedSavingDetail)"
+							vflex="true" pageSize="10">
+						<attribute name="onCreate">
+							<![CDATA[lstSavingD.pagingChild.mold = "os";]]>
+						</attribute>
+						<listhead sizable="true">
+							<listheader label="Pr. Code" style="text-align: center" width="70px" />
+							<listheader label="Product Name" style="text-align: center" width="200px" />
+							<listheader label="CCY" style="text-align: center" width="70px" />
+							<listheader label="Create By" style="text-align: left" width="200px" />
+							<listheader label="Create On" style="text-align: left" width="100%" />
+						</listhead>
+						<template name="model" var="item">
+							<listitem height="35px" context="menuKBureauUser"
+								onDoubleClick="@command('onOpenSavingInput')">
+								<listcell label="@load(item.product.code)" style="text-align: center" />
+								<listcell label="@load(item.product.description)" style="text-align: center" />
+								<listcell label="@load(item.currency)" style="text-align: center" />
+								<listcell label="@load(item.createBy)" style="text-align: left" />
+								<listcell label="@load(item.createOn) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: left"/>
+							</listitem>
+						</template>
+					</listbox>	
+				</tabpanel>
+			</tabpanels>
+		</tabbox>	
+	</vbox>
+</window>
+</zk>

@@ -1,0 +1,36 @@
+<?page title="Help" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window xmlns:n="native">
+		<n:div class="support-bg">
+			<n:h1>Support:</n:h1>
+			<n:div id="suport_content">
+				<n:p>
+					We are please to support you if you need help
+					relating to kBureau System. Please feel free to
+					contact IT Department or the following contacts.
+				</n:p>
+				<n:p>
+					1. NETH Sovathena, Software Developer
+					<n:ul>
+						<n:li>Tel: 017 719 326</n:li>
+						<n:li>Skype: vathena007</n:li>
+					</n:ul>
+				</n:p>
+				<n:p>
+					2. CHEA Visal, MIS Unit Manager
+					<n:ul>
+						<n:li>Tel: 077 76 13 13</n:li>
+						<n:li>Skype: visal.chea</n:li>
+					</n:ul>
+				</n:p>
+				<n:p>
+					3. SOK Kimchhay, Head of IT Department
+					<n:ul>
+						<n:li>Tel: 012 555 744</n:li>
+						<n:li>Skype: kimchhays</n:li>
+					</n:ul>
+				</n:p>
+			</n:div>
+		</n:div>
+	</window>
+</zk>

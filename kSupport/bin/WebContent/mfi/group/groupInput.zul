@@ -1,0 +1,35 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="grip" title="Group Input" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('kredit.web.mfi.group.vm.GroupInputVM')"
+		mode="overlapped" closable="true" width="1050px" height="650px"
+		position="center"
+		onClose="@global-command('onCloseWin', id=self, postGlobal='notifyListGroupChange')">
+		<div vflex="true"
+			form="@id('fx2') @init(vm.frm) @load(vm.selected) @save(vm.selected, before='onSave2')">
+			<div
+				form="@id('fxLeader') @init(vm.frmLeader) @load(vm.currentGroupLeader) @save(vm.currentGroupLeader, before='onSave2')">
+				<include src="/common/ui/toolbarInput2.zul" />
+				<include src="/mfi/group/include/groupInfo.zul" />
+				<n:div class="k-space" />
+				<tabbox vflex="true" height="345px">
+					<tabs>
+						<tab label="Members" />
+						<tab label="Group Leader" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<include src="/mfi/group/include/groupMembers.zul" />
+						</tabpanel>
+						<tabpanel id="tabLeader">
+							<include src="/mfi/group/include/groupLeader.zul" />
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+
+			</div>
+		</div>
+		<include src="/common/ui/statusBar.zul"></include>
+	</window>
+</zk>

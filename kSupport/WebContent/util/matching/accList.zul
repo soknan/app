@@ -1,0 +1,133 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="acls" title="Account List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.matching.AccListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1050px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<include src="/common/ui/accToolbarList.zul"></include>
+
+			<listbox model="@load(vm.lst)" width="100%" mold="paging"
+				pageSize="@load(vm.selectedNumRow.description)" hflex="true"
+				vflex="true" pagingPosition="bottom" paginal="${lstPagingLoan}">
+				<listhead sizable="true">
+					<listheader label="Br. Code" width="60px"
+						align="right" sort="auto(branchCode)" />
+					<listheader label="Flexcube Acc." width="140px"
+						align="right" sort="auto(accountNumber)" />
+					<listheader label="Kredits Acc." width="120px"
+						align="right" sort="auto(refAcc)" />
+						<listheader label="Group Acc." width="120px"
+						align="right" sort="auto(groupAcc)" />
+					<listheader label="Product Cat." width="160px"
+						sort="auto(productCategory)" />
+					<listheader label="Amount Disb." width="100px"
+						sort="auto(amountDisbursed)" align="right" />
+					<listheader label="CIF" width="90px"
+						sort="auto(customerId)" align="right" />
+					<listheader label="Full Name" sort="auto(fullName)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">
+						<listcell>
+							<textbox value="@load(item.branchCode)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.accountNumber)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.refAcc)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.groupAccNo)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.productCategory)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox
+								value="@load(item.amountDisbursed) @converter('formatedNumber', format='#,##0.##')"
+								width="100%" readonly="true" style="text-align:right" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.customerId)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.fullName)"
+								width="100%" readonly="true" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPagingLoan" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)" pageSize="10" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging>
+			<listbox model="@load(vm.lstCasa)" width="100%"
+				mold="paging" pageSize="@load(vm.selectedNumRow.description)"
+				hflex="true" vflex="true" pagingPosition="bottom"
+				paginal="${lstPagingCasa}">
+				<listhead sizable="true">
+					<listheader label="Br. Code" width="100px"
+						align="right" sort="auto(branchCode)">
+					</listheader>
+					<listheader label="Flexcube Acc." width="140px"
+						align="right" sort="auto(custAcNo)" />
+					<listheader label="Kredits Acc." width="160px"
+						align="right" sort="auto(refAcc)" />
+					<listheader label="Product Cat." width="120px"
+						sort="auto(prdCat)" />
+					<listheader label="CIF" width="90px"
+						sort="auto(custNo)" align="right" />
+					<listheader label="Full Name" sort="auto(fullName)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" >
+						<listcell>
+						<hbox>
+							<div><image src="/img/icon/search.png" onClick="@command('onViewDetail',current=item)"/></div>							
+							<textbox value="@load(item.branchCode)"
+								width="100%" readonly="true" />
+							
+						</hbox>
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.custAcNo)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.refAcc)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.prdCat)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.custNo)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.fullName)"
+								width="100%" readonly="true" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPagingCasa" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize2)" pageSize="10" mold="os"
+				activePage="@bind(vm.pageIndex2)">
+			</paging>
+		</vbox>
+	</window>
+</zk>

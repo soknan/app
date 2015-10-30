@@ -1,0 +1,417 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="stf" title="Loan Transfer" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.transfer.vm.MainVM')"
+		mode="overlapped" closable="true" width="1020px" height="680px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+	<vbox>
+		<toolbar width="100%">
+			<toolbarbutton label="Reset" iconSclass="z-icon-file" disabled="false"
+				onClick="@command('onReset')"/>
+			<toolbarbutton label="Transfer" iconSclass="z-icon-terminal" disabled="false"
+				onClick="@command('onConfirmTransfer')"/>
+		</toolbar>
+		
+		<borderlayout width="1005px" height="620px">
+			<center>
+				<borderlayout>
+					<west width="500px">
+						<div>
+							<n:div class="widget-box transparent" style="opacity: 1;">
+								<n:div class="widget-header">
+									<n:h6 class="lighter">
+										<n:b>Transfer Info</n:b>
+									</n:h6>
+								</n:div>
+								
+								<n:table>
+									<n:tr align="right">
+										<n:td>
+											CO
+										</n:td>
+										<n:td align="left" class="k-padding">
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="input-group input-group-sm">
+														<textbox class="form-control" width="140px"
+															value="@load(vm.selectedCoT.fullName)" />
+														<span class="input-group-btn">
+															<button class="btn-primary" onClick="@command('onShowFetchCo', type=1)"
+																iconSclass="z-icon-search" width="8px" />
+														</span>
+													</div>
+												</div>
+											</div>
+										</n:td>
+										<n:td>
+											Req. Type
+										</n:td>
+										<n:td align="left" class="k-padding">
+											<combobox model="@load(vm.filterRequire)"
+												width="130px" selectedItem="@bind(vm.selectedRequire)">
+													<template name="model" var="t">
+														<comboitem label="@load(t.description)"/>
+													</template>
+											</combobox>
+										</n:td>
+									</n:tr>
+								</n:table>
+
+								<n:div class="widget-header">
+									<n:h6 class="lighter">
+										<n:b>Personal Info</n:b>
+									</n:h6>
+								</n:div>
+								<n:div class="widget-body">
+									<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+										<n:div class="k-space" />
+										<n:table width="100%" cellspacing="5">
+											<n:tr align="right">
+												<n:td width="100px">Full Name</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox value="@load(vm.selectedCoT.fullName)" readonly="true" width="160px" />
+												</n:td>
+												<n:td>Branch Code</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox value="@load(vm.selectedCoT.branchCode)"
+														readonly="true" width="50px" />
+												</n:td>
+											</n:tr>
+											<n:tr align="right">
+												<n:td>Short Name</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox value="@load(vm.selectedCoT.shortName)"
+														readonly="true" width="160px" />
+												</n:td>
+												<n:td width="120px">
+													Short Name2
+												</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox width="160px" value="@load(vm.selectedCoT.shortName2)" readonly="true" />
+												</n:td>
+											</n:tr>
+										</n:table>
+									</n:div>
+								</n:div>
+								
+								<div visible="@load(vm.visibleOption)">
+									<n:div class="widget-header">
+										<n:h6 class="lighter">
+											<n:b>Option</n:b>
+										</n:h6>
+									</n:div>
+									<n:div class="widget-body">
+									<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+										<n:div class="k-space" />
+										<vbox>
+											<hbox style="margin-left: 25px;">
+												Transfer All <checkbox onCheck="@command('onCheckTransferAll', checked = self.checked)" />
+											</hbox>
+											<hbox>
+												<listbox id="lstCommune" height="335px" width="150px" model="@load(vm.lstCommuneT)"
+									            	selectedItems="@bind(vm.param.communes)">
+									            	<attribute name="onCreate">
+														<![CDATA[
+															lstCommune.setMultiple(true);
+															lstCommune.setCheckmark(true);
+														]]>
+													</attribute>
+									                <listhead>
+														<listheader label="Commune"/>
+													</listhead>
+									                <template name="model" var="item">
+														<listitem height="35px">
+															<listcell label="@load(item.description)" />
+														</listitem>
+													</template>
+									            </listbox>
+									            
+									            <button class="btn-primary" label="P" onClick="@command('onPopulateVillage')" style="margin-top: 100px;" />
+									            
+									            <listbox id="lstVillage" height="335px" width="150px" model="@load(vm.lstVillageT)"
+									            	selectedItems="@bind(vm.param.villages)">
+									            	<attribute name="onCreate">
+														<![CDATA[
+															lstVillage.setMultiple(true);
+															lstVillage.setCheckmark(true);
+														]]>
+													</attribute>
+									                <listhead>
+														<listheader label="Village"/>
+													</listhead>
+									                <template name="model" var="item">
+														<listitem height="35px">
+															<listcell label="@load(item.description)" />
+														</listitem>
+													</template>
+									            </listbox>
+									            <listbox id="lstProduct" height="335px" width="150px" model="@load(vm.lstProductT)"
+									            	selectedItems="@bind(vm.param.products)">
+									            	<attribute name="onCreate">
+														<![CDATA[
+															lstProduct.setMultiple(true);
+															lstProduct.setCheckmark(true);
+														]]>
+													</attribute>
+									                <listhead>
+														<listheader label="Product"/>
+													</listhead>
+									                <template name="model" var="item">
+														<listitem height="35px">
+															<listcell label="@load(item.description)" />
+														</listitem>
+													</template>
+									            </listbox>
+											</hbox>
+										</vbox>
+									</n:div>
+								</n:div>
+								</div>
+								
+								<div visible="@load(!vm.visibleOption)">
+								<n:div class="widget-header">
+									<n:h6 class="lighter">
+										<n:b>Summary</n:b>
+									</n:h6>
+								</n:div>
+								<n:div class="widget-body">
+									<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+										<n:div class="k-space" />
+										<grid>
+									        <columns>
+									            <column width="25%">Title</column>
+									            <column width="25%">Pre.</column>
+									            <column width="25%">Receive</column>
+									            <column width="25%">Post</column>
+									        </columns>
+									        <rows sclass="narrow">
+									            <row>
+									                <label value="Loan Amount" />
+									                <label value="@load(vm.accTrnf.trn_loan_amt)" />
+									                <label value="@load(vm.accTrnf.trn_loan_amt)" />
+									                <label value="@load(vm.accTrnf.trn_post_loan_amt)" />
+									            </row>
+									            <row>
+									                <label value="Active Client" />
+									                <label value="@load(vm.accTrnf.trn_client_act)" />
+									                <label value="@load(vm.accTrnf.trn_client_act)" />
+									                <label value="@load(vm.accTrnf.trn_post_client_act)" />
+									            </row>
+									            <row>
+									                <label value="Saving Amount" />
+									                <label value="@load(vm.accTrnf.trn_sav_amt)" />
+									                <label value="@load(vm.accTrnf.trn_sav_amt)" />
+									                <label value="@load(vm.accTrnf.trn_post_sav_amt)" />
+									            </row>
+									            <row>
+									                <label value="Saving Client" />
+									                <label value="@load(vm.accTrnf.trn_sav_act)" />
+									                <label value="@load(vm.accTrnf.trn_sav_act)" />
+									                <label value="@load(vm.accTrnf.trn_post_sav_act)" />
+									            </row>
+									            <row>
+									                <label value="PAR30+ Per." />
+									                <label value="@load(vm.accTrnf.trn_par30_pct)" />
+									                <label value="@load(vm.accTrnf.trn_par30_pct)" />
+									                <label value="@load(vm.accTrnf.trn_post_par30_pct)" />
+									            </row>
+									            <row>
+									                <label value="PAR30+ Amount" />
+									                <label value="@load(vm.accTrnf.trn_par30_amt)" />
+									                <label value="@load(vm.accTrnf.trn_par30_amt)" />
+									                <label value="@load(vm.accTrnf.trn_post_par30_amt)" />
+									            </row>
+									            <row>
+									                <label value="PAR0+ Per." />
+									                <label value="@load(vm.accTrnf.trn_par0_pct)" />
+									                <label value="@load(vm.accTrnf.trn_par0_pct)" />
+									                <label value="@load(vm.accTrnf.trn_post_par0_pct)" />
+									            </row>
+									            <row>
+									                <label value="PAR0+ Amount" />
+									                <label value="@load(vm.accTrnf.trn_par0_amt)" />
+									                <label value="@load(vm.accTrnf.trn_par0_amt)" />
+									                <label value="@load(vm.accTrnf.trn_post_par0_amt)" />
+									            </row>
+									            <row>
+									                <label value="WriteOff Amo." />
+									                <label value="@load(vm.accTrnf.trn_wof_amt)" />
+									                <label value="@load(vm.accTrnf.trn_wof_amt)" />
+									                <label value="@load(vm.accTrnf.trn_post_wof_amt)" />
+									            </row>
+									            <row>
+									                <label value="WriteOff Per." />
+									                <label value="@load(vm.accTrnf.trn_wof_pct)" />
+									                <label value="@load(vm.accTrnf.trn_wof_pct)" />
+									                <label value="@load(vm.accTrnf.trn_post_wof_pct)" />
+									            </row>
+									        </rows>
+									    </grid>
+									</n:div>
+								</n:div>
+								</div>
+								
+							</n:div>
+						</div>
+					</west>
+					
+					<east width="500px">
+						<div>
+							<n:div class="widget-box transparent" style="opacity: 1;">
+								<n:div class="widget-header">
+									<n:h6 class="lighter">
+										<n:b>Receiver Info</n:b>
+									</n:h6>
+								</n:div>
+								
+								<n:table>
+									<n:tr align="right">
+										<n:td>
+											CO
+										</n:td>
+										<n:td align="left" class="k-padding">
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="input-group input-group-sm">
+														<textbox class="form-control" width="140px"
+															value="@load(vm.selectedCoR.fullName)" />
+														<span class="input-group-btn">
+															<button class="btn-primary" onClick="@command('onShowFetchCo', type=2)"
+																iconSclass="z-icon-search" width="8px" />
+														</span>
+													</div>
+												</div>
+											</div>
+										</n:td>
+									</n:tr>
+								</n:table>
+									
+								<n:div class="widget-header">
+									<n:h6 class="lighter">
+										<n:b>Personal Info</n:b>
+									</n:h6>
+								</n:div>
+								<n:div class="widget-body">
+									<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+										<n:div class="k-space" />
+										<n:table width="100%" cellspacing="5">
+											<n:tr align="right">
+												<n:td width="100px">Full Name</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox value="@load(vm.selectedCoR.fullName)" readonly="true" width="160px" />
+												</n:td>
+												<n:td>Branch Code</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox value="@load(vm.selectedCoR.branchCode)"
+														readonly="true" width="50px" />
+												</n:td>
+											</n:tr>
+											<n:tr align="right">
+												<n:td>Short Name</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox value="@load(vm.selectedCoR.shortName)"
+														readonly="true" width="160px" />
+												</n:td>
+												<n:td width="120px">
+													Short Name2
+												</n:td>
+												<n:td align="left" class="k-padding">
+													<textbox width="160px" value="@load(vm.selectedCoR.shortName2)" readonly="true" />
+												</n:td>
+											</n:tr>
+										</n:table>
+									</n:div>
+								</n:div>
+								
+								<div visible="@load(vm.visibleTmp)">
+									<n:div class="widget-header">
+										<n:h6 class="lighter">
+											<n:b>Summary</n:b>
+										</n:h6>
+									</n:div>
+									<n:div class="widget-body">
+									<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+										<n:div class="k-space" />
+										<grid>
+									        <columns>
+									            <column width="25%">Title</column>
+									            <column width="25%">Pre.</column>
+									            <column width="25%">Receive</column>
+									            <column width="25%">Post</column>
+									        </columns>
+									        <rows sclass="narrow">
+									            <row>
+									                <label value="Loan Amount" />
+									                <label value="@load(vm.accTrnf.rcr_loan_amt)" />
+									                <label value="@load(vm.accTrnf.trn_loan_amt)" />
+									                <label value="@load(vm.accTrnf.rcr_post_loan_amt)" />
+									            </row>
+									            <row>
+									                <label value="Active Client" />
+									                <label value="@load(vm.accTrnf.rcr_client_act)" />
+									                <label value="@load(vm.accTrnf.trn_client_act)" />
+									                <label value="@load(vm.accTrnf.rcr_post_client_act)" />
+									            </row>
+									            <row>
+									                <label value="Saving Amount" />
+									                <label value="@load(vm.accTrnf.rcr_sav_amt)" />
+									                <label value="@load(vm.accTrnf.trn_sav_amt)" />
+									                <label value="@load(vm.accTrnf.rcr_post_sav_amt)" />
+									            </row>
+									            <row>
+									                <label value="Saving Client" />
+									                <label value="@load(vm.accTrnf.rcr_sav_act)" />
+									                <label value="@load(vm.accTrnf.trn_sav_act)" />
+									                <label value="@load(vm.accTrnf.rcr_post_sav_act)" />
+									            </row>
+									            <row>
+									                <label value="PAR30+ Per." />
+									                <label value="@load(vm.accTrnf.rcr_par30_pct)" />
+									                <label value="@load(vm.accTrnf.trn_par30_pct)" />
+									                <label value="@load(vm.accTrnf.rcr_post_par30_pct)" />
+									            </row>
+									            <row>
+									                <label value="PAR30+ Amount" />
+									                <label value="@load(vm.accTrnf.rcr_par30_amt)" />
+									                <label value="@load(vm.accTrnf.trn_par30_amt)" />
+									                <label value="@load(vm.accTrnf.rcr_post_par30_amt)" />
+									            </row>
+									            <row>
+									                <label value="PAR0+ Per." />
+									                <label value="@load(vm.accTrnf.rcr_par0_pct)" />
+									                <label value="@load(vm.accTrnf.trn_par0_pct)" />
+									                <label value="@load(vm.accTrnf.rcr_post_par0_pct)" />
+									            </row>
+									            <row>
+									                <label value="PAR0+ Amount" />
+									                <label value="@load(vm.accTrnf.rcr_par0_amt)" />
+									                <label value="@load(vm.accTrnf.trn_par0_amt)" />
+									                <label value="@load(vm.accTrnf.rcr_post_par0_amt)" />
+									            </row>
+									            <row>
+									                <label value="WriteOff Amo." />
+									                <label value="@load(vm.accTrnf.rcr_wof_amt)" />
+									                <label value="@load(vm.accTrnf.trn_wof_amt)" />
+									                <label value="@load(vm.accTrnf.rcr_post_wof_amt)" />
+									            </row>
+									            <row>
+									                <label value="WriteOff Per." />
+									                <label value="@load(vm.accTrnf.rcr_wof_pct)" />
+									                <label value="@load(vm.accTrnf.trn_wof_pct)" />
+									                <label value="@load(vm.accTrnf.rcr_post_wof_pct)" />
+									            </row>
+									        </rows>
+									    </grid>
+									</n:div>
+								</n:div>
+								</div>
+							</n:div>
+						</div>
+					</east>
+				</borderlayout>
+			</center>
+		</borderlayout>
+	</vbox>		
+</window>
+</zk>

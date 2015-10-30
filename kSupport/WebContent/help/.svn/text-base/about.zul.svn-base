@@ -1,0 +1,27 @@
+<?page title="About kBureau Plus" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="winAbout">
+		<n:div xmlns:n="native" class="about-bg">
+			<n:div style="padding:20px 20px 20px 40px; width:300px">
+				<n:img src="img/login/KREDIT_small.png" alt="kSupport" class="about-logo"/>	
+				<n:p style="margin-top:10px;">kSupport, Sub System for Flexcube</n:p>
+				<n:p style="margin-top:10px;">Version 1.0</n:p>
+				<n:p>IT Department © 2014</n:p>
+				<n:p>
+					KREDIT Microfinance Institution Plc
+				</n:p>
+				<n:div id="reset-footer" class="clearfix">
+					<button label="OK"
+						style="float:right; margin-top:10px;width:80px;height:30px;"
+						height="30px" width="80px">
+						<attribute name="onClick">
+						<![CDATA[
+							winAbout.detach();
+						]]>
+						</attribute>
+					</button>
+				</n:div>
+			</n:div>
+		</n:div>
+	</window>
+</zk>

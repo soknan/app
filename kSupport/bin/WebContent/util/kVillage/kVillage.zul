@@ -1,0 +1,125 @@
+<?page title="List of Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="vils" title="List of Value - Village" border="normal"
+		width="750px" height="400px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.village.vm.VillageVM')"
+		mode="overlapped" closable="true" maximizable="true"
+		onClose="@global-command('onCloseWin', id=self)" position="center">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox vflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table id="ctr_detail" width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Village</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox
+								value="@bind(vm.paramVillage.village)" width="200px"
+								onOK="@command('onSearchVillage')" />
+						</n:td>
+						<n:td width="130px">District</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox
+								value="@bind(vm.paramVillage.district)" width="200px"
+								onOK="@command('onSearchVillage')" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Commune</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox
+								value="@bind(vm.paramVillage.commune)" width="200px"
+								onOK="@command('onSearchVillage')" />
+						</n:td>
+						<n:td width="20px">Province</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox
+								value="@bind(vm.paramVillage.province)" width="200px"
+								onOK="@command('onSearchVillage')" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Village ID</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<div class="row">
+								<div class="col-lg-6">
+									<div
+										class="input-group input-group-sm">
+										<textbox id="txtVillage"
+											class="form-control" width="170px"
+											value="@bind(vm.paramVillage.strID)"
+											onOK="@command('onSearchVillageByID')" />
+										<span class="input-group-btn">
+											<button class="btn-primary"
+												width="30px" onClick="@command('onSearchVillageByID')"
+												iconSclass="z-icon-search" />
+										</span>
+									</div><!-- /input-group -->
+								</div><!-- /.col-lg-6 -->
+							</div><!-- /.row -->
+						</n:td>
+						<n:td></n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-search"
+								onClick="@command('onSearchVillage')">
+								Find
+							</button>
+							<space />
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-eraser"
+								onClick="@command('onResetSearchVillage')">
+								Reset
+							</button>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<listbox id="lst" model="@load(vm.lstFetchVillage)"
+				width="100%" vflex="true" pagingPosition="top"
+				paginal="${lstPaging}">
+				<listhead sizable="true">
+					<listheader label="ID" width="80px" sort="auto(id)" />
+					<listheader label="Village" width="160px"
+						sort="auto(village)" />
+					<listheader label="Commune" width="150px"
+						sort="auto(commune)" />
+					<listheader label="District" width="150px"
+						sort="auto(district)" />
+					<listheader label="Province" sort="auto(province)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">
+						<listcell label="@load(item.id)" />
+						<listcell>
+							<textbox value="@load(item.village)" readonly="true"
+								width="100%" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.commune)" readonly="true"
+								width="100%" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.district)" readonly="true"
+								width="100%" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.province)" readonly="true"
+								width="100%" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)" pageSize="10" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging>
+		</vbox>
+	</window>
+</zk>

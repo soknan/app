@@ -1,0 +1,40 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winCB" title="List Value - CB" border="normal" mode="modal"
+		closable="true" width="700px" height="400px">
+		<vbox vflex="true">
+			<hlayout>
+				<textbox value="@bind(vm.cbFilter)" width="180px"
+					onOK="@command('onSearchCbCycle')" />
+				<button sclass="btn-primary btn-xs" label="Search"
+					iconSclass="z-icon-search" onClick="@command('onSearchCbCycle')">
+				</button>
+			</hlayout>
+			<listbox id="lst" model="@load(vm.lstFetchCbCycle)" width="100%"
+				selectedItem="@bind(vm.selectedCbCycle)" mold="paging" pageSize="10"
+				vflex="true" pagingPosition="top">
+
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "default";
+]]>
+				</attribute>
+
+				<listhead sizable="true">
+					<listheader label="CB Name (EN)" width="200px" sort="auto(cb.nameEN)" />
+					<listheader label="CB Name (KH)" width="200px" sort="auto(cb.nameKH)" />
+					<listheader label="Cycle No" width="80px" sort="auto(cycleNo)" />
+					<listheader label="Leader Name" sort="auto(leaderName)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="winCB.detach();">
+						<listcell label="@load(item.cb.nameEN)" />
+						<listcell label="@load(item.cb.nameKH)" />
+						<listcell label="@load(item.cycleNo)" />
+						<listcell label="@load(item.leaderName)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

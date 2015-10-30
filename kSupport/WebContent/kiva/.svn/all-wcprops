@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/scm/svn/kSupport_SVN/!svn/ver/198/WebContent/kiva
+END
+account.zul
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/scm/svn/kSupport_SVN/!svn/ver/154/WebContent/kiva/account.zul
+END
+groupAccount.zul
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/scm/svn/kSupport_SVN/!svn/ver/159/WebContent/kiva/groupAccount.zul
+END
+loanList.zul
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/scm/svn/kSupport_SVN/!svn/ver/198/WebContent/kiva/loanList.zul
+END
+kivaGroupPost.zul
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/scm/svn/kSupport_SVN/!svn/ver/159/WebContent/kiva/kivaGroupPost.zul
+END
+kivaPost.zul
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/scm/svn/kSupport_SVN/!svn/ver/159/WebContent/kiva/kivaPost.zul
+END

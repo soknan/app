@@ -1,0 +1,73 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="plns" title="Loan Write-Off List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.opp.data.vm.MainVM')"
+		mode="overlapped" closable="true" width="700px" height="600px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+	<vbox id="mVbox" hflex="true">
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('onNewPlnInput')"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpenPlnInput')" disabled="@load(vm.selectedPlan.id eq null)"/>
+				<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+					onClick="@command('onConfirmDeletePlnInput')" disabled="@load(vm.selectedPlan.id eq null)"/>
+					
+				<space bar="true" sclass="k-ver-bar" />
+				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearchPlan')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearchPlan')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAllPlan')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearchPlan')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+		
+			<listbox id="lstPlan" model="@load(vm.lstPlan)"
+				selectedItem="@bind(vm.selectedPlan)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstPlan.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Plan" sort="auto(plan_year)" style="text-align: center"
+						width="70px" />
+					<listheader label="Plan (month)" sort="auto(plan_month)" style="text-align: center"
+						width="100px" />
+					<listheader label="Year1" style="text-align: center"
+						sort="auto(year_01)" width="70px" />
+					<listheader label="Year2" style="text-align: center"
+						sort="auto(year_02)" width="70px" />
+					<listheader label="Year3" style="text-align: center"
+						sort="auto(year_03)" width="70px" />
+					
+					<listheader label="Create Date" style="text-align: left" width="100%" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpenPlnInput')">
+						<listcell label="@load(item.plan_year)" style="text-align: center"/>
+						<listcell label="@load(item.plan_month)" style="text-align: center"/>
+						<listcell label="@load(item.year_01)" style="text-align: center"/>
+						<listcell label="@load(item.year_02)" style="text-align: center"/>
+						<listcell label="@load(item.year_03)" style="text-align: center"/>
+						<listcell label="@load(item.createOn) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: left"/>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+</window>
+</zk>

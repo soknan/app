@@ -1,0 +1,82 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		transfer.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="transfer" title="Transfer Information" border="normal" visible="@load(vm.visibleTransfer)"
+		mode="overlapped" closable="true" width="650px" height="330px"
+		position="center" onClose="@command('onCloseTrnCo')">
+		
+		<toolbar width="100%">
+		<toolbarbutton label="Transfer" image="/img/icon/transfer.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onTransferCo')"/>
+	</toolbar>
+	
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Original Co</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td>Full Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedTrnCo.orgCoFame)" width="160px" />
+						</n:td>
+						<n:td>Short Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedTrnCo.orgCoSame)" width="160px" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+		
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Transfer Co</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td>
+							<n:i class="red">*</n:i>
+								Full Name
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="input-group input-group-sm">
+										<textbox class="form-control" width="140px"
+											value="@bind(vm.selectedTrnCo.trnCoFame)" />
+										<span class="input-group-btn">
+											<button class="btn-primary" onClick="@command('onShowFetchCoH')"
+												iconSclass="z-icon-search" width="8px" />
+										</span>										
+									</div>
+								</div>
+							</div>
+						</n:td>
+						<n:td>Short Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedTrnCo.trnCoSame)" width="160px" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+	</n:div>
+	
+	</window>
+</zk>

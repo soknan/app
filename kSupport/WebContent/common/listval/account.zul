@@ -1,0 +1,134 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winAcc" title="List Value - CIF and Account"
+		border="normal" mode="modal" closable="true" width="950px"
+		height="400px">
+		<vbox vflex="true" hflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Customer No</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox value="@bind(vm.paramCIF.custNo)"
+								width="200px" onOK="@command('onSearchCIF')" />
+						</n:td>
+						<n:td width="130px">Full Name</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox value="@bind(vm.paramCIF.fullName)"
+								width="200px" onOK="@command('onSearchCIF')" />
+						</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-search" onClick="@command('onSearchCIF')">
+								Find
+							</button>
+							<space />
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-eraser"
+								onClick="@command('onResetSearchCIF')">
+								Reset
+							</button>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Account No</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox
+								value="@bind(vm.paramCIF.accountNo)" width="200px"
+								onOK="@command('onSearchCIF')" />
+						</n:td>
+						<n:td width="20px">Village</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<textbox
+								value="@bind(vm.paramCIF.addr2)" width="200px"
+								onOK="@command('onSearchCIF')" />
+						</n:td>
+						<n:td></n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			
+			<!-- <listbox id="lst" model="@load(vm.lstFetchCIF)" width="100%"
+				vflex="true" hflex="true" pagingPosition="top"
+				paginal="${lstPaging}">
+				<listhead sizable="true">
+					<listheader label="Customer No." width="80px"
+						sort="auto(custNo)" align="right" />
+					<listheader label="Full Name" width="180px"
+						sort="auto(fullName)" />
+					<listheader label="Account No."
+						sort="auto(accountNo)" width="120px" />
+					<listheader label="Alt Acc. No."
+						sort="auto(altAccNo)" width="120px" />
+					<listheader label="Prod. Code" sort="auto(prdCd)"
+						width="70px" align="right" />
+					<listheader label="Prod. Category"
+						sort="auto(prdCat)" width="120px" />
+					<listheader label="Village" sort="auto(addr2)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">
+						<listcell label="@load(item.custNo)" />
+						<listcell label="@load(item.fullName)" />
+						<listcell label="@load(item.accountNo)" />
+						<listcell label="@load(item.altAccNo)" />
+						<listcell label="@load(item.prdCd)" />
+						<listcell label="@load(item.prdCat)" />
+						<listcell label="@load(item.addr2)" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)" pageSize="10" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging> -->
+			
+			
+			<listbox id="lst" model="@load(vm.lstFetchCIF)" width="100%"
+				selectedItem="@bind(vm.selectedCIF)" mold="paging" pageSize="10"
+				vflex="true" hflex="true" pagingPosition="top">
+
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "default";
+]]>
+				</attribute>
+
+				<listhead sizable="true">
+					<listheader label="Customer No." width="80px"
+						sort="auto(custNo)" align="right" />
+					<listheader label="Full Name" width="180px"
+						sort="auto(fullName)" />
+					<listheader label="Account No."
+						sort="auto(accountNo)" width="120px" />
+					<listheader label="Alt Acc. No."
+						sort="auto(altAccNo)" width="120px" />
+					<listheader label="Prod. Code" sort="auto(prdCd)"
+						width="70px" align="right" />
+					<listheader label="Prod. Category"
+						sort="auto(prdCat)" width="120px"/>
+					<listheader label="Village"
+						sort="auto(addr2)" />	
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px"
+						onClick="winAcc.detach();">
+						<listcell label="@load(item.custNo)" />
+						<listcell label="@load(item.fullName)" />
+						<listcell label="@load(item.accountNo)" />
+						<listcell label="@load(item.altAccNo)" />
+						<listcell label="@load(item.prdCd)" />
+						<listcell label="@load(item.prdCat)" />
+						<listcell label="@load(item.addr2)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+
+</zk>

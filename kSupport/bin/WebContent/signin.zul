@@ -1,0 +1,105 @@
+<?page title="kSupport Login"?>
+<?link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon"?>
+<?link rel="stylesheet" type="text/css" href="/css/login/login.min.css?v=13"?>
+<?link rel="stylesheet" type="text/css" href="/css/login/resetpsw.min.css?v=13"?>
+<?link rel="stylesheet" href="assets/fonts/linecon/font-linecon.css?t=12390" ?>
+<?link rel="stylesheet" href="assets/css/ace.min.css?t=221144223" ?>
+
+<zk xmlns:c="client">
+	<zscript><![CDATA[
+	String serverRoot = Executions.getCurrent().getContextPath();
+]]></zscript>
+
+	<window id="singIn" border="none" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.core.util.authentication.viewmodel.LoginVM')">
+		<n:div xmlns:n="native">
+			<div visible="@load(vm.flgSave)">
+				<n:div id="notify-wrapper">
+					<n:span id="notify" class="server-success">
+						<n:span id="notify-msg">
+							Your new password has been saved.
+						</n:span>
+					</n:span>
+				</n:div>
+			</div>
+			<n:div id="outer-frame">
+				<n:div id="page-logo-header">
+					<n:a href="${serverRoot}">
+						<n:img id="db-logo" alt="kSupport Logo" src="img/login/KREDIT_small.png" />
+					</n:a>
+					<n:div id="header-border-div" />
+
+				</n:div>
+				<n:div id="login-container">
+					<n:div class="splash">
+						<n:img src="img/login/login.jpg" id="login_kite" alt="kBureau Plus" />
+					</n:div>
+					<n:form action="" method="post">
+						<n:div class="title-text">
+							<n:h3 class="header smaller lighter green">
+								<n:i class="z-icon-key"></n:i>
+								kSupport
+							</n:h3>
+						</n:div>
+						<n:div id="login-partial">
+							<n:div class="k-label-b login_label">
+								Username
+							</n:div>
+							<n:div id="email-field" class="sick-input">
+								<n:span class="block input-icon input-icon-right">
+
+									<textbox id="txtUsername" placeholder="Please input your username"
+										sclass="kh-textbox txtBox" value="@bind(vm.username)">
+										<attribute name="onCreate">
+										<![CDATA[
+	if (txtUsername.getText().isEmpty())
+		txtUsername.setFocus(true);
+	else
+		txtPassword.setFocus(true);
+]]>
+									</attribute>
+									</textbox>
+									<n:i class="z-icon-user"></n:i>
+								</n:span>
+							</n:div>
+
+							<n:div class="k-label-b login_label">
+								Password
+							</n:div>
+							<n:div id="password-field" class="sick-input">
+								<n:span class="block input-icon input-icon-right">
+									<textbox id="txtPassword" placeholder="Please input your password"
+										type="password" sclass="kh-textbox txtBox" value="@bind(vm.password)"
+										onOK="@command('onOK')" onCancel="@command('onCancel')" />
+									<n:icon class="z-icon-lock"></n:icon>
+								</n:span>
+							</n:div>
+							<n:div id="login-footer">
+								<button label="Sign in" iconSclass="z-icon-key" sclass="btn-primary btn-xs"
+									onClick="@command('doLogin')" style="float:right; margin-top:-10px;"
+									height="30px" width="80px" />
+
+								<n:div>
+									<label value="Forgot your password?" sclass="k-forgot"
+										onClick="@command('showForgot')" />
+								</n:div>
+
+							</n:div>
+							<n:div>
+								<label id="mesgLbl" value="@load(vm.message)" sclass="errormsg" />
+							</n:div>
+						</n:div>
+						<n:br class="clear" />
+
+					</n:form>
+				</n:div>
+				<n:p>
+					© 2014 IT Department. All rights reserved. KREDIT
+					Microfinance
+					Institution Plc.
+				</n:p>
+			</n:div>
+		</n:div>
+	</window>
+	<script src="/js/login.js"></script>
+</zk>

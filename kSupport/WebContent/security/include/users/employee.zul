@@ -1,0 +1,85 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winEmp" title="List of Value - Employee" onClose="@command('onCloseEmployee')" visible="@load(vm.visibleEmployee)"
+		border="normal" mode="modal" closable="true" width="760px" position="center" height="500px">
+		<vbox vflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table id="ctr_detail" width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Filter</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.paramEmp.filter)" width="162px" onOK="@command('onSearchEmployee')"/>
+						</n:td>
+						<n:td width="20px">Branch</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<combobox model="@load(vm.filterBranchesAll)" value="@load(vm.paramEmp.branch.description)" onSelect="@command('onSearchEmployee')"
+								selectedItem="@bind(vm.paramEmp.branch)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Position</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox model="@load(vm.filterPositions)" value="@load(vm.paramEmp.position.description)" onSelect="@command('onSearchEmployee')"
+								selectedItem="@bind(vm.paramEmp.position)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+						<n:td></n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-search"
+								onClick="@command('onSearchEmployee')">
+								Find
+							</button>
+							<space />
+							<button sclass="btn-primary btn-xs"
+								iconSclass="z-icon-eraser"
+								onClick="@command('onResetSearchEmployee')">
+								Reset
+							</button>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			 <listbox id="lstEmp" model="@load(vm.filterEmployees)"
+					selectedItem="@bind(vm.selectedEmp)" hflex="true" mold="paging"
+					vflex="true" pageSize="7">
+					<attribute name="onCreate">
+						<![CDATA[lstEmp.pagingChild.mold = "os";]]>
+					</attribute>
+				<listhead sizable="true">
+					<listheader label="Emp. ID" sort="auto(emp_id)" style="text-align: right" width="55px" />
+					<listheader label="Full Name" sort="auto(fullNameEn)" style="text-align: left"
+						width="160px" />
+					<listheader label="Gender" sort="auto(gender)" style="text-align: left"
+						width="60px" />
+					<listheader label="Branch" style="text-align: center"
+						sort="auto(homeBranch)" width="180px" />
+					<listheader label="Position" sort="auto(position)" style="text-align: left"
+						width="100%" />
+					<listheader label="Birth Date" sort="auto(birth_date)" style="text-align: left"
+						width="140px" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="@command('onSelectEmployee')" style="text-align: left">
+						<listcell label="@load(item.emp_id)" style="text-align: right" />
+						<listcell label="@load(item.fullNameEn)" style="text-align: left" />
+						<listcell label="@load(item.gender)" style="text-align: left" />
+						<listcell label="@load(item.homeBranch)" style="text-align: left" />
+						<listcell label="@load(item.position)" style="text-align: left"/>
+						<listcell label="@load(item.birth_date) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</listitem>
+				</template>
+			</listbox>		
+		</vbox>
+	</window>
+</zk>

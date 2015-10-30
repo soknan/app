@@ -1,0 +1,97 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+	<![CDATA[
+	String context = Executions.getCurrent().getContextPath();
+]]>
+	</zscript>
+	<n:div class="navbar">
+		<n:div class="navbar-inner">
+			<n:div class="container-fluid">
+				<n:a class="brand" href="${context}">
+					<n:small>
+						<n:i class="icon-k"></n:i>
+						Support
+					</n:small>
+					<!-- <n:img src="img/icon/k-logo.png"></n:img> -->
+				</n:a>
+				<space/>
+				<n:small>
+					<n:i class="z-icon-home k-green"></n:i>
+					<label sclass="k-orange" value="@load(vm.user.brDesc)"/>
+				</n:small>
+				<span visible="@load(vm.user.validity.exist)">
+					<n:small>
+						/
+						<n:i class="z-icon-clock-o k-green"></n:i>
+						<label sclass="k-green" value="@load(vm.user.validity.validityBrDes)"/>
+						<label sclass="k-green" value="(From: "/>
+						<label sclass="k-green" value="@load(vm.user.validity.from) @converter('formatedDate', format='dd-MMMM-yyyy') "></label>
+						<label sclass="k-green" value="To: "/>
+						<label sclass="k-green" value="@load(vm.user.validity.to) @converter('formatedDate', format='dd-MMMM-yyyy')"></label>
+						<label sclass="k-green" value=")"/>
+					</n:small>
+				</span>
+				<!--/.brand -->
+				<n:div class="nav-search">
+					<textbox width="100px" placeholder="Shortcut Menu"
+						value="@bind(vm.cmd)" mold="rounded" onOK="@command('onCmd')" />
+					<button class="btn-primary btn-xs"
+						style="margin:0 0 0 -4px;" iconSclass="z-icon-arrow-right"
+						width="30px" onClick="@command('onCmd')" />
+					<space bar="true" class="k-ver-bar" />
+					<menupopup id="openedWindows"
+						children="@load(vm.lstMenuItem)">
+						<template name="children" var="node">
+							<menuitem id="@load(node.id)"
+								label="@load(node.label)"
+								onClick="@command('onMenuOpenedWindowClicked', id=self.id)" />
+						</template>
+					</menupopup>
+					<div class="btn-group">
+						<button dir="reverse"
+							class="btn-primary btn-xs dropdown-toggle"
+							popup="openedWindows, after_start" iconSclass="caret"
+							disabled="@load(empty vm.lstMenuItem)">
+							Windows
+						</button>
+					</div>
+
+					<menupopup id="m1">
+						<menuitem label="About"
+							onClick="@command('onAbout')" />
+					</menupopup>
+					<div class="btn-group">
+						<button dir="reverse"
+							class="btn-primary btn-xs dropdown-toggle"
+							popup="m1, after_start" iconSclass="caret">
+							Help
+						</button>
+					</div>
+					<space bar="true" class="k-ver-bar" />
+					Welcome
+					<!-- User menu -->
+					<menupopup id="pUsr">
+						<menuitem label="Settings"
+							iconSclass="z-icon-cog" />
+						<menuitem label="Profile"
+							iconSclass="z-icon-user" onClick="@command('onShowProfile')" />
+						<menuseparator />
+						<menuitem label="Logout"
+							iconSclass="fa fa-power-off" onClick="@command('logOff')" />
+					</menupopup>
+
+					<div class="btn-group">
+						<button dir="reverse"
+							class="btn-xs dropdown-toggle" popup="pUsr, after_start"
+							iconSclass="caret" label="@load(vm.user.username)">
+						</button>
+					</div>
+				</n:div>
+				<!--/.ace-nav -->
+			</n:div>
+			<!--/.container-fluid -->
+		</n:div>
+		<!--/.navbar-inner -->
+	</n:div>
+</zk>

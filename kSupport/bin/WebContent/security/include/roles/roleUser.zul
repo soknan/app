@@ -1,0 +1,49 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<vbox>
+		<toolbar width="620px">
+			<toolbarbutton label="Save" visible="@load(vm.privilege.canUpdate)"
+				image="/img/icon/save.png" onClick="@command('onSave')"/>
+		</toolbar>
+		<hbox align="center">
+		 	<listbox id="lstAvailable" model="@load(vm.selectedRole.avaUserRole)" style="margin-left: 49px"
+				selectedItem="@bind(vm.selectedUserRoleA)" width="243px" height="280px">
+				<listhead sizable="false">
+					<listheader label="Available Users" width="240px"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell style="text-align: left">
+							<label value="@load(each.user.username)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		 	
+			<vbox style="margin-top: 33px">
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-forward" width="30px" onClick="@command('allLeftToRightU')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-chevron-right" width="30px" onClick="@command('leftToRightU')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-chevron-left" width="30px" onClick="@command('rightToLeftU')" />
+				<button class="btn-primary btn-xs" style="margin:0 0 0 -4px; margin-left: 3px; margin-right: 3px;"
+					iconSclass="z-icon-backward" width="30px" onClick="@command('allRightToLeftU')" />
+			</vbox>
+			
+			<listbox id="lstOwn" model="@load(vm.selectedRole.userRole)"
+				selectedItem="@bind(vm.selectedUserRoleO)" width="243px" height="280px">
+				<listhead sizable="false">
+					<listheader label="Role own Users" width="240px"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell style="text-align: left">
+							<label value="@load(each.user.username)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</vbox>
+</zk>

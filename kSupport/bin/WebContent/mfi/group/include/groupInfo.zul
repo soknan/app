@@ -1,0 +1,177 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="k-space" />
+	<n:table width="100%" cellspacing="5">
+		<n:tr align="right">
+			<n:td width="100px" valign="top">
+				<n:p>
+					<n:i class="red">*</n:i>
+					Status
+				</n:p>
+			</n:td>
+			<n:td width="180px" align="left" class="k-padding"
+				valign="top">
+				<radiogroup id="rdStatus"
+					selectedItem="@bind(fx2.groupStatus)">
+					<vbox>
+						<radio value="N" label="New (first cycle)"
+							disabled="@load(not empty fx2.id)">
+						</radio>
+						<radio value="E"
+							label="Existing (add new cycle)"
+							disabled="@load(not empty fx2.id)"
+							onCheck='txtGrAccNo.setText("%")'>
+						</radio>
+					</vbox>
+				</radiogroup>
+			</n:td>
+			<n:td valign="top" width="120px">
+				<n:i class="red">*</n:i>
+				Type
+			</n:td>
+			<n:td align="left" class="k-padding" valign="top"
+				width="300px">
+				<radiogroup selectedItem="@bind(fx2.groupType)">
+					<vbox>
+						<radio id="rdSG" value="SG" label="SG (Group)"
+							disabled="@load(fx2.groupStatus eq 'E' or not empty fx2.id)"
+							onCheck="@command('onCheckGroupType', txtGrAccNo = txtGrAccNo)" />
+						<radio id="rdCB" value="CB" label="VSU (CB)"
+							disabled="@load(fx2.groupStatus eq 'E' or not empty fx2.id)"
+							onCheck="@command('onCheckGroupType', txtGrAccNo = txtGrAccNo)" />
+						<radio id="rdTB" value="TB"
+							label="Trust Bank (TB)"
+							disabled="@load(fx2.groupStatus eq 'E' or not empty fx2.id)"
+							onCheck="@command('onCheckGroupType', txtGrAccNo = txtGrAccNo)" />
+					</vbox>
+				</radiogroup>
+			</n:td>
+			<n:td valign="top" width="80px">
+				<vbox>
+					<n:p>
+						<n:i class="red">*</n:i>
+						Village
+					</n:p>
+					<n:p style="text-align:right; margin-top:-4px">
+						<n:i class="red">*</n:i>
+						Village ID
+					</n:p>
+					<n:p style="text-align:right; margin-top:-4px">
+						CB Name
+					</n:p>
+				</vbox>
+			</n:td>
+			<n:td valign="top" align="left" class="k-padding">
+				<vbox>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="input-group input-group-sm">
+								<textbox id="txtVillage"
+									class="form-control" width="185px"
+									value="@bind(fx2.villageName)" onOK="@command('onShowFetchVillage', txtVillage = txtVillage, txtVillageID=txtVillageID)"/>
+								<span class="input-group-btn">
+									<button class="btn-primary"
+										onClick="@command('onShowFetchVillage', txtVillage = txtVillage, txtVillageID=txtVillageID)"
+										iconSclass="z-icon-search" width="8px" />
+								</span>
+							</div><!-- /input-group -->
+						</div><!-- /.col-lg-6 -->
+					</div><!-- /.row -->
+					<textbox id="txtVillageID" readonly="true"
+						value="@bind(fx2.villageID)" width="205px" constraint="no empty" />
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="input-group input-group-sm">
+								<textbox id="txtCB" class="form-control"
+									width="140px" value="@bind(fx2.cbName)"
+									disabled="@load(fx2.groupType eq 'SG')" readonly="true" />
+								<span class="input-group-btn">
+									<button class="btn-primary"
+										disabled="@load(fx2.groupType eq 'SG' or fx2.groupType eq 'TB')"
+										iconSclass="z-icon-search" width="8px"
+										onClick="@command('onShowFetchCbCycle', txtCB = txtCB, txtCycleNo = txtCycleNo, txtVillageID=txtVillageID)" />
+
+								</span>
+								<button label="clear"
+									disabled="@load(empty fx2.cbName or fx2.groupType eq 'SG')"
+									class="btn-primary btn-xs" style="margin-left: 5px"
+									onClick="@command('onClearCbCycle', txtCB = txtCB, txtCycleNo = txtCycleNo)" />
+
+							</div><!-- /input-group -->
+						</div><!-- /.col-lg-6 -->
+					</div><!-- /.row -->
+				</vbox>
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td>Branch Code</n:td>
+			<n:td align="left" class="k-padding">
+				<textbox value="@bind(fx2.brCd)" readonly="true"
+					width="50px" />
+			</n:td>
+			<n:td>
+				<n:p>
+					<n:i class="red">*</n:i>
+					Group Acc. No.
+				</n:p>
+			</n:td>
+			<n:td align="left" class="k-padding">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="input-group input-group-sm">
+							<textbox id="txtGrAccNo"
+								value="@bind(fx2.groupAccNo)" class="form-control" width="120px"
+								readonly="true" constraint="no empty" />
+							<span class="input-group-btn">
+								<button class="btn-primary" label="P"
+									onClick="@command('onPopulateNewGroupAccNo', txtGrAccNo=txtGrAccNo)"
+									width="8px" visible="@load(fx2.groupStatus eq 'N')"
+									disabled="@load(empty fx2.groupStatus or empty fx2.groupType or not empty fx2.id)" />
+								<button class="btn-primary"
+									visible="@load(fx2.groupStatus eq 'E')"
+									disabled="@load(not empty fx2.id)" iconSclass="z-icon-search"
+									width="8px"
+									onClick="@command('onShowFetchGroup', txtGrAccNo=txtGrAccNo, txtVillage = txtVillage, txtVillageID=txtVillageID, rdSG=rdSG, rdCB=rdCB, rdTB=rdTB)" />
+							</span>
+						</div><!-- /input-group -->
+					</div><!-- /.col-lg-6 -->
+					<label value="Ref." style="margin:5px;" />
+					<textbox value="@bind(fx2.refGrp)" width="100px" />
+				</div><!-- /.row -->
+			</n:td>
+			<n:td>CB Cycle No</n:td>
+			<n:td align="left" class="k-padding">
+				<textbox id="txtCycleNo" value="@bind(fx2.cbCycleNo)"
+					width="40px" readonly="true" />
+					<label value="Status" style="margin:5px;" /><textbox id="txtStatus" value="@load(vm.selected.recordStatDes)"
+					width="70px" readonly="true" />
+			</n:td>	
+			
+		</n:tr>
+		<n:tr>
+			<n:td colspan="6">
+				<n:hr width="90%" />
+			</n:td>
+		</n:tr>
+	</n:table>
+	<div visible="@load(fx2.groupType eq 'TB')">
+		<n:table>
+			<n:tr align="right">
+				<n:td width="230px">
+					Max Indiv Amount (For Trust Bank)
+				</n:td>
+				<n:td class="k-padding">
+					<intbox value="@bind(fx2.amountMaxIndiv)"
+						format="#,##0.##"
+						width="220px"
+						onChange="@command('translateToLetter', amount = fx2.amountMaxIndiv, txtNumLetter=txtNumLetter)" />
+				</n:td>
+				<n:td align="left" colspan="4" class="k-padding">
+					<textbox sclass="k-orange" id="txtNumLetter"
+						value="@load(vm.translate(fx2.amountMaxIndiv))" width="530px"
+						readonly="true" />
+				</n:td>
+			</n:tr>
+		</n:table>
+	</div>
+</zk>

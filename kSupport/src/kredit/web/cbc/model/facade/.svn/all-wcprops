@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/scm/svn/kSupport_SVN/!svn/ver/245/src/kredit/web/cbc/model/facade
+END
+CbcFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/209/src/kredit/web/cbc/model/facade/CbcFacade.java
+END
+CoGuaFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/245/src/kredit/web/cbc/model/facade/CoGuaFacade.java
+END
+TelcoFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/200/src/kredit/web/cbc/model/facade/TelcoFacade.java
+END

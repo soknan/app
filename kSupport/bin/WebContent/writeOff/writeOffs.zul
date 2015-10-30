@@ -1,0 +1,199 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="wols" title="Loan Write-Off List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.writeOff.vm.MainVM')"
+		mode="overlapped" closable="true" width="1200px" height="600px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+	<vbox id="mVbox" hflex="true">
+ 			<groupbox open="true" hflex="true" style="margin-top: -10px">
+				<caption label="Filter"/>
+				<n:table width="100%">
+					<n:tr>
+						<n:td width="100px" align="right">
+							<label value="Branch" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px">
+							<combobox model="@load(vm.filterBranches)" disabled="@load(vm.disableBr)"
+								value="@load(vm.param.branch.description)"
+								selectedItem="@bind(vm.param.branch)" width="150px"
+								onChange="@command('onSelectBranch')">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)" description="@load(t.code)" />
+									</template>
+							</combobox>
+						</n:td>
+						<n:td width="100px" align="right">
+							<label value="Prod. Cate." style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<combobox model="@load(vm.filterCategory)" value="@load(vm.param.category.description)"
+								width="130px" selectedItem="@bind(vm.param.category)"
+								onChange="@command('doSearch')">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"/>
+									</template>
+							</combobox>
+						</n:td>
+						<n:td width="100px" align="right">
+							<label value="From Date" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<datebox value="@bind(vm.param.stDate)" width="110px" onChange="@command('doSearch')"/>
+						</n:td>
+						<n:td width="120px" align="right">
+							<label value="From Amount" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<textbox value="@bind(vm.param.stAmount)" width="120px" onChange="@command('doSearch')"/>
+						</n:td>
+						<n:td width="100px" align="right">
+							<label value="Currency" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<combobox id="cmbCurrency" model="@load(vm.filterCurrency)" value="@load(vm.param.currency.description)"
+								width="120px" selectedItem="@bind(vm.param.currency)"
+								onChange="@command('doSearch')">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"/>
+									</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td width="100px" align="right">
+							<label value="Sub Branch" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px">
+							<combobox model="@load(vm.filterSubBranches)" disabled="@load(vm.disableSbr)"
+								value="@load(vm.param.subBranch.description)"
+								selectedItem="@bind(vm.param.subBranch)" width="150px"
+								onChange="@command('onSelectSubBranch')">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)" description="@load(t.code)" />
+									</template>
+							</combobox>
+						</n:td>
+						<n:td width="100px" align="right">
+							<label value="Product" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<combobox model="@load(vm.filterProduct)" value="@load(vm.param.product.description)"
+								width="130px" selectedItem="@bind(vm.param.product)"
+								onChange="@command('doSearch')">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)" description="@load(t.code)" />
+									</template>
+							</combobox>
+						</n:td>
+						<n:td width="100px" align="right">
+							<label value="To Date" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<datebox value="@bind(vm.param.enDate)" width="110px" onChange="@command('doSearch')"/>
+						</n:td>
+						<n:td width="120px" align="right">
+							<label value="To Amount" style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<textbox id="dtbTo" value="@bind(vm.param.enAmount)" width="120px" onChange="@command('doSearch')"/>
+						</n:td>
+						<n:td width="100px" align="right">
+							<label value="WOF. Cate." style="margin: 0 0 0 10px;" />
+						</n:td>
+						<n:td align="left" style="padding:0 0 0 15px;">
+							<combobox model="@load(vm.filterWCategory)" value="@load(vm.param.wCategory.description)"
+								width="120px" selectedItem="@bind(vm.param.wCategory)"
+								onChange="@command('doSearch')">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"/>
+									</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('onNew')"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpen')" disabled="@load(vm.selectedLoan.id eq null)"/>
+				<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+					onClick="@command('onConfirmDelete')" disabled="@load(vm.selectedLoan.id eq null)"/>
+				<space bar="true" sclass="k-ver-bar" />
+				<toolbarbutton label="Import All" visible="@load(vm.privilege.canNew)" iconSclass="z-icon-download"
+					onClick="@command('onImportAll')" />
+					
+				<space bar="true" sclass="k-ver-bar" />
+				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAll')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+		
+			<listbox id="lstLoan" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selectedLoan)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstLoan.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="CIF" sort="auto(cif)" style="text-align: right"
+						width="70px" />
+					<listheader label="Name" sort="auto(nameEn)" style="text-align: left"
+						width="150px" />
+					<listheader label="Branch" style="text-align: left"
+						sort="auto(fullBranch)" width="100%" />
+					<listheader label="Account No." style="text-align: right"
+						sort="auto(accountNo)" width="120px" />
+					<listheader label="Prod. Category" style="text-align: right"
+						sort="auto(prodCode)" width="100px" />
+					<listheader label="Product" style="text-align: right"
+						sort="auto(prodCode)" width="120px" />
+					<listheader label="Write-Off Date" style="text-align: right"
+						sort="auto(woffDate)" width="100px" />
+					<listheader label="Total Write-Off" sort="auto(totWoff)" style="text-align: right"
+						width="110px" />
+					<listheader label="Ccy" sort="auto(ccy)" style="text-align: center"
+						width="40px" />
+					<listheader label="Acc. Loan Rec." sort="auto(accuLnRec)" style="text-align: right"
+						width="110px" />
+					<listheader label="Net Loss" sort="auto(netLoss)" style="text-align: right"
+						width="110px" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpen')">
+						<listcell label="@load(item.cif)" style="text-align: right"/>
+						<listcell label="@load(item.nameEn)" />
+						<listcell label="@load(item.fullBranch)" style="text-align: left"/>
+						<listcell label="@load(item.accountNo)" style="text-align: right"/>
+						<listcell label="@load(item.prodCat)" style="text-align: right"/>
+						<listcell label="@load(item.product)" style="text-align: right"/>
+						<listcell label="@load(item.woffDate) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: center"/>
+						<listcell label="@load(item.totWoff)" style="text-align: right"/>
+						<listcell label="@load(item.ccy)"/>
+						<listcell label="@load(item.accuLnRec)" style="text-align: right"/>
+						<listcell label="@load(item.netLoss)" style="text-align: right"/>
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+</window>
+</zk>

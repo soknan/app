@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/scm/svn/kSupport_SVN/!svn/ver/82/src/kredit/web/core/model
+END
+Employee.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/scm/svn/kSupport_SVN/!svn/ver/82/src/kredit/web/core/model/Employee.java
+END
+LogDomain.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/model/LogDomain.java
+END
+DomainNoBranch.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/model/DomainNoBranch.java
+END
+Domain.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/scm/svn/kSupport_SVN/!svn/ver/1/src/kredit/web/core/model/Domain.java
+END
+Privilege.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/scm/svn/kSupport_SVN/!svn/ver/62/src/kredit/web/core/model/Privilege.java
+END

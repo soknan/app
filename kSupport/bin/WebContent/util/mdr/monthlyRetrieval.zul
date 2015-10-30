@@ -1,0 +1,68 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="smr" title="Monthly Retrieval" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.monthly.vm.MainVM')"
+		mode="overlapped" closable="true" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+	<n:table cellspacing="10">
+		<n:tr>
+			<n:td>
+				Branch
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterBranches)"
+					value="@load(vm.param.branch.description)"
+					selectedItem="@bind(vm.param.branch)" width="150px"
+					onChange="@command('onSelectBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+			</n:td>
+			<n:td>
+				Option
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.options)"
+					value="@load(vm.param.option.description)"
+					selectedItem="@bind(vm.param.option)" width="100px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				Sub Branch
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterSubBranches)"
+					value="@load(vm.param.subBranch.description)"
+					selectedItem="@bind(vm.param.subBranch)" width="150px"
+					onChange="@command('onSelectSubBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+			</n:td>
+			<n:td>
+				Month
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.months)"
+					value="@load(vm.param.month.description)"
+					selectedItem="@bind(vm.param.month)" width="100px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+	</n:table>
+	<button sclass="btn btn-success btn-sm" iconSclass="z-icon-cog" width="100px" onClick="@command('onOpenEnv')"></button>
+	<button sclass="btn btn-primary btn-sm" iconSclass="z-icon-eraser" style="margin-left: 50px" width="100px" label="Clear" onClick="@command('onClear')"></button>
+	<button sclass="btn btn-primary btn-sm" iconSclass="z-icon-download" style="margin-left: 12px" width="100px" label="Retrieve" onClick="@command('onRetrieve')" disabled="@load(vm.disableRetrieve)"></button>
+</window>
+</zk>

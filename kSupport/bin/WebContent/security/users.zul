@@ -1,0 +1,91 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript><![CDATA[
+	String path = "/security/include";
+]]></zscript>
+	<window id="urls" title="Users List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.security.vm.UserVM')"
+		mode="overlapped" closable="true" width="1015px" height="500px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+		<vbox id="mVbox" hflex="true">
+ 			
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('onNew')"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpen')" disabled="@load(vm.selectedUser.id eq null)"/>
+				<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+					onClick="@command('onConfirmDelete')" disabled="@load(vm.selectedUser.id eq null)"/>
+				<toolbarbutton label="Reset Pwd" visible="@load(vm.privilege.canUpdate)" iconSclass="z-icon-refresh"
+					onClick="@command('onConfirmReset')" disabled="@load(vm.selectedUser.id eq null)"/>
+				<toolbarbutton label="Sync Pwd" visible="@load(vm.privilege.canUpdate)" iconSclass="z-icon-random" tooltiptext="Sync user kSupport's password with Flexcube's password"
+					onClick="@command('onConfirmSync')" disabled="@load(vm.selectedUser.id eq null)" />
+				<space bar="true" sclass="k-ver-bar" />	
+					
+				<toolbarbutton label="Sync Users" visible="@load(vm.privilege.canNew)" iconSclass="z-icon-cloud-download"  tooltiptext="Sync user from Flexcube to kSupport"
+					onClick="@command('onSyncUser')" />
+						
+				<space bar="true" sclass="k-ver-bar" />
+				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAll')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+		
+			<listbox id="lstUser" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selectedUser)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstUser.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Full Name" sort="auto(full_name)" style="text-align: center"
+						width="160px" />
+					<listheader label="Username" sort="auto(username)" style="text-align: center"
+						width="140px" />
+					<listheader label="Branch Name" style="text-align: center"
+						sort="auto(branch_name)" width="160px" />
+					<listheader label="Branch Code" style="text-align: center"
+						sort="auto(branch_code)" width="90px" />
+					<listheader label="Authorized" sort="auto(authorized)" style="text-align: center"
+						width="100px" />
+					<listheader label="Status" sort="auto(status)" style="text-align: center"
+						width="60px" />
+					<listheader label="Start" sort="auto(start)" style="text-align: center"
+						width="140px" />
+					<listheader label="End" sort="auto(end)" style="text-align: center"
+						width="100%" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpen')">
+						<listcell label="@load(item.full_name)" />
+						<listcell label="@load(item.username)" />
+						<listcell label="@load(item.branch_name)" />
+						<listcell label="@load(item.branch_code)" />
+						<listcell label="@load(item.authorized)" />
+						<listcell label="@load(item.status eq 'A'?'Active':'Inactive')"/>
+						<listcell label="@load(item.start_on) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(item.end_on) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

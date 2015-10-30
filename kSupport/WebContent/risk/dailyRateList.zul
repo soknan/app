@@ -1,0 +1,185 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+	<window id="dratels" title="Daily Rate List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.risk.vm.DailyRateListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="900px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<style>
+.RATE {
+font-family: Arial,Sans-serif;
+font-size: 12px;
+font-weight: normal;
+font-style: normal;
+border-radius: 0;
+text-shadow: none;
+color:#000000;
+padding: 1px 5px 3px;
+}
+.RATE.A{
+background-color: #5cb85c;
+}
+.RATE.B{
+background-color: #FFFC00;
+}
+.RATE.C{
+background-color: #FFB800;
+}
+.RATE.D{
+background-color: #FFB800;
+}
+.RATE.E{
+background-color: #d9534f;
+}
+.RATE.F{
+background-color: #d9534f;
+}
+</style>		
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<groupbox hflex="true">
+				<caption label="Filters" />
+				<hbox width="100%">
+					<cell>
+						<label>Date</label>
+					</cell>
+					<cell>
+						<datebox width="120px" format="dd-MM-yyyy"
+							value="@bind(vm.param.vDate)" onChange="@command('doSearch')" />
+					</cell>
+					<cell>
+						<label value="Branch" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterBranch)"
+							value="@bind(vm.param.branch.description)"
+							selectedItem="@bind(vm.param.branch)" onChange="@command('doSearch')"
+							width="162px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell>	
+					<cell>
+						<label value="Sub" />
+					</cell>
+					<cell>
+						<combobox model="@load(vm.lstFilterSub)"
+							value="@bind(vm.param.sub.description)"
+							selectedItem="@bind(vm.param.sub)"
+							onChange="@command('doSub')" width="162px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)"
+									description="@load(t.code)" />
+							</template>
+						</combobox>
+					</cell> 				
+					<cell>
+						<label value="Tran. Type" />
+					</cell>
+					<cell>
+						<combobox id="lstTranType" model="@load(vm.lstTranType)"
+							value="@load(vm.param.tranType.description)"
+							selectedItem="@bind(vm.param.tranType)" onChange="@command('doSearch')"
+							 width="80px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)" />
+							</template>
+						</combobox>
+					</cell> 
+					<cell>
+						<label value="Tran. Status" />
+					</cell>
+					<cell>
+						<combobox id="lstTranStatus" model="@load(vm.lstTranStatus)"
+							value="@load(vm.param.tranStatus.description)"
+							selectedItem="@bind(vm.param.tranStatus)" onChange="@command('doSearch')"
+							 width="80px">
+							<template name="model" var="t">
+								<comboitem label="@load(t.description)" />
+							</template>
+						</combobox>
+					</cell>				
+				</hbox>
+			</groupbox> 			
+			<toolbar hflex="true">						
+								
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					value="@bind(vm.param.filter)" placeholder="Search....." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<space bar="true" class="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>		
+				<div style="float:right">
+						<toolbarbutton label="Export List" image="/img/icon/export.png"
+					onClick="@command('onExport')"  disabled="@bind(empty vm.lstDailyRate)" />
+				</div>						
+			</toolbar>
+			<listbox id="lst" model="@load(vm.lstDailyRate)" width="100%"
+				mold="paging" selectedItem="@bind(vm.selected)"  pageSize="@load(vm.selectedNumRow.description)"
+				hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="No" 
+					style="text-align: center" sort="auto(no)" width="30px"/>
+					<listheader label="Br.Code" 
+					style="text-align: center" sort="auto(branch_code)" width="80px"/>
+					<listheader label="Br.Name" 
+					style="text-align: center" sort="auto(branch_name)" width="200px"/>
+					<listheader label="CIF" 
+						style="text-align: center" sort="auto(cif)" width="80px"/>					
+					<listheader label="Client Name" 
+						style="text-align: center" sort="auto(cust_name)"  width="200px"/>
+						<listheader label="#ACC" 
+						style="text-align: center" sort="auto(num_account)"  width="80px"/>
+					<listheader label="PRE-TYPE" 
+						style="text-align: center" sort="auto(initial_type)"  width="80px"/>
+					<listheader label="PRE-RATE" 
+						style="text-align: center" sort="auto(initial_class)"  width="80px"/>
+				    <listheader label="Daily Deposit" 
+					style="text-align: center" sort="auto(daily_deposit)" width="120px"/>					
+					<listheader label="Daily Status" 
+					style="text-align: center" sort="auto(daily_status)" width="120px"/>					
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onDoubleClick="@command('onDetail')">																		
+						<listcell label="@load(item.no)" />						
+						<listcell label="@load(item.branch_code)" />
+						<listcell label="@load(item.branch_name)" />
+						<listcell label="@load(item.cif)" />						
+						<listcell label="@load(item.cust_name)" />
+						<listcell label="@load(item.num_account)" />
+						<listcell label="@load(item.initial_type)"/>
+						<listcell><label class="RATE ${item.initial_class}" value="@load(item.initial_class)"/></listcell>										
+						<listcell label="@load(item.daily_deposit) @converter('formatedNumber', format='#,##0.##')" />
+						<listcell label="@load(item.daily_status)" />								
+					</listitem>
+				</template>
+			</listbox>			 
+			<!-- <paging id="lstPaging" autohide="false" detailed="true"
+			totalSize="@load(vm.totalSize)"
+			pageSize="@load(vm.selectedNumRow.description)" mold="os"
+			activePage="@bind(vm.pageIndex)">
+			</paging> -->			
+		</vbox>		
+	</window>
+</zk>

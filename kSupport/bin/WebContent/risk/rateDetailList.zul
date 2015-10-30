@@ -1,0 +1,73 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="detaills" title="Rate Detail List" border="normal"		
+		height="300px" position="center" mode="overlapped" closable="true" maximizable="true" width="900px"
+		onClose="@global-command('onCloseWin', id=self)">		
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">					
+			<listbox id="lst" model="@load(vm.lstRateDetail)" width="100%"
+				mold="paging"
+				hflex="true" vflex="true">
+								<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "os";
+]]>
+				</attribute>
+				<listhead sizable="true">
+					<listheader label="No" 
+					style="text-align: center" sort="auto(no)" width="30px" />
+					<listheader label="Br.Code" 
+					style="text-align: center" sort="auto(branch_code)" width="80px"/>
+					<!-- <listheader label="CIF" 
+						style="text-align: center" sort="auto(cif)" />	 -->				
+					<listheader label="ACC.No" 
+						style="text-align: center" sort="auto(acc_no)" width="120px"/>
+						<listheader label="Product Name" 
+						style="text-align: center" sort="auto(product_ame)" width="200px"/>
+					<listheader label="CCY" 
+						style="text-align: center" sort="auto(ccy)" width="80px"/>
+					<listheader label="B.Balance" 
+						style="text-align: center" sort="auto(b_balance)" width="120px"/>
+					<listheader label="Deposit"
+						style="text-align: center" sort="auto(deposit)"  width="120px"/>					
+					<listheader label="Withdrawal" 
+					style="text-align: center" sort="auto(withdrawal)"  width="120px"/>
+					<listheader label="Other-Deposit" 
+					style="text-align: center" sort="auto(other_deposit)"   width="80px"/>
+					<listheader label="Disbursement" 
+					style="text-align: center" sort="auto(disbursement)"  width="120px"/>
+					<listheader label="Pri.Repay" 
+					style="text-align: center" sort="auto(principal_repayment)"   width="120px"/>					
+					<listheader label="Other-Loan" 
+					style="text-align: center" sort="auto(other_loan)"  width="80px"/>					
+					<listheader label="E.Balance" 
+					style="text-align: center" sort="auto(e_balance)" width="120px"/>					
+					
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">																		
+						<listcell label="@load(item.no)" />						
+						<listcell label="@load(item.branch_code)" />
+						<!-- <listcell label="@load(item.cif)" /> -->						
+						<listcell label="@load(item.acc_no)" />
+						<listcell label="@load(item.product_name)" />
+						<listcell label="@load(item.ccy)"/>
+						<listcell label="@load(item.b_balance) @converter('formatedNumber', format='#,##0.##')" />					
+						<listcell label="@load(item.deposit) @converter('formatedNumber', format='#,##0.##')" />
+						<listcell label="@load(item.withdrawal) @converter('formatedNumber', format='#,##0.##')"/>
+						<listcell label="@load(item.other_deposit) @converter('formatedNumber', format='#,##0.##')" />
+						<listcell label="@load(item.disbursement) @converter('formatedNumber', format='#,##0.##')" />
+						<listcell label="@load(item.principal_repayment) @converter('formatedNumber', format='#,##0.##')" />						
+						<listcell label="@load(item.other_loan) @converter('formatedNumber', format='#,##0.##')" />
+						<listcell label="@load(item.e_balance) @converter('formatedNumber', format='#,##0.##')" />								
+					</listitem>
+				</template>
+			</listbox>			 
+			<!-- <paging id="lstPaging" autohide="false" detailed="true"
+			totalSize="@load(vm.totalSize)"
+			pageSize="@load(vm.selectedNumRow.description)" mold="os"
+			activePage="@bind(vm.pageIndex)">
+			</paging> -->			
+		</vbox>		
+	</window>
+</zk>

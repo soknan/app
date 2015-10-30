@@ -1,0 +1,28 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		roleDetail.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="roleDetail" title="Role Information" border="normal" visible="@load(vm.visible)"
+		mode="overlapped" closable="true" width="650px" height="400px"
+		position="center" onClose="@command('onCloseDetail')">
+		<tabbox selectedIndex="@bind(vm.selectedTabIndex)" onSelect="@command('onSelectTab', tab = self.selectedPanel)">
+			<tabs>
+				<tab label="Role" />
+				<tab label="Function" />
+				<tab label="User"/>
+			</tabs>
+			<tabpanels>
+				<tabpanel id="tabInfo">
+					<include src="/security/include/roles/roleInfo.zul" />
+				</tabpanel>
+				<tabpanel id="tabFunction"></tabpanel>
+				<tabpanel id="tabUser"></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

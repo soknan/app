@@ -1,0 +1,38 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="cbclip"
+		title="@load(empty vm.selected.nameEN? 'CB Cycle Input' : vm.selected.nameEN)"
+		border="normal" mode="overlapped" closable="true" width="950px" height="600px"
+		position="center" onClose="event.stopPropagation(); self.setVisible(false);">
+		<div vflex="true"
+			form="@id('fx2') @init(vm.frmCycle) @load(vm.selectedCycle) @save(vm.selectedCycle, before='onSave2')">
+			<div
+				form="@id('fxLeader') @init(vm.frmLeader) @load(vm.currentCbLeader) @save(vm.currentCbLeader, before='onSave2')">
+				<include src="/common/ui/toolbarInput2.zul" visible="@load(vm.bCurrentCycle)" />
+				<include src="/mfi/cb/include/cbCycleInfo.zul" />
+				<n:div class="k-space" />
+				<tabbox vflex="true">
+					<tabs>
+						<tab label="Groups" />
+						<tab label="CB Leader" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<include src="/mfi/cb/include/cbMembers.zul" />
+						</tabpanel>
+						<tabpanel id="tabLeader">
+							<include src="/mfi/cb/include/cbLeader.zul" />
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+				<n:div class="k-space-2px" />
+				<n:div class="k-bottom-info">
+					<n:div class="alert alert-info k-small k-right">
+						<button sclass="btn-primary" label="Close"
+							onClick="cbclip.setVisible(false)" />
+					</n:div>
+				</n:div>
+			</div>
+		</div>
+	</window>
+</zk>

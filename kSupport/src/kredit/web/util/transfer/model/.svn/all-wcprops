@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model
+END
+Loan.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/Loan.java
+END
+SavingTrnf.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/SavingTrnf.java
+END
+LoanClose.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/LoanClose.java
+END
+LoanTrnf.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/LoanTrnf.java
+END
+LoanWriteOff.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/LoanWriteOff.java
+END
+LoanCloseTrnf.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/LoanCloseTrnf.java
+END
+SavingClose.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/SavingClose.java
+END
+Email.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/93/src/kredit/web/util/transfer/model/Email.java
+END
+Saving.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/Saving.java
+END
+ParamTransfer.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/ParamTransfer.java
+END
+AccTrnf.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/AccTrnf.java
+END
+LoanWriteOffTrnf.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/LoanWriteOffTrnf.java
+END
+TransferCommon.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/util/transfer/model/TransferCommon.java
+END

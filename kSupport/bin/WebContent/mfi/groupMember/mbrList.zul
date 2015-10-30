@@ -1,0 +1,63 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="mbls" title="Member List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.mfi.mbr.vm.MbrListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1150px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<include src="/common/ui/mbrToolbarList.zul"></include>
+			<listbox id="lst" model="@load(vm.lstMbr)" width="100%"
+				hflex="true" vflex="true" selectedItem="@bind(vm.selected)"
+				paginal="${lstPaging}">
+				<listhead sizable="true">
+					<listheader label="No" width="40px" align="right"
+						sort="auto(id)" />
+					<listheader label="Br. Code" width="60px"
+						align="right" sort="auto(brCd)" />
+					<listheader label="Full Name" width="160px"
+						sort="auto(fullName)" />
+						<listheader label="Status" width="50px"
+						sort="auto(statusDes)" />
+					<listheader label="CIF" width="90px"
+						sort="auto(cif)" align="right" />
+					<listheader label="Account" width="140px"
+						align="right" sort="auto(account)" />
+					<listheader label="Ref. Account" width="120px"
+						align="right" sort="auto(refAccNo)" />
+					<listheader label="Amount Disb." width="100px"
+						sort="auto(amountDisbursed)" align="right" />
+					<listheader label="Mobilizer" width="160px"
+						sort="auto(mobilzerName)" />
+					<listheader label="Group" width="120px" sort="auto(groupAccNo)" />
+					<listheader label="Village" sort="auto(villageName)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px"
+						onDoubleClick="@global-command('onCmd', cmd = vm.cmdNew, obj = vm.selected)">
+						<listcell label="@load(item.id)" />
+						<listcell label="@load(item.brCd)" />
+						<listcell label="@load(item.fullName)" />
+						<listcell label="@load(item.statusDes)" />
+						<listcell label="@load(item.cif)" />
+						<listcell label="@load(item.account)" />
+						<listcell label="@load(item.refAccNo)" />
+						<listcell
+							label="@load(item.amountDisbursed) @converter('formatedNumber', format='#,##0.##')" />
+						<listcell label="@load(item.mobilizerName)" />
+						<listcell label="@load(item.groupAccNo)" />
+						<listcell label="@load(item.villageName)" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging>
+		</vbox>
+	</window>
+</zk>

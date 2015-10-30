@@ -1,0 +1,303 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="risk_reg_input" title="Risk Register Input" border="normal"		
+		mode="overlapped" closable="true" width="800px" height="600px"
+		position="center"
+		onClose="@command('onClose', cmp=risk_reg_input)">
+		
+		<style>
+RATE {
+font-family: Arial,Sans-serif;
+font-size: 12px;
+font-weight: normal;
+font-style: normal;
+border-radius: 0;
+text-shadow: none;
+color:#000000;
+padding: 1px 5px 3px;
+}
+.RATE.L{
+background-color: #5cb85c;
+}
+.RATE.M{
+background-color: #FDFA03;
+}
+.RATE.H{
+background-color: #F9920B;
+}
+.RATE.E{
+background-color: #FD0303;
+}
+
+</style>	
+		<caption iconSclass="icon-k k-green"></caption>
+		<div vflex="true" form="@id('fx') @load(vm.selected) @save(vm.selected, before='onSave')">			
+	<toolbar width="100%">		
+		<toolbarbutton label="Save" image="/img/icon/save.png"
+			onClick="@command('onSave')"/>		
+	</toolbar>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Risk Identification</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="100px"><n:i class="red">*</n:i> Risk Code</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(fx.code)" width="160px" constraint="no empty"/>
+								</n:td>
+								<n:td><n:i class="red">*</n:i>									
+									Process
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox  model="@load(vm.lstProcess)"	
+									value="@load(vm.selected.processC.description)"
+									selectedItem="@bind(vm.selected.processC)"	constraint="no empty"																		
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>															
+							</n:tr>
+							<n:tr align="right">									
+								<n:td>
+									<n:i class="red">*</n:i>
+									Risk Description
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox rows="4"  value="@bind(fx.risk_desc)" width="160px"
+										constraint="no empty" />
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									Indicator
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox rows="4" value="@bind(fx.indicator)" width="160px"
+										constraint="no empty" />
+								</n:td>							
+								<n:td>
+									<n:i class="red">*</n:i>
+									Existing Control
+								</n:td>
+								<n:td align="left" class="k-padding" >
+									<textbox rows="4" value="@bind(fx.existing_control)" width="160px"
+										constraint="no empty" />
+								</n:td>
+																	
+							</n:tr>											
+						</n:table>
+					</n:div>
+				</n:div>
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Risk Management</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="100px">
+									<n:i class="red">*</n:i> Likelihood
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox id="likelihood"  model="@load(vm.rowsReg1)"
+									value="@load(vm.selected.likelihoodC.code)" onChange="@command('onRateChange1')"
+									selectedItem="@bind(vm.selected.likelihoodC)"																				
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.code)" />
+										</template>
+									</combobox>									
+								</n:td>
+								<n:td><n:i class="red">*</n:i>									
+									Impact
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox id="impact" model="@load(vm.rowsReg2)"
+									value="@load(vm.selected.impactC.code)" onChange="@command('onRateChange1')"
+									selectedItem="@bind(vm.selected.impactC)"																				
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									RR
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox  width="160px" value="@bind(vm.tmp_rr)"
+										constraint="no empty" readonly="true"/>
+										<!-- <label id="RATE_L" width="160px" style="display: inline-block" value="${vm.tmp_style}"/> -->										
+								</n:td>
+							</n:tr>
+							<n:tr align="right">									
+								<n:td>
+									<n:i class="red">*</n:i>
+									4Ts
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox  model="@load(vm.lstForTs)"	
+										value="@load(vm.selected.for_tsC.description)"
+										selectedItem="@bind(vm.selected.for_tsC)"																			
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>	
+								<n:td>
+									<n:i class="red">*</n:i>
+									Risk Owner
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox  model="@load(vm.lstPosition)"
+									value="@load(vm.selected.risk_ownerC.description)"
+										selectedItem="@bind(vm.selected.risk_ownerC)"																				
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									Due Date
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<datebox width="160px" format="dd-MM-yyyy" value="@bind(fx.due_date)" constraint="no empty"/>
+								</n:td>							
+							</n:tr>
+							<n:tr align="right">								
+																
+							</n:tr>	
+							<n:tr align="right">									
+								<n:td>
+									<n:i class="red">*</n:i>
+									Additional Controls
+								</n:td>
+								<n:td align="left" class="k-padding" colspan="8">
+									<textbox rows="4" value="@bind(fx.additional_control)" width="160px"
+										constraint="no empty" />
+								</n:td>															
+							</n:tr>						
+						</n:table>
+					</n:div>
+				</n:div>
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Target Risk Score After Action Plan</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="100px"><n:i class="red">*</n:i> Likelihood</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox  model="@load(vm.rowsReg3)"
+									value="@load(vm.selected.af_likelihoodC.code)" onChange="@command('onRateChange2')"
+									selectedItem="@bind(vm.selected.af_likelihoodC)"																				
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i>									
+									Impact
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox  model="@load(vm.rowsReg4)"
+									value="@load(vm.selected.af_impactC.code)" onChange="@command('onRateChange2')"
+									selectedItem="@bind(vm.selected.af_impactC)"																	
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+								<n:td>
+									<n:i class="red">*</n:i>
+									ER
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" value="@bind(vm.tmp_er)"
+										constraint="no empty" readonly="true"/>
+								</n:td>																
+							</n:tr>
+							<n:tr align="right">
+								<n:td width="100px"><n:i class="red">*</n:i> Status</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox  model="@load(vm.lstStatus)"
+									value="@load(vm.selected.statusC.description)" 
+									selectedItem="@bind(vm.selected.statusC)"																				
+										width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>																			
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 10px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.create_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.create_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.change_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.change_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+	</window>
+</zk>

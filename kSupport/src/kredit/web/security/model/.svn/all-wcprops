@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/scm/svn/kSupport_SVN/!svn/ver/275/src/kredit/web/security/model
+END
+ValidityHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/34/src/kredit/web/security/model/ValidityHelper.java
+END
+ParamValidity.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/17/src/kredit/web/security/model/ParamValidity.java
+END
+RoleFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/23/src/kredit/web/security/model/RoleFunction.java
+END
+UserValidity.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/46/src/kredit/web/security/model/UserValidity.java
+END
+ParamEmp.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/75/src/kredit/web/security/model/ParamEmp.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/scm/svn/kSupport_SVN/!svn/ver/82/src/kredit/web/security/model/User.java
+END
+Function.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/47/src/kredit/web/security/model/Function.java
+END
+ParamUser.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/17/src/kredit/web/security/model/ParamUser.java
+END
+Role.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/scm/svn/kSupport_SVN/!svn/ver/93/src/kredit/web/security/model/Role.java
+END
+ParamFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/17/src/kredit/web/security/model/ParamFunction.java
+END
+ParamRole.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/17/src/kredit/web/security/model/ParamRole.java
+END
+UserFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/14/src/kredit/web/security/model/UserFunction.java
+END
+UserRole.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/14/src/kredit/web/security/model/UserRole.java
+END

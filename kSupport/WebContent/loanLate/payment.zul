@@ -1,0 +1,102 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Repayment Info</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td>January</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.r01)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">February</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.r02)" readonly="true" />
+						</n:td>
+					</n:tr>
+					
+					<n:tr align="right">
+						<n:td>March</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.r03)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">April</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.r04)" readonly="true" />
+						</n:td>
+					</n:tr>
+					
+					<n:tr align="right">
+						<n:td>May</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.r05)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">June</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.r06)" readonly="true" />
+						</n:td>
+					</n:tr>
+					
+					<n:tr align="right">
+						<n:td>July</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.r07)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">August</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.r08)" readonly="true" />
+						</n:td>
+					</n:tr>
+					
+					<n:tr align="right">
+						<n:td>September</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.r09)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">October</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.r10)" readonly="true" />
+						</n:td>
+					</n:tr>
+					
+					<n:tr align="right">
+						<n:td>November</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.r11)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">December</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.r12)" readonly="true" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+
+	</n:div>
+</zk>

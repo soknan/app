@@ -1,0 +1,661 @@
+package kredit.web.risk_reg.vm;
+
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+
+import kredit.web.core.util.authentication.UserCredentialManager;
+import kredit.web.core.util.db.Sql2oHelper;
+import kredit.web.core.util.model.CodeItem;
+import kredit.web.risk_reg.model.ParamModel;
+import kredit.web.risk_reg.model.RiskRegModel;
+import kredit.web.risk_reg.model.facade.RiskRegFacade;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.sql2o.Connection;
+import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zhtml.Filedownload;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Window;
+
+import com.avaje.ebean.Ebean;
+
+public class RiskRegListVM {
+	ListModelList<RiskRegModel> lstRiskReg;	
+	RiskRegModel selected = new RiskRegModel();
+	
+	private ListModelList<CodeItem> rows;
+	CodeItem selectedNumRow;
+	
+	ListModelList<CodeItem> rowsReg1;
+	ListModelList<CodeItem> rowsReg2;
+	ListModelList<CodeItem> rowsReg3;
+	ListModelList<CodeItem> rowsReg4;
+	ParamModel param = new ParamModel();
+	
+	ListModelList<CodeItem> lstProcess;	
+	ListModelList<CodeItem> lstForTs;	
+	ListModelList<CodeItem> lstStatus;	
+	ListModelList<CodeItem> lstPosition;	
+	
+	ListModelList<CodeItem> lstFilterBranch;
+	ListModelList<CodeItem> lstFilterSub;
+	ListModelList<CodeItem> lstFinMonth;
+	ListModelList<CodeItem> lstFinYear;
+	
+	String tmp_rr;
+	String tmp_er;
+	String tmp_style = "";
+	
+	boolean notAdmin = true;
+	
+	@Wire("#risk_reg_ls")
+	private Window riskRegLs;
+	
+	@Init
+	public void init() {
+		
+	}
+	
+	public RiskRegListVM(){
+		if(!getUserRole().equals("RISK_ADMIN")){
+			if(UserCredentialManager.getIntance().getLoginUsr().getBrCd().equals(000)){
+				param.getBranch().setCode(UserCredentialManager.getIntance().getLoginUsr().getBrCd());
+				param.getBranch().setDescription(UserCredentialManager.getIntance().getLoginUsr().getBrDesc());
+			}else{
+				//System.out.println(RiskRegFacade.getBranchBy(UserCredentialManager.getIntance().getLoginUsr().getBrCd().toString()).getCode());
+				param.getBranch().setCode(RiskRegFacade.getBranchBy(UserCredentialManager.getIntance().getLoginUsr().getBrCd()).getCode());
+				param.getBranch().setDescription(RiskRegFacade.getBranchBy(UserCredentialManager.getIntance().getLoginUsr().getBrCd().toString()).getDescription());
+			}
+			param.getSub().setCode(UserCredentialManager.getIntance().getLoginUsr().getBrCd());
+			param.getSub().setDescription(UserCredentialManager.getIntance().getLoginUsr().getBrDesc());
+		}else{
+			notAdmin = false;
+		}				
+	}
+
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
+	}
+	
+	@Command
+	@NotifyChange({"lstRiskReg"})
+	public void doSearch(){
+		lstRiskReg = null;	
+	}
+	
+	@Command
+	@NotifyChange({ "param","lstRiskReg", "lstFilterSub", "selected" })
+	public void onChangeBranch() {
+		CodeItem item = new CodeItem();
+		item.setId(0);
+		item.setCode("");
+		item.setDescription("All");
+		param.setSub(item);
+		onDropSubBranch();
+		doSearch();
+	}
+	
+	public void onDropSubBranch() {
+		lstFilterSub.clear();
+		lstFilterSub.addAll(RiskRegFacade.getSubBranchesList(param.getBranch().getId()));
+	}
+	
+	@Command
+	@NotifyChange({ "param","lstRiskReg", "selected" })
+	public void onChangeSubBranch() {
+		
+		CodeItem item = new CodeItem();
+		if(param.getSub().getId() == 0)
+		{
+			item.setId(0);
+			item.setCode("");
+			item.setDescription("All");
+		}
+		else
+		{
+			item.setId(param.getSub().getSuperId());
+			item.setCode(param.getSub().getSuperCode());
+			item.setDescription(param.getSub().getSuperDescription());
+		}
+		
+		param.setBranch(item);
+		doSearch();
+		}
+	
+	@Command
+	@NotifyChange({"lstRiskReg","param","selected","lstFilterBranch","lstFilterSub"})
+	public void onClear(){
+		if(notAdmin){
+			lstRiskReg = null;
+		}else{
+			lstFilterBranch = null;
+			lstFilterSub = null;
+			selected = null;
+			lstRiskReg = null;
+			param = new ParamModel();
+		}		
+	}
+	
+	@Command
+	@NotifyChange("selected")
+	public void onNew(){
+		tmp_rr = "";
+		tmp_er = "";
+		selected = new RiskRegModel();
+		boolean wait = riskRegLs.hasFellow("risk_reg_input");		
+		if(wait) return;		
+		Executions.createComponents("/risk_reg/riskRegInput.zul", riskRegLs, null);
+	}
+	
+	@Command
+	@NotifyChange({ "selected","tmp_rr","tmp_er"})
+	public void onOpen(){		
+		tmp_rr = selected.getRisk_rr();
+		tmp_er = selected.getAf_risk_er();
+		boolean wait = riskRegLs.hasFellow("risk_reg_input");		
+		if(wait) return;		
+		Executions.createComponents("/risk_reg/riskRegInput.zul", riskRegLs, null);
+	}
+	
+	@Command
+	@NotifyChange({ "lstRiskReg", "selected" })
+	public void onSave(){			
+		selected.setBranch_code(UserCredentialManager.getIntance().getLoginUsr().getBrCd());		
+		if(selected.getId() == null)
+		{
+			selected.setFin_month(new SimpleDateFormat("MMM").format(new Date()).toUpperCase());
+			selected.setFin_year(new SimpleDateFormat("YYYY").format(new Date()));
+			selected.setSubmmitted_date(new Date());
+			selected.setCreate_by(UserCredentialManager.getIntance().getLoginUsr().getUsername());
+			selected.setCreate_on(new Date());
+			Ebean.save(selected);
+			selected = new RiskRegModel();
+		}
+		else
+		{
+			selected.setChange_by(UserCredentialManager.getIntance().getLoginUsr().getUsername());
+			selected.setChange_on(new Date());
+			Ebean.update(selected);
+		}
+		lstRiskReg = null;		
+		Clients.showNotification("Saved");
+	}
+	
+	@Command
+	@NotifyChange({"lstRiskReg","selected","param"})
+	public void onClose(@BindingParam("cmp")  Window x) {
+		lstRiskReg = null;
+		selected = null;
+		param = new ParamModel();
+	    x.detach();
+	}
+	
+	@Command
+	@NotifyChange({"tmp_rr","tmp_style"})
+	public void onRateChange1(){
+		//selected = new RiskRegModel();
+		Integer li = 1;
+		Integer im = 1;
+		Integer re = 1;
+		if(!selected.getLikelihoodC().getCode().equals("")){
+			li = Integer.valueOf(selected.getLikelihoodC().getCode());			
+		}
+		if(!selected.getImpactC().getCode().equals("")){
+			im = Integer.valueOf(selected.getImpactC().getCode());
+		}
+		re = li * im;
+		
+		if(re<=4){
+			selected.setRisk_rr(String.valueOf(re)+"-L");
+			
+			if(li==4){
+				selected.setRisk_rr(String.valueOf(re)+"-M");
+				
+			}
+			if(im==4){
+				selected.setRisk_rr(String.valueOf(re)+"-H");
+				
+			}
+		}else if(re<=6){
+			selected.setRisk_rr(String.valueOf(re)+"-M");
+			
+			if(im==5){
+				selected.setRisk_rr(String.valueOf(re)+"-E");
+				
+			}
+		}else if(re<=12){
+			selected.setRisk_rr(String.valueOf(re)+"-H");
+			
+			if(im==5){
+				selected.setRisk_rr(String.valueOf(re)+"-E");
+				
+			}
+		}else if(re<=25){
+			selected.setRisk_rr(String.valueOf(re)+"-E");
+			
+		}
+		tmp_rr = selected.getRisk_rr();
+		//tmp_style = selected.getRisk_rr().substring(selected.getRisk_rr().length() - 1, selected.getRisk_rr().length());		
+	}
+	
+	@Command	
+	@NotifyChange("tmp_er")
+	public void onRateChange2(){
+		//selected = new RiskRegModel();
+		Integer li = 1;
+		Integer im = 1;
+		Integer re = 1;
+		if(!selected.getAf_likelihoodC().getCode().equals("")){
+			li = Integer.valueOf(selected.getAf_likelihoodC().getCode());			
+		}
+		if(!selected.getAf_impactC().getCode().equals("")){
+			im = Integer.valueOf(selected.getAf_impactC().getCode());
+		}
+		re = li * im;
+		
+		if(re<=4){
+			selected.setAf_risk_er(String.valueOf(re)+"-L");
+			if(li==4){
+				selected.setAf_risk_er(String.valueOf(re)+"-M");
+			}
+			if(im==4){
+				selected.setAf_risk_er(String.valueOf(re)+"-H");
+			}
+		}else if(re<=6){
+			selected.setAf_risk_er(String.valueOf(re)+"-M");
+			if(im==5){
+				selected.setAf_risk_er(String.valueOf(re)+"-E");
+			}
+		}else if(re<=12){
+			selected.setAf_risk_er(String.valueOf(re)+"-H");
+			if(im==5){
+				selected.setAf_risk_er(String.valueOf(re)+"-E");
+			}
+		}else if(re<=25){
+			selected.setAf_risk_er(String.valueOf(re)+"-E");
+		}
+		tmp_er = selected.getAf_risk_er();
+	}
+	
+	@Command
+	public void onExport() {
+		try {
+			Workbook workbook = new HSSFWorkbook();
+			Iterator<RiskRegModel> iterator = lstRiskReg.iterator();
+			Row row;
+			// List<KivaLoanModel> tmpSch = new ArrayList<KivaLoanModel>();
+			Integer rowIndex = 1;
+			Sheet sheet = workbook.createSheet();
+			row = sheet.createRow(0);
+			Cell Cno = row.createCell(0);
+			Cell Crisk_code = row.createCell(1);
+			Cell Cprocess = row.createCell(2);
+			Cell Crisk_desc = row.createCell(3);
+			Cell Cindicator = row.createCell(4);
+			Cell Cexisting_control = row.createCell(5);
+			Cell Clikelihood = row.createCell(6);
+			Cell Cimpact = row.createCell(7);
+			Cell Crr = row.createCell(8);
+			Cell Cfor_ts = row.createCell(9);
+			Cell Cadditional_control = row.createCell(10);
+			Cell Crisk_owner = row.createCell(11);
+			Cell Cdue_date = row.createCell(12);
+			Cell Caf_likelihood = row.createCell(13);
+			Cell Caf_impact = row.createCell(14);
+			Cell Cer = row.createCell(15);
+			Cell Cstatus = row.createCell(16);
+			Cell Csummitted_date = row.createCell(17);			
+								
+			Cno.setCellValue("No");
+			Crisk_code.setCellValue("Risk Code");
+			Cprocess.setCellValue("Process");
+			Crisk_desc.setCellValue("Risk Desc");
+			Cindicator.setCellValue("Indicator");
+			Cexisting_control.setCellValue("Existing Control");			
+			Clikelihood.setCellValue("Likelihood");
+			Cimpact.setCellValue("Impact");
+			Crr.setCellValue("RR");
+			Cfor_ts.setCellValue("4Ts");
+			Cadditional_control.setCellValue("Additional Control");
+			Crisk_owner.setCellValue("Risk Owner");
+			Cdue_date.setCellValue("Due Date");
+			Caf_likelihood.setCellValue("Likelihood");
+			Caf_impact.setCellValue("Impact");
+			Cer.setCellValue("ER");	
+			Cstatus.setCellValue("Status");
+			Csummitted_date.setCellValue("Summitted Date");
+			
+			while (iterator.hasNext()) {
+				//Case All Cell To String
+				/*Iterator<Cell> cellIterator = row.cellIterator();
+				while (cellIterator.hasNext()) {
+					Cell cells = cellIterator.next();
+					cells.setCellType(Cell.CELL_TYPE_STRING);
+				}*/
+				RiskRegModel c = iterator.next();
+				row = sheet.createRow(rowIndex++);
+				Cell no = row.createCell(0);
+				Cell risk_code = row.createCell(1);
+				Cell process = row.createCell(2);
+				Cell risk_desc = row.createCell(3);
+				Cell indicator = row.createCell(4);
+				Cell existing_control = row.createCell(5);
+				Cell likelihood = row.createCell(6);
+				Cell impact = row.createCell(7);
+				Cell rr = row.createCell(8);
+				Cell for_ts = row.createCell(9);
+				Cell additional_control = row.createCell(10);
+				Cell risk_owner = row.createCell(11);
+				Cell due_date = row.createCell(12);
+				Cell af_likelihood = row.createCell(13);
+				Cell af_impact = row.createCell(14);
+				Cell er = row.createCell(15);
+				Cell status = row.createCell(16);
+				Cell summitted_date = row.createCell(17);				
+				
+				no.setCellValue(c.getRownum());
+				risk_code.setCellValue(c.getCode());
+				process.setCellValue(c.getProcess());
+				risk_desc.setCellValue(c.getRisk_desc());
+				indicator.setCellValue(c.getIndicator());
+				existing_control.setCellValue(c.getExisting_control());			
+				likelihood.setCellValue(c.getRisk_likelihood());
+				impact.setCellValue(c.getRisk_impact());
+				rr.setCellValue(c.getRisk_rr());
+				for_ts.setCellValue(c.getFor_ts());
+				additional_control.setCellValue(c.getAdditional_control());
+				risk_owner.setCellValue(c.getRisk_owner());
+				due_date.setCellType(Cell.CELL_TYPE_STRING);
+				due_date.setCellValue(new SimpleDateFormat("dd-MMM-yyyy")
+				.format(c.getDue_date()));				
+				af_likelihood.setCellValue(c.getAf_risk_likelihood());
+				af_impact.setCellValue(c.getAf_risk_impact());
+				er.setCellValue(c.getAf_risk_er());	
+				status.setCellValue(c.getStatus());
+				summitted_date.setCellType(Cell.CELL_TYPE_STRING);
+				summitted_date.setCellValue(new SimpleDateFormat("dd-MMM-yyyy")
+				.format(c.getSubmmitted_date()));
+				
+			}
+			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+			workbook.write(outByteStream);
+			byte[] outArray = outByteStream.toByteArray();
+			String now = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+			Filedownload
+					.save(outArray, "application/ms-excel", "Risk_Reg-"+now+".xls");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public ListModelList<RiskRegModel> getLstRiskReg() {
+		if(lstRiskReg==null){
+			lstRiskReg = new ListModelList<>(RiskRegFacade.getLstRiskReg(param));
+		}
+		return lstRiskReg;
+	}
+
+	public void setLstRiskReg(ListModelList<RiskRegModel> lstRiskReg) {
+		this.lstRiskReg = lstRiskReg;
+	}
+
+	public ListModelList<CodeItem> getLstFinMonth() {
+		if(lstFinMonth==null){
+			if (lstFinMonth != null)
+				return lstFinMonth;
+			lstFinMonth = new ListModelList<CodeItem>();
+			String[] desc = new String[] { "JAN", "FEB", "MAR","APR","MAY","JUN", "JUL", "AUG", "SEP",
+					"OCT","NOV","DEC" };
+			String[] code = new String[] { "JAN", "FEB", "MAR","APR","MAY","JUN", "JUL", "AUG", "SEP",
+					"OCT","NOV","DEC" };
+			for (int i = 0; i < code.length; i++) {
+				CodeItem item = new CodeItem();
+				item.setCode(code[i]);
+				item.setDescription(desc[i]);
+				lstFinMonth.add(item);
+			}
+		}
+		return lstFinMonth;
+	}
+
+	public void setLstFinMonth(ListModelList<CodeItem> lstFinMonth) {
+		this.lstFinMonth = lstFinMonth;
+	}
+
+	public ListModelList<CodeItem> getLstFinYear() {
+		if(lstFinYear==null){
+			lstFinYear = new ListModelList<>(RiskRegFacade.getFinYearList());
+		}
+		return lstFinYear;
+	}
+
+	public void setLstFinYear(ListModelList<CodeItem> lstFinYear) {
+		this.lstFinYear = lstFinYear;
+	}
+
+	public RiskRegModel getSelected() {
+		return selected;
+	}
+	public void setSelected(RiskRegModel selected) {
+		this.selected = selected;
+	}
+	public ListModelList<CodeItem> getRows() {
+		if (rows != null)
+			return rows;
+		rows = new ListModelList<CodeItem>();
+		String[] desc = new String[] { "5", "10", "15", "20", "25", "30", "40",
+				"50" };
+		String[] code = new String[] { "5", "10", "15", "20", "25", "30", "40",
+				"50" };
+		for (int i = 0; i < code.length; i++) {
+			CodeItem item = new CodeItem();
+			item.setCode(code[i]);
+			item.setDescription(desc[i]);
+			rows.add(item);
+		}
+		return rows;
+	}
+	public void setRows(ListModelList<CodeItem> rows) {
+		this.rows = rows;
+	}
+	public CodeItem getSelectedNumRow() {
+		if (selectedNumRow != null)
+			return selectedNumRow;
+		selectedNumRow = new CodeItem();
+		selectedNumRow.setCode("10");
+		selectedNumRow.setDescription("10");
+		return selectedNumRow;
+	}
+	public void setSelectedNumRow(CodeItem selectedNumRow) {
+		this.selectedNumRow = selectedNumRow;
+	}
+	public Window getRiskRegLs() {
+		return riskRegLs;
+	}
+	public void setRiskRegLs(Window riskRegLs) {
+		this.riskRegLs = riskRegLs;
+	}
+
+	public ListModelList<CodeItem> getLstFilterBranch() {
+		if(lstFilterBranch==null){
+			lstFilterBranch = new ListModelList<>(RiskRegFacade.getBranchesList());
+		}
+		return lstFilterBranch;
+	}
+
+	public void setLstFilterBranch(ListModelList<CodeItem> lstFilterBranch) {
+		this.lstFilterBranch = lstFilterBranch;
+	}
+	
+	public ListModelList<CodeItem> getLstFilterSub() {
+		if(lstFilterSub==null){
+			lstFilterSub = new ListModelList<>(RiskRegFacade.getSubBranchesList(param.getBranch().getId()));
+		}
+		return lstFilterSub;
+	}
+
+	public void setLstFilterSub(ListModelList<CodeItem> lstFilterSub) {
+		this.lstFilterSub = lstFilterSub;
+	}
+	
+	public ParamModel getParam() {
+		return param;
+	}
+
+	public void setParam(ParamModel param) {
+		this.param = param;
+	}
+
+	public ListModelList<CodeItem> getRowsReg1() {
+		if (rowsReg1 != null)
+			return rowsReg1;
+		rowsReg1 = new ListModelList<CodeItem>(RiskRegFacade.getRowsReg());		
+		return rowsReg1;
+	}
+
+	public void setRowsReg1(ListModelList<CodeItem> rowsReg1) {
+		this.rowsReg1 = rowsReg1;
+	}
+	
+	public ListModelList<CodeItem> getRowsReg2() {
+		if (rowsReg2 != null)
+			return rowsReg2;
+		rowsReg2 = new ListModelList<CodeItem>(RiskRegFacade.getRowsReg());
+		return rowsReg2;
+	}
+
+	public void setRowsReg2(ListModelList<CodeItem> rowsReg2) {
+		this.rowsReg2 = rowsReg2;
+	}
+	public ListModelList<CodeItem> getRowsReg3() {
+		if (rowsReg3 != null)
+			return rowsReg3;
+		rowsReg3 = new ListModelList<CodeItem>(RiskRegFacade.getRowsReg());
+		return rowsReg3;
+	}
+
+	public void setRowsReg3(ListModelList<CodeItem> rowsReg3) {
+		this.rowsReg3 = rowsReg3;
+	}
+	public ListModelList<CodeItem> getRowsReg4() {
+		if (rowsReg4 != null)
+			return rowsReg4;
+		rowsReg4 = new ListModelList<CodeItem>(RiskRegFacade.getRowsReg());
+		return rowsReg4;
+	}
+
+	public void setRowsReg4(ListModelList<CodeItem> rowsReg4) {
+		this.rowsReg4 = rowsReg4;
+	}
+
+	public ListModelList<CodeItem> getLstProcess() {
+		if(lstProcess==null){
+			lstProcess = new ListModelList<>(RiskRegFacade.getProcessList());
+		}
+		return lstProcess;
+	}
+
+	public void setLstProcess(ListModelList<CodeItem> lstProcess) {
+		this.lstProcess = lstProcess;
+	}
+
+	public ListModelList<CodeItem> getLstForTs() {
+		if(lstForTs==null){
+			lstForTs = new ListModelList<>(RiskRegFacade.getForTsList());
+		}
+		return lstForTs;
+	}
+
+	public void setLstForTs(ListModelList<CodeItem> lstForTs) {
+		this.lstForTs = lstForTs;
+	}
+
+	public ListModelList<CodeItem> getLstStatus() {
+		if(lstStatus==null){
+			lstStatus = new ListModelList<>(RiskRegFacade.getStatusList());
+		}
+		return lstStatus;
+	}
+
+	public void setLstStatus(ListModelList<CodeItem> lstStatus) {
+		this.lstStatus = lstStatus;
+	}
+	
+	public ListModelList<CodeItem> getLstPosition() {
+		if(lstPosition==null){
+			lstPosition = new ListModelList<>(RiskRegFacade.getPositionList());
+		}
+		return lstPosition;
+	}
+
+	public void setLstPosition(ListModelList<CodeItem> lstPosition) {
+		this.lstPosition = lstPosition;
+	}
+
+	public String getTmp_rr() {
+		return tmp_rr;
+	}
+
+	public void setTmp_rr(String tmp_rr) {
+		this.tmp_rr = tmp_rr;
+	}
+
+	public String getTmp_er() {
+		return tmp_er;
+	}
+
+	public void setTmp_er(String tmp_er) {
+		this.tmp_er = tmp_er;
+	}
+
+	public String getTmp_style() {		
+		return tmp_style;
+	}
+
+	public void setTmp_style(String tmp_style) {
+		this.tmp_style = tmp_style;
+	}
+	
+	public boolean isNotAdmin() {
+		return notAdmin;
+	}
+
+	public void setNotAdmin(boolean notAdmin) {
+		this.notAdmin = notAdmin;
+	}
+
+	public static String getUserRole(){
+		String lst = "";
+		String sql = ""
+				+ "select r.name from sys_user u left join sys_user_role ur "
+				+ "on u.id = ur.user_id left join sys_role r "
+				+ "on r.id = ur.role_id where u.username = '"+UserCredentialManager.getIntance().getLoginUsr().getUsername()+"' ";
+		try(Connection con = Sql2oHelper.sql2o.open()){
+		lst = con.createQuery(sql)
+    		 			.executeAndFetchFirst(String.class);
+			if(lst==null){
+				lst = UserCredentialManager.getIntance().getLoginUsr().getBrCd();
+			}
+		}
+		return lst;
+	}
+	
+}

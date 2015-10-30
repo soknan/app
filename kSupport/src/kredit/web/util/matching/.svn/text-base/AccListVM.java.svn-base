@@ -1,0 +1,581 @@
+package kredit.web.util.matching;
+
+import java.util.List;
+import java.util.Map;
+
+import kredit.flexcube.model.CasaDetail;
+import kredit.flexcube.model.CltbAccountAppsMaster;
+import kredit.flexcube.model.JoinHolder;
+import kredit.flexcube.model.SttmCustAccount;
+import kredit.web.core.util.authentication.UserCredentialManager;
+import kredit.web.core.util.db.Sql2oHelper;
+import kredit.web.core.util.model.CodeItem;
+import kredit.web.security.model.facade.SecurityFacade;
+
+import org.sql2o.Connection;
+import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.DefaultCommand;
+import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Window;
+
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Page;
+import com.avaje.ebean.PagingList;
+import com.avaje.ebean.Query;
+
+public class AccListVM {
+
+	ListModelList<CodeItem> lstSearch;
+	CodeItem searchType;
+	private ListModelList<CodeItem> rows;
+	CodeItem selectedNumRow;
+
+	@Wire("#acls")
+	Window winAcc;
+
+	@Wire("#pbls")
+	Window winPsb;
+
+	ListModelList<CltbAccountAppsMaster> lst;
+
+	ListModelList<SttmCustAccount> lstCasa;
+
+	String filter = "";
+
+	String reportUrl = "";
+
+	boolean isPsb = true; // passbook
+
+	boolean visible;
+	
+	boolean disableView;
+
+	// region paging
+
+	private int pageIndex;
+	private PagingList<CltbAccountAppsMaster> pagingList;
+	private int totalSize;
+
+	private int pageIndex2;
+	private PagingList<SttmCustAccount> pagingList2;
+	private int totalSize2;
+
+	// endregion paging
+	
+	List<CasaDetail> lstCasaDetail;
+	CasaDetail selectedDetail;
+	
+	SttmCustAccount selectedCasa;
+	
+	List<JoinHolder> lstJoin;
+	JoinHolder jHolder;
+
+	@Init
+	public void init() {
+
+	}
+
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.VIEW) Component view) {
+		Selectors.wireComponents(view, this, false);
+	}
+	
+	public AccListVM(){	
+		
+	}
+
+	@Command
+	@NotifyChange({ "lst", "lstCasa", "totalSize2", "totalSize" })
+	public void doSearch(@BindingParam("forPSB") Integer psb) {
+		lstCasa = null;
+		if (psb != null) {
+			isPsb = true;
+			return;
+		}
+
+		isPsb = false;
+		lst = null;
+	}
+
+	@Command
+	@NotifyChange({ "lstCasa", "totalSize2" })
+	public void doSearchPsb() {
+		lstCasa = null;
+	}
+
+	@Command
+	@NotifyChange({ "filter", "lst", "selected", "lstCasa", "totalSize2",
+			"totalSize" })
+	public void onClear() {
+		filter = "";
+		lst = null;
+		lstCasa = null;
+	}
+
+	@Command
+	public void onEdit() {
+
+	}
+
+	public ListModelList<CodeItem> getRows() {
+		if (rows != null)
+			return rows;
+		rows = new ListModelList<CodeItem>();
+		String[] desc = new String[] { "5", "10", "15", "20", "25", "30", "40",
+				"50" };
+		String[] code = new String[] { "5", "10", "15", "20", "25", "30", "40",
+				"50" };
+		for (int i = 0; i < code.length; i++) {
+			CodeItem item = new CodeItem();
+			item.setCode(code[i]);
+			item.setDescription(desc[i]);
+			rows.add(item);
+		}
+		return rows;
+	}
+
+	/**
+	 * @param rows
+	 *            the rows to set
+	 */
+	public void setRows(ListModelList<CodeItem> rows) {
+		this.rows = rows;
+	}
+
+	/**
+	 * @return the selectedNumRow
+	 */
+	public CodeItem getSelectedNumRow() {
+		if (selectedNumRow != null)
+			return selectedNumRow;
+		selectedNumRow = new CodeItem();
+		selectedNumRow.setCode("10");
+		selectedNumRow.setDescription("10");
+		return selectedNumRow;
+	}
+
+	/**
+	 * @param selectedNumRow
+	 *            the selectedNumRow to set
+	 */
+	public void setSelectedNumRow(CodeItem selectedNumRow) {
+		this.selectedNumRow = selectedNumRow;
+	}
+
+	@DefaultCommand
+	public void dummy() {
+
+	}
+
+	/**
+	 * @return the filter
+	 */
+	public String getFilter() {
+		return filter;
+	}
+
+	/**
+	 * @param filter
+	 *            the filter to set
+	 */
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+	@GlobalCommand
+	@NotifyChange({"lst", "totalSize"})
+	public void notifyListChange() {
+		lst = null;
+	}
+
+	/**
+	 * @return the lst
+	 */
+	@NotifyChange({ "totalSize", "lst" })
+	public ListModelList<CltbAccountAppsMaster> getLst() {
+		if (lst != null)
+			return lst;
+
+		String sFilter = filter;
+		/*if (filter.isEmpty())			
+			sFilter = "%";*/
+		/*if (filter.indexOf("-") > 0) {
+			sFilter = filter.replace("-", "");
+		}*/
+		
+		sFilter = "%" + sFilter + "%";
+
+		pagingList = Ebean
+				.find(CltbAccountAppsMaster.class)
+				.select("branchCode, accountNumber, altAccNo, customerId,groupAccNo, amountDisbursed, fullName, productCategory, fullNameKh")
+				.where().ilike(searchType.getCode(), sFilter)
+				/*.disjunction()				
+				.ilike("customerId", sFilter).ilike("accountNumber", sFilter)
+				.ilike("altAccNo", sFilter).ilike("fullName", sFilter)				
+				//.ilike("fullNameKh", sFilter)				
+				.ilike("productCategory", sFilter)
+				.ilike("groupAccNo", sFilter)
+				.endJunction()*/
+				.ne("accountStatus", "V")
+				.findPagingList(Integer.parseInt(selectedNumRow.getCode()));
+		
+		pagingList.getFutureRowCount();
+
+		// get the first page
+		Page<CltbAccountAppsMaster> page = pagingList.getPage(0);
+
+		// get the beans from the page as a list
+		List<CltbAccountAppsMaster> ls = page.getList();
+
+		totalSize = page.getTotalRowCount();
+
+		lst = new ListModelList<CltbAccountAppsMaster>(ls);
+		
+		return lst;
+	}
+
+	/**
+	 * @param lst
+	 *            the lst to set
+	 */
+	public void setLst(ListModelList<CltbAccountAppsMaster> lst) {
+		this.lst = lst;
+	}
+
+	/**
+	 * @return the lstCasa
+	 */
+	@NotifyChange({ "totalSize2", "lstCasa" })
+	public ListModelList<SttmCustAccount> getLstCasa() {
+		if (lstCasa != null)
+			return lstCasa;
+
+		String sFilter = filter;
+		if (filter.isEmpty())
+			sFilter = "%";
+		if (filter.indexOf("-") > 0) {
+			sFilter = filter.replace("-", "");
+		}
+		
+		sFilter = "%" + sFilter + "%";
+
+		Query<SttmCustAccount> queryPsb = Ebean.find(SttmCustAccount.class);
+
+		if (isPsb) {
+			queryPsb.select(
+					"branchCode, custAcNo, altAcNo, custNo, prdCat, fullName")
+					.where()
+					.disjunction()
+					.like("custNo", sFilter).like("custAcNo", sFilter)
+					.like("altAcNo", sFilter).ilike("fullName", sFilter)
+					.ilike("prdCat", sFilter).endJunction()
+					.eq("accountClass", "011");
+		} else {
+			queryPsb.select(
+					"branchCode, custAcNo, altAcNo, custNo, prdCat, fullName")
+					.where()
+					.disjunction()
+					.like("custNo", sFilter).like("custAcNo", sFilter)
+					.like("altAcNo", sFilter).ilike("fullName", sFilter)
+					.ilike("prdCat", sFilter).endJunction();
+		}
+
+		pagingList2 = queryPsb.findPagingList(Integer.parseInt(selectedNumRow
+				.getCode()));
+
+		pagingList2.getFutureRowCount();
+
+		// get the first page
+		Page<SttmCustAccount> page = pagingList2.getPage(0);
+
+		// get the beans from the page as a list
+		List<SttmCustAccount> ls = page.getList();
+
+		totalSize2 = page.getTotalRowCount();
+
+		lstCasa = new ListModelList<SttmCustAccount>(ls);
+
+		return lstCasa;
+	}
+
+	/**
+	 * @param lstCasa
+	 *            the lstCasa to set
+	 */
+	public void setLstCasa(ListModelList<SttmCustAccount> lstCasa) {
+		this.lstCasa = lstCasa;
+	}
+
+	/**
+	 * @return the pageIndex
+	 */
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public int getPageIndex2() {
+		return pageIndex2;
+	}
+
+	/**
+	 * @param pageIndex
+	 *            the pageIndex to set
+	 */
+	@NotifyChange("lst")
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+		// get the first page
+		Page<CltbAccountAppsMaster> page = pagingList.getPage(pageIndex);
+
+		// get the beans from the page as a list
+		List<CltbAccountAppsMaster> ls = page.getList();
+		lst = new ListModelList<CltbAccountAppsMaster>(ls);
+	}
+
+	@NotifyChange("lstCasa")
+	public void setPageIndex2(int pageIndex2) {
+		this.pageIndex2 = pageIndex2;
+		// get the first page
+		Page<SttmCustAccount> page = pagingList2.getPage(pageIndex2);
+
+		// get the beans from the page as a list
+		List<SttmCustAccount> ls = page.getList();
+		lstCasa = new ListModelList<SttmCustAccount>(ls);
+	}
+
+	/**
+	 * @return the pagingList
+	 */
+	public PagingList<CltbAccountAppsMaster> getPagingList() {
+		return pagingList;
+	}
+
+	public PagingList<SttmCustAccount> getPagingList2() {
+		return pagingList2;
+	}
+
+	/**
+	 * @param pagingList
+	 *            the pagingList to set
+	 */
+	public void setPagingList(PagingList<CltbAccountAppsMaster> pagingList) {
+		this.pagingList = pagingList;
+	}
+
+	public void setPagingList2(PagingList<SttmCustAccount> pagingList) {
+		this.pagingList2 = pagingList;
+	}
+
+	/**
+	 * @return the totalSize
+	 */
+	public int getTotalSize() {
+		return totalSize;
+	}
+
+	public int getTotalSize2() {
+		return totalSize2;
+	}
+
+	/**
+	 * @param totalSize
+	 *            the totalSize to set
+	 */
+	public void setTotalSize(int totalSize) {
+		this.totalSize = totalSize;
+	}
+
+	public void setTotalSize2(int totalSize) {
+		this.totalSize2 = totalSize;
+	}
+
+	@Command
+	@NotifyChange({ "reportUrl" })
+	public void onViewTrans() {
+		//reportUrl = "http://192.168.2.9:7001/xmlpserver/Kredit Report/3. Saving/Saving Reports/SA02-Print Passbook Transaction.xdo?_xmode=2&P_ACCOUNT_NO=0000122000795001&P_FIRST_ROW_TO_PRINT=10&_xt=Print&_xf=pdf";
+
+		Executions.createComponents("/report/reportViewer.zul", winPsb, null);
+	}
+	
+	@Command
+	@NotifyChange({"lstCasaDetail","lstJoin"})
+	public void onViewDetail(@BindingParam("current") SttmCustAccount sel) {	
+		lstCasaDetail=null;	
+		lstJoin = null;
+		selectedCasa = sel;	
+		getLstCasaDetail();		
+		selectedDetail = lstCasaDetail.get(0);
+		getLstJoin();	
+		
+		Map<String, String> rolesMap = SecurityFacade.getRoleCode(
+				UserCredentialManager.getIntance().getLoginUsr().getId());
+		String brMap = UserCredentialManager.getIntance().getLoginUsr().getBrCd();
+		
+		if(!rolesMap.containsValue("sa")){
+			if(brMap.equals("000")){						
+				selectedDetail.setBal("N/A");						
+			}else{
+				if(rolesMap.containsValue("ot")||rolesMap.containsValue("ht")){
+					if(!brMap.equals(selectedCasa.getBranchCode())){			
+						selectedDetail.setBal("N/A");				
+					}
+				}else{
+					selectedDetail.setBal("N/A");	
+				}
+			}			
+		}
+		
+		if(winAcc.hasFellow("vwls")){			
+			return;
+		}	
+		Executions.createComponents("/util/matching/viewDetail.zul", winAcc, null);
+	}
+
+	/**
+	 * @return the reportUrl
+	 */
+	public String getReportUrl() {
+		return reportUrl;
+	}
+
+	/**
+	 * @param reportUrl
+	 *            the reportUrl to set
+	 */
+	public void setReportUrl(String reportUrl) {
+		this.reportUrl = reportUrl;
+	}
+
+	/**
+	 * @return the visible
+	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param visible
+	 *            the visible to set
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public List<CasaDetail> getLstCasaDetail() {
+		if (lstCasaDetail != null) {
+			return lstCasaDetail;
+		}				
+		String sql = ""
+				+ "select a.cust_no cif,a.cust_ac_no accNo,a.ac_desc cusName,"
+				+ "(select case when f.function_id='STDCUSAC' THEN f.field_val_2 ELSE f.field_val_3 END from cstm_function_userdef_fields f "
+				+ "where substr(f.rec_key,5,16) = a.cust_ac_no) mop,"
+				+ "a.account_class accClass, DECODE(a.joint_ac_indicator,'S','Single','J','Joint') accType,a.ccy ccy,"
+				+ "a.acy_curr_balance bal,krd_get_photo(a.cust_no) photo,krd_get_signature(a.cust_no) signature "
+				+ "from sttm_cust_account a where a.cust_ac_no='"+selectedCasa.getCustAcNo()+"'";
+		try (Connection con = Sql2oHelper.sql2o.open()) {
+			lstCasaDetail = con.createQuery(sql)					
+					.executeAndFetch(CasaDetail.class);				
+		}	
+		return lstCasaDetail;
+	}
+
+	public void setLstCasaDetail(List<CasaDetail> lstCasaDetail) {
+		this.lstCasaDetail = lstCasaDetail;
+	}
+
+	public CasaDetail getSelectedDetail() {
+		return selectedDetail;
+	}
+
+	public void setSelectedDetail(CasaDetail selectedDetail) {
+		this.selectedDetail = selectedDetail;
+	}
+
+	public List<JoinHolder> getLstJoin() {
+		if (lstJoin != null) {
+			return lstJoin;
+		}				
+		String sql = "select en.joint_holder_code jCode,en.joint_holder_description joinHolder,"
+				+ "krd_get_signature(en.joint_holder_code) jSignature, "
+				+ "krd_get_photo(en.joint_holder_code) jPhoto "
+				+ " from sttm_ac_linked_entities en where en.cust_ac_no = '"+selectedCasa.getCustAcNo()+"'";				
+		try (Connection con = Sql2oHelper.sql2o.open()) {
+			lstJoin = con.createQuery(sql)					
+					.executeAndFetch(JoinHolder.class);				
+		}	
+		return lstJoin;
+	}
+
+	public void setLstJoin(List<JoinHolder> lstJoin) {
+		this.lstJoin = lstJoin;
+	}
+
+	public JoinHolder getjHolder() {
+		return jHolder;
+	}
+
+	public void setjHolder(JoinHolder jHolder) {
+		this.jHolder = jHolder;
+	}
+
+	public SttmCustAccount getSelectedCasa() {
+		return selectedCasa;
+	}
+
+	public void setSelectedCasa(SttmCustAccount selectedCasa) {
+		this.selectedCasa = selectedCasa;
+	}
+
+	public boolean isDisableView() {
+		return disableView;
+	}
+
+	public void setDisableView(boolean disableView) {
+		this.disableView = disableView;
+	}
+	
+	public ListModelList<CodeItem> getLstSearch() {
+		if (lstSearch != null)
+			return lstSearch;
+		lstSearch = new ListModelList<CodeItem>();
+		String[] desc = new String[] { "Branch Code", "Flexcube Acc.", "Kredit Acc.","CIF","Group Acc.", "Amount Disb", "Full Name", "Product Category", "Full NameKh" };
+		String[] code = new String[] { "branchCode", "accountNumber", "altAccNo","customerId","groupAccNo", "amountDisbursed", "fullName", "productCategory", "fullNameKh" };
+		for (int i = 0; i < code.length; i++) {
+			CodeItem item = new CodeItem();
+			item.setCode(code[i]);
+			item.setDescription(desc[i]);
+			lstSearch.add(item);
+		}
+		return lstSearch;
+	}
+
+	public void setLstSearch(ListModelList<CodeItem> lstSearch) {		
+		this.lstSearch = lstSearch;
+	}
+
+	public CodeItem getSearchType() {
+		if (searchType != null)
+			return searchType;
+		searchType = new CodeItem();
+		searchType.setCode("branchCode");
+		searchType.setDescription("Branch Code");
+		return searchType;
+	}
+
+	public void setSearchType(CodeItem searchType) {
+		this.searchType = searchType;
+	}	
+
+}

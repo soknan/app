@@ -1,0 +1,26 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Members of the Group - CIF and Acc</n:b>
+
+				<textbox value="@bind(vm.filter)"
+					onOK="@command('onSearchMember', groupType = fx2.groupType)"
+					disabled="@load(empty fx2.groupType or empty fx2.villageName)" />
+				<button sclass="btn-primary btn-xs" label="Search"
+					iconSclass="z-icon-search" onClick="@command('onSearchMember', groupType = fx2.groupType, villageID = fx2.villageID)"
+					disabled="@load(empty fx2.groupType or empty fx2.villageName)">
+				</button>
+				<label
+					value="*Members search is disabled. Please choose TYPE of the group and VILLAGE to enable it."
+					sclass="k-orange" visible="@load(empty fx2.groupType or empty fx2.villageName)" />
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<include src="/mfi/group/include/cifDualListbox.zul" />
+			</n:div>
+		</n:div>
+	</n:div>
+</zk>

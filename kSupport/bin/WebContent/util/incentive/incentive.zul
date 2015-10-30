@@ -1,0 +1,81 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="sis" title="Incentive Summary" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.incentive.vm.SummaryVM')"
+		mode="overlapped" closable="true" position="center" 
+		onClose="@global-command('onCloseWin', id=self)">
+	<n:table cellspacing="10">
+		<n:tr>
+			<n:td>
+				Option
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.options)" onChange="@command('onChangeOption')"
+					value="@load(vm.param.option.description)"
+					selectedItem="@bind(vm.param.option)" width="150px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				Branch
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterBranches)"
+					value="@load(vm.param.branch.description)"
+					selectedItem="@bind(vm.param.branch)" width="150px"
+					onChange="@command('onSelectBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+			</n:td>
+			<n:td>
+				From
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.fMonths)" disabled="@load(vm.disableF)"
+					value="@load(vm.param.fmonth.description)"
+					selectedItem="@bind(vm.param.fmonth)" width="150px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				Sub Branch
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.filterSubBranches)"
+					value="@load(vm.param.subBranch.description)"
+					selectedItem="@bind(vm.param.subBranch)" width="150px"
+					onChange="@command('onSelectSubBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+			</n:td>
+			<n:td>
+				To
+			</n:td>
+			<n:td>
+				<combobox model="@load(vm.tMonths)" disabled="@load(vm.disableT)"
+					value="@load(vm.param.tmonth.description)"
+					selectedItem="@bind(vm.param.tmonth)" width="150px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</n:td>
+		</n:tr>
+	</n:table>
+	<button sclass="btn btn-primary btn-sm" iconSclass="z-icon-eraser" width="100px" style="margin-left: 200px" onClick="@command('onClear')" label="Clear"></button>
+	<button sclass="btn btn-primary btn-sm" iconSclass="z-icon-terminal" width="100px" style="margin-left: 5px" label="Generate" onClick="@command('onGenerate')"></button>
+</window>
+</zk>

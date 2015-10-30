@@ -1,0 +1,40 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:div class="breadcrumbs" id="breadcrumbs">
+		<n:div class="nav-search" id="nav-search">
+			<button sclass="btn btn-mini" label="Change Branch" />
+			<button sclass="btn btn-mini" label="Options" />
+
+			<menupopup id="openedWindows" children="@load(vm.lstMenuItem)">
+				<template name="children" var="node">
+					<menuitem id="@load(node.id)" label="@load(node.label)"
+						onClick="@command('onMenuOpenedWindowClicked', id=self.id)" />
+				</template>
+			</menupopup>
+			<div class="btn-group">
+				<button dir="reverse" class="btn-default btn-xs dropdown-toggle"
+					popup="openedWindows, after_start" iconSclass="caret"
+					disabled="@load(empty vm.lstMenuItem)">
+					Windows
+				</button>
+			</div>
+
+			<menupopup id="m1">
+				<menuitem label="Render Menu" onClick="@command('renderMenu')" />
+				<menuitem label="Render Menu ZK" onClick="@command('renderMenuZK')" />
+				<menuseparator />
+				<menuitem label="About" />
+			</menupopup>
+			<div class="btn-group">
+				<button dir="reverse" class="btn-default btn-xs dropdown-toggle"
+					popup="m1, after_start" iconSclass="caret">
+					Help
+				</button>
+			</div>
+			<button sclass="btn btn-mini" iconSclass="fa fa-power-off fa-lg"
+				label="Sign Off" />
+			<textbox placeholder="Shortcut Menu" value="@bind(vm.cmd)"
+				mold="rounded" onOK="@command('onCmd')" sclass="input-prepend" />
+		</n:div><!--#nav-search -->
+	</n:div>
+</zk>

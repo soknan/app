@@ -1,0 +1,199 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSave')"/>
+		<toolbarbutton label="Reset Pwd" visible="@load(vm.privilege.canUpdate)" iconSclass="z-icon-refresh"
+					onClick="@command('onConfirmReset')" disabled="@load(vm.selectedUser.id eq null)"/>	
+		<toolbarbutton label="Sync Pwd" visible="@load(vm.privilege.canUpdate)" iconSclass="z-icon-random"
+					onClick="@command('onConfirmSync')" disabled="@load(vm.selectedUser.id eq null)" />
+	</toolbar>
+	<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>User Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">
+									<n:i class="red">*</n:i>
+									Emp. ID
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="input-group input-group-sm">
+												<textbox class="form-control" width="140px"
+													value="@bind(vm.selectedUser.emp_id)" />
+												<span class="input-group-btn">
+													<button class="btn-primary" onClick="@command('onShowFetchEmp')"
+														iconSclass="z-icon-search" width="8px" />
+												</span>
+											</div>
+										</div>
+									</div>
+								</n:td>
+								<n:td>Branch</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.filterBranches)"
+										value="@load(vm.selectedUser.branch.description)"
+										selectedItem="@bind(vm.selectedUser.branch)" width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Full Name</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedUser.full_name)"
+										 width="160px" />
+								</n:td>
+								<n:td width="120px">
+									Username
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" value="@bind(vm.selectedUser.username)"  />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Account Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Password</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox type="password" value="123456789" readonly="true" width="160px" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Pwd. Change</n:td>
+								<n:td align="left" class="k-padding">
+									<datebox width="160px" format="dd-MM-yyyy" disabled="true" value="@bind(vm.selectedUser.pwd_change_on)"/>
+								</n:td>
+								<n:td width="120px">
+									For. Ch. Pwd.
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.filterBoolP)"
+										value="@load(vm.selectedUser.pwdF.description)"
+										selectedItem="@bind(vm.selectedUser.pwdF)" width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)"/>
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Authorized</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.filterBoolA)"
+										value="@load(vm.selectedUser.authorizedC.description)"
+										selectedItem="@bind(vm.selectedUser.authorizedC)" width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)"/>
+										</template>
+									</combobox>
+								</n:td>
+								<n:td>Status</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.filterStatus)"
+										value="@load(vm.selectedUser.statusC.description)"
+										selectedItem="@bind(vm.selectedUser.statusC)" width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Start Date</n:td>
+								<n:td align="left" class="k-padding">
+									<datebox width="160px" format="dd-MM-yyyy" value="@bind(vm.selectedUser.start_on)"/>
+								</n:td>
+								<n:td>End Date</n:td>
+								<n:td align="left" class="k-padding">
+									<datebox width="160px" format="dd-MM-yyyy" value="@bind(vm.selectedUser.end_on)"/>
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>Locked</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.filterBoolL)"
+										value="@load(vm.selectedUser.lockedC.description)"
+										selectedItem="@bind(vm.selectedUser.lockedC)" width="160px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>	
+								</n:td>
+								<n:td>Time Level</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" value="@bind(vm.selectedUser.time_level)"/>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 35px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedUser.create_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedUser.create_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedUser.change_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selectedUser.change_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+
+</zk>

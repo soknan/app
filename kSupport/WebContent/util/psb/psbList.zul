@@ -1,0 +1,96 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="pbls" title="Account List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.util.matching.AccListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="1050px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<toolbar hflex="true">
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch', forPSB=1)"
+					focus="true" width="400px" value="@bind(vm.filter)"
+					placeholder="Passbook Account" />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch', forPSB=1)" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png"
+					onClick="@command('onClear')" />
+				<space bar="true" class="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch', forPSB=1)" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+			<listbox model="@load(vm.lstCasa)" width="100%"
+				mold="paging" pageSize="@load(vm.selectedNumRow.description)"
+				hflex="true" vflex="true" pagingPosition="bottom"
+				paginal="${lstPagingCasa}">
+				<listhead sizable="true">
+					<listheader label="Br. Code" width="60px"
+						align="right" sort="auto(branchCode)">
+					</listheader>
+					<listheader label="Flexcube Acc." width="140px"
+						align="right" sort="auto(custAcNo)" />
+					<listheader label="Kredits Acc." width="160px"
+						align="right" sort="auto(refAcc)" />
+					<listheader label="Product Cat." width="120px"
+						sort="auto(prdCat)" />
+					<listheader label="CIF" width="90px"
+						sort="auto(custNo)" align="right" />
+					<listheader label="Full Name" sort="auto(fullName)"
+						width="160px" />
+					<listheader label="Action" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px">
+						<listcell>
+							<textbox value="@load(item.branchCode)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.custAcNo)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.refAcc)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.prdCat)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.custNo)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(item.fullName)"
+								width="100%" readonly="true" />
+						</listcell>
+						<listcell>
+							<button class="btn-xs" label="trans."
+								iconSclass="z-icon-print"
+								tooltiptext="Print updated transactions" />
+							|
+							<button class="btn-xs" label="cover"
+								iconSclass="z-icon-print"
+								tooltiptext="Print passbook cover" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPagingCasa" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize2)" pageSize="10" mold="os"
+				activePage="@bind(vm.pageIndex2)">
+			</paging>
+		</vbox>
+	</window>
+</zk>

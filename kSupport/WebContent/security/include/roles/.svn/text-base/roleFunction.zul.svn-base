@@ -1,0 +1,71 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<vbox>
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onSave')"/>
+			<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onDeleteFunction')"/>
+			
+			<combobox model="@load(vm.selectedRole.avaFunctions)"
+					value="@load(vm.selectedFunction.name)"
+					selectedItem="@bind(vm.selectedFunction)" width="162px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.name)" />
+					</template>
+			</combobox>
+			<toolbarbutton label="Add" image="/img/icon/add-icon.png" disabled="@load(vm.selectedFunction.id eq null)" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onAddFunction')"/>
+						 
+		</toolbar>
+		
+		<hbox align="center">
+			<listbox id="lstRole" model="@load(vm.selectedRole.roleFunction)"
+				selectedItem="@bind(vm.selectedRoleFunction)" width="100%" height="280px">
+				<listhead sizable="false">
+					<listheader style="text-align: center" label="Name" width="200px" />
+					<listheader>
+						<checkbox id="allNew" onCheck="@command('checkAll', type = 1, checked = self.checked)" style="margin-left: 28px" />
+					</listheader>
+					<listheader>
+						<checkbox id="allView" onCheck="@command('checkAll', type = 2, checked = self.checked)" style="margin-left: 28px" />
+					</listheader>
+					<listheader>
+						<checkbox id="allCopy" onCheck="@command('checkAll', type = 3, checked = self.checked)" style="margin-left: 28px" />
+					</listheader>
+					<listheader>
+						<checkbox id="allUpdate" onCheck="@command('checkAll', type = 4, checked = self.checked)" style="margin-left: 28px" />
+					</listheader>
+					<listheader>
+						<checkbox id="allDelete" onCheck="@command('checkAll', type = 5, checked = self.checked)" style="margin-left: 28px" />
+					</listheader>
+				</listhead>
+				<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.function.name)" />
+						<listcell>
+							<label value="New" />
+							<checkbox checked="@bind(item.checkedNew)" disabled="@load(item.disabledNew)" />
+						</listcell>
+						<listcell>
+							<label value="View" />
+							<checkbox checked="@bind(item.checkedView)" disabled="@load(item.disabledView)" />
+						</listcell>
+						<listcell>
+							<label value="Copy" />
+							<checkbox checked="@bind(item.checkedCopy)" disabled="@load(item.disabledCopy)" />
+						</listcell>
+						<listcell>
+							<label value="Update" />
+							<checkbox checked="@bind(item.checkedUpdate)" disabled="@load(item.disabledUpdate)" />
+						</listcell>
+						<listcell>
+							<label value="Delete" />
+							<checkbox checked="@bind(item.checkedDelete)" disabled="@load(item.disabledDelete)" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</vbox>
+</zk>

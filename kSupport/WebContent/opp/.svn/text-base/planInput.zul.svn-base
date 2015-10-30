@@ -1,0 +1,425 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winPlnInput" title="Plan Input" border="normal" visible="@load(vm.visiblePlnInput)"
+	mode="overlapped" closable="true" width="1110px" height="650px"
+	position="center" onClose="@command('onClosePlnInput')">
+	
+	<vbox hflex="true">
+		<hbox>
+			<label>Plan Year:</label>
+			<textbox value="@bind(vm.selectedPlan.plan_year)" readonly="@load(!vm.privilege.canNew)"></textbox>
+			
+			<label style="margin-left: 25px">Plan Month:</label>
+			<combobox model="@load(vm.months)"
+				value="@load(vm.selectedMonth.description)" disabled="@load(!vm.privilege.canNew)"
+				selectedItem="@bind(vm.selectedMonth)" width="100px">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" />
+				</template>
+			</combobox>
+			
+			<button label="Save" class="btn-primary btn-xs" onClick="@command('onSavePlanInput')"  visible="@load(vm.privilege.canNew)"></button>
+		</hbox>
+		
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onNewPlnCo')" disabled="@load(vm.disableNewCo)" />
+			<toolbarbutton label="New Staff" image="/img/icon/addStaff.png" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onNewPlnStaff')" />	
+			<toolbarbutton label="Open" image="/img/icon/edit.png"
+				onClick="@command('onOpenPlnCo')" disabled="@load(vm.selectedPlanCo.id eq null)"/>
+			<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canUpdate)"
+				onClick="@command('onConfirmDeletePlnCo')" disabled="@load(vm.selectedPlanCo.id eq null)"/>
+				
+			<space bar="true" sclass="k-ver-bar" visible="@load(vm.privilege.canNew)" />
+			<toolbarbutton label="Sum. All Sub" image="/img/icon/report.png" visible="@load(vm.privilege.canNew)"
+				onClick="@command('onSummaryAllSub')"/>		
+				
+			<space bar="true" sclass="k-ver-bar" />
+			<label value="Branch: " style="padding: 0 0 0 5px;" />
+			<combobox model="@load(vm.branchListPlanInput)" disabled="@load(vm.disableBr)"
+				value="@load(vm.paramPlanCo.branch.description)"
+				selectedItem="@bind(vm.paramPlanCo.branch)" width="150px"
+				onChange="@command('onSelectBranchPlanCo')">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" description="@load(t.code)" />
+				</template>
+			</combobox>
+			
+			<label value="Sub Branch: " style="padding: 0 0 0 5px;" />
+			<combobox model="@load(vm.subBranchListPlanInput)" disabled="@load(vm.disableSbr)"
+				value="@load(vm.paramPlanCo.subBranch.description)"
+				selectedItem="@bind(vm.paramPlanCo.subBranch)" width="150px"
+				onChange="@command('onSelectSubBranchPlanCo')">
+				<template name="model" var="t">
+					<comboitem label="@load(t.description)" description="@load(t.code)" />
+				</template>
+			</combobox>		
+			
+			<label value="CO: " style="padding: 0 0 0 5px;" />
+			<textbox onOK="@command('doSearchPlanInput')" focus="true"
+				sclass="ksearch" value="@bind(vm.paramPlanCo.filter)"
+				placeholder="Search..." />
+			<toolbarbutton label="Find" image="/img/icon/search.png"
+				onClick="@command('doSearchPlanInput')" />
+			<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+				onClick="@command('onClearAllPlanInput')" />			
+		</toolbar>
+		
+		<tabbox>
+			<tabs>
+				<tab label="Detail" />
+				<tab label="Summary Loan By CO" />
+				<tab label="Summary Saving BY CO" />
+				<tab label="Summary Loan By PRODUCT" />
+				<tab label="Summary Saving BY PRODUCT" />
+				<tab label="Staff Recruitment" />
+				<tab label="Staff Recruitment Summary" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<listbox id="lstPlanCo" model="@load(vm.selectedPlan.planCo)"
+						selectedItem="@bind(vm.selectedPlanCo)" hflex="true" mold="paging"
+						vflex="true" pageSize="10">
+						<attribute name="onCreate">
+							<![CDATA[lstPlanCo.pagingChild.mold = "os";]]>
+						</attribute>
+						<listhead sizable="true">
+							<listheader label="Name" style="text-align: left"
+								width="170px" />
+							<listheader label="Branch Code" style="text-align: center"
+								width="100px" />
+							<listheader label="Create By" style="text-align: left" width="150px" />	
+							<listheader label="Create Date" style="text-align: left" width="100%" />
+						</listhead>
+						<template name="model" var="item">
+							<listitem height="35px" context="menuKBureauUser"
+								onDoubleClick="@command('onOpenPlnCo')">
+								<listcell label="@load(item.co.full_name)" style="text-align: left"/>
+								<listcell label="@load(item.branchCode)" style="text-align: center"/>
+								<listcell label="@load(item.createBy)" style="text-align: left"/>
+								<listcell label="@load(item.createOn) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: left"/>
+							</listitem>
+						</template>
+					</listbox>
+				</tabpanel>
+				<tabpanel>
+					<vbox>
+						<listbox id="lstLoanSummary" model="@load(vm.lstSubLoanSummary)" height="400px"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="1" class="topic" label="CO NAME"  style="text-align: left" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.plan_year)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_02)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_03)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="" style="text-align: center" width="100%" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.full_name)" style="text-align: left" />
+									<listcell label="@load(item.y0_cli)" style="text-align: center" />
+									<listcell label="@load(item.y0_amt)" style="text-align: center" />
+									<listcell label="@load(item.y1_cli)" style="text-align: center" />
+									<listcell label="@load(item.y1_amt)" style="text-align: center" />
+									<listcell label="@load(item.y2_cli)" style="text-align: center" />
+									<listcell label="@load(item.y2_amt)" style="text-align: center" />
+									<listcell label="@load(item.y3_cli)" style="text-align: center" />
+									<listcell label="@load(item.y3_amt)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>
+				
+						<grid>
+							<columns>
+								<column width="100%" label="TOTAL" style="background-color: #26a69a; color: #FFF;" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY0Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY0Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY1Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY1Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY2Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY2Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY3Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryTotal.totalY3Amt)" />
+							</columns>
+						</grid>
+					</vbox>
+				</tabpanel>
+				<tabpanel>
+					<vbox>
+						<listbox id="lstSavingSummary" model="@load(vm.lstSubSavingSummary)" height="400px"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="1" class="topic" label="CO NAME"  style="text-align: left" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.plan_year)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_02)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_03)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="" style="text-align: center" width="100%" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.full_name)" style="text-align: left" />
+									<listcell label="@load(item.y0_cli)" style="text-align: center" />
+									<listcell label="@load(item.y0_amt)" style="text-align: center" />
+									<listcell label="@load(item.y1_cli)" style="text-align: center" />
+									<listcell label="@load(item.y1_amt)" style="text-align: center" />
+									<listcell label="@load(item.y2_cli)" style="text-align: center" />
+									<listcell label="@load(item.y2_amt)" style="text-align: center" />
+									<listcell label="@load(item.y3_cli)" style="text-align: center" />
+									<listcell label="@load(item.y3_amt)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>
+						
+						<grid>
+							<columns>
+								<column width="100%" label="TOTAL" style="background-color: #26a69a; color: #FFF;" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY0Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY0Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY1Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY1Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY2Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY2Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY3Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryTotal.totalY3Amt)" />
+							</columns>
+						</grid>
+					</vbox>
+				</tabpanel>
+				
+				<tabpanel>
+					<vbox>
+						<listbox id="lstLoanSummaryBP" model="@load(vm.lstSubLoanSummaryByProduct)" height="400px"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="2" class="topic" label="PRODUCT"  style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.plan_year)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_02)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_03)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="NAME" style="text-align: center" width="100%" />
+								<listheader label="CODE" style="text-align: center" width="50px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.description)" style="text-align: left" />
+									<listcell label="@load(item.product_code)" style="text-align: center" />
+									<listcell label="@load(item.y0_cli)" style="text-align: center" />
+									<listcell label="@load(item.y0_amt)" style="text-align: center" />
+									<listcell label="@load(item.y1_cli)" style="text-align: center" />
+									<listcell label="@load(item.y1_amt)" style="text-align: center" />
+									<listcell label="@load(item.y2_cli)" style="text-align: center" />
+									<listcell label="@load(item.y2_amt)" style="text-align: center" />
+									<listcell label="@load(item.y3_cli)" style="text-align: center" />
+									<listcell label="@load(item.y3_amt)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>
+					
+						<grid>
+							<columns>
+								<column width="100%" label="TOTAL" style="background-color: #26a69a; color: #FFF;" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY0Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY0Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY1Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY1Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY2Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY2Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY3Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubLoanSummaryByProductTotal.totalY3Amt)" />
+							</columns>
+						</grid>
+					</vbox>
+				</tabpanel>
+				<tabpanel>
+					<vbox>
+						<listbox id="lstSavingSummaryBP" model="@load(vm.lstSubSavingSummaryByProduct)" height="400px"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="2" class="topic" label="PRODUCT"  style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.plan_year)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_02)" style="text-align: center" />
+								<auxheader colspan="2" class="topic" label="@load(vm.selectedPlan.year_03)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="NAME" style="text-align: center" width="100%" />
+								<listheader label="CODE" style="text-align: center" width="50px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+								<listheader label="CLIENT" style="text-align: center" width="95px" />
+								<listheader label="LOAN" style="text-align: center" width="95px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.description)" style="text-align: left" />
+									<listcell label="@load(item.product_code)" style="text-align: center" />
+									<listcell label="@load(item.y0_cli)" style="text-align: center" />
+									<listcell label="@load(item.y0_amt)" style="text-align: center" />
+									<listcell label="@load(item.y1_cli)" style="text-align: center" />
+									<listcell label="@load(item.y1_amt)" style="text-align: center" />
+									<listcell label="@load(item.y2_cli)" style="text-align: center" />
+									<listcell label="@load(item.y2_amt)" style="text-align: center" />
+									<listcell label="@load(item.y3_cli)" style="text-align: center" />
+									<listcell label="@load(item.y3_amt)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>
+					
+						<grid>
+							<columns>
+								<column width="100%" label="TOTAL" style="background-color: #26a69a; color: #FFF;" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY0Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY0Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY1Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY1Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY2Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY2Amt)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY3Cli)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstSubSavingSummaryByProductTotal.totalY3Amt)" />
+							</columns>
+						</grid>
+					</vbox>
+				</tabpanel>
+				<tabpanel>
+					<vbox>
+						<listbox id="lstStaffDetail" model="@load(vm.selectedPlan.planStaff)"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="3" class="topic" label="STAFF"  style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.selectedPlan.plan_year)" style="text-align: center" />
+								<auxheader colspan="4" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.selectedPlan.year_02)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.selectedPlan.year_03)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="DESC" style="text-align: left" width="100%" />
+								<listheader label="CODE" style="text-align: center" width="50px" />
+								<listheader label="BRANCH" style="text-align: center" width="80px" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="Q1" style="text-align: center" width="95px" />
+								<listheader label="Q2" style="text-align: center" width="95px" />
+								<listheader label="Q3" style="text-align: center" width="95px" />
+								<listheader label="Q4" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.staffDesc)" style="text-align: left" />
+									<listcell label="@load(item.staff_code)" style="text-align: center" />
+									<listcell label="@load(item.branch_code)" style="text-align: center" />
+									<listcell label="@load(item.ny0)" style="text-align: center" />
+									<listcell label="@load(item.ny1q1)" style="text-align: center" />
+									<listcell label="@load(item.ny1q2)" style="text-align: center" />
+									<listcell label="@load(item.ny1q3)" style="text-align: center" />
+									<listcell label="@load(item.ny1q4)" style="text-align: center" />
+									<listcell label="@load(item.ny2)" style="text-align: center" />
+									<listcell label="@load(item.ny3)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>					
+					</vbox>
+				</tabpanel>
+				<tabpanel>
+					<vbox>
+						<listbox id="lstStaffSummary" model="@load(vm.lstStaffSummary)" height="400px"
+								 hflex="true" vflex="true">
+							<auxhead>
+								<auxheader colspan="1" class="topic" label="STAFF CODE"  style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.label1)" style="text-align: center" />
+								<auxheader colspan="4" class="topic" label="@load(vm.selectedPlan.year_01)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.label2)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.label3)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.label4)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.label5)" style="text-align: center" />
+								<auxheader colspan="1" class="topic" label="@load(vm.label6)" style="text-align: center" />
+							</auxhead>						
+							<listhead sizable="true">
+								<listheader label="" style="text-align: center" width="100%" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="Q1" style="text-align: center" width="95px" />
+								<listheader label="Q2" style="text-align: center" width="95px" />
+								<listheader label="Q3" style="text-align: center" width="95px" />
+								<listheader label="Q4" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+								<listheader label="" style="text-align: center" width="95px" />
+							</listhead>
+							<template name="model" var="item">
+								<listitem height="35px" context="menuKBureauUser">
+									<listcell label="@load(item.staff_code)" style="text-align: center" />
+									<listcell label="@load(item.ny0)" style="text-align: center" />
+									<listcell label="@load(item.ny1q1)" style="text-align: center" />
+									<listcell label="@load(item.ny1q2)" style="text-align: center" />
+									<listcell label="@load(item.ny1q3)" style="text-align: center" />
+									<listcell label="@load(item.ny1q4)" style="text-align: center" />
+									<listcell label="@load(item.sY1)" style="text-align: center" />
+									<listcell label="@load(item.ny2)" style="text-align: center" />
+									<listcell label="@load(item.sY2)" style="text-align: center" />
+									<listcell label="@load(item.ny3)" style="text-align: center" />
+									<listcell label="@load(item.sY3)" style="text-align: center" />
+								</listitem>
+							</template>
+						</listbox>
+						
+						<grid>
+							<columns>
+								<column width="100%" label="TOTAL" style="background-color: #26a69a; color: #FFF;" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy0)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy1q1)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy1q2)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy1q3)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy1q4)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNsY1)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy2)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNsY2)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNy3)" />
+								<column width="95px" style="text-align: center; background-color: #7cb342; color: #FFF;" label="@load(vm.lstStaffSummaryTotal.totalNsY3)" />
+							</columns>
+						</grid>
+					</vbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</vbox>
+	
+</window>
+</zk>

@@ -1,0 +1,41 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:table width="100%" cellspacing="5">
+		<n:tr align="right">
+			<n:td width="120px">No.</n:td>
+			<n:td align="left" class="k-padding">
+				<textbox width="40px" readonly="true"
+					value="@load(vm.selected.currentCbCycle.cycleNo)" />
+			</n:td>
+			<n:td>Total Group</n:td>
+			<n:td align="left" class="k-padding">
+				<textbox width="40px" readonly="true"
+					value="@load(vm.selected.currentCbCycle.countGroup)" />
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td>Start Date</n:td>
+			<n:td align="left" class="k-padding">
+				<datebox width="162px" format="dd-MM-yyyy" readonly="true"
+					value="@load(vm.selected.currentCbCycle.startDate)" />
+			</n:td>
+			<n:td>Leader CIF</n:td>
+			<n:td align="left" class="k-padding">
+				<textbox width="170px" readonly="true"
+					value="@load(vm.selected.currentCbCycle.leaderCIF)" />
+			</n:td>
+		</n:tr>
+		<n:tr align="right">
+			<n:td>End Date</n:td>
+			<n:td align="left" class="k-padding">
+				<datebox width="162px" format="dd-MM-yyyy" readonly="true"
+					value="@load(vm.selected.currentCbCycle.endDate)" />
+			</n:td>
+			<n:td>Leader Name</n:td>
+			<n:td align="left" class="k-padding">
+				<textbox width="170px" readonly="true"
+					value="@load(vm.selected.currentCbCycle.leaderName)" />
+			</n:td>
+		</n:tr>
+	</n:table>
+</zk>

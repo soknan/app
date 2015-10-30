@@ -1,0 +1,59 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winCo" title="List of Value - CO" onClose="@command('onCloseCo')" visible="@load(vm.visibleCo)"
+		border="normal" mode="modal" closable="true" width="750px" position="center" height="400px">
+		<vbox vflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table id="ctr_detail" width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Name</n:td>
+						<n:td align="left" class="k-padding">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="input-group input-group-sm">
+										<textbox class="form-control" width="140px"
+											value="@bind(vm.paramCo.filter)" onOK="@command('onSearchCo')" />
+										<span class="input-group-btn">
+											<button class="btn-primary" onClick="@command('onSearchCo')"
+												iconSclass="z-icon-search" width="8px" />
+										</span>										
+									</div>
+								</div>
+							</div>
+						</n:td>
+						<n:td width="20px">Branch</n:td>
+						<n:td align="left"
+							class="cell-input k-padding">
+							<combobox model="@load(vm.filterSubBranchesCo)" value="@load(vm.paramCo.branch.description)" onSelect="@command('onSearchCo')"
+								selectedItem="@bind(vm.paramCo.branch)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<listbox id="lstCo" model="@load(vm.lstCo)"
+				width="100%" selectedItem="@bind(vm.selectedCo)" vflex="true"
+				pagingPosition="top">
+				<listhead sizable="true">
+					<listheader label="Full Name" width="160px" sort="auto(fullName)" />
+					<listheader label="Short Name" width="140px" sort="auto(shortName)" />
+					<listheader label="Short Name2" width="140px" sort="auto(shortName2)" />
+					<listheader label="Branch Code" width="90px" sort="auto(branchCode)" />
+					<listheader label="Branch Name" width="100%" sort="auto(branchName)"/>
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="@command('onSelectCo')">
+						<listcell label="@load(item.fullName)" />
+						<listcell label="@load(item.shortName)" />
+						<listcell label="@load(item.shortName2)" />
+						<listcell label="@load(item.branchCode)" />
+						<listcell label="@load(item.branchName)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

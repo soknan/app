@@ -1,0 +1,120 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="lols" title="Loan Late List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.loanLate.vm.MainVM')"
+		mode="overlapped" closable="true" width="1200px" height="500px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+	<vbox id="mVbox" hflex="true">
+ 			<toolbar hflex="true" width="100%">
+				<toolbarbutton label="Refresh" image="/img/icon/refresh.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('doSearch')"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpen')" disabled="@load(vm.selected.accNo eq null)"/>
+					
+				<space bar="true" sclass="k-ver-bar" />
+				<toolbarbutton label="Exp. to Excel" visible="@load(vm.privilege.canNew)" image="/img/icon/excel.png"
+					onClick="@command('onExport')" />
+					
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Branch: " style="padding: 0 0 0 5px;" />
+				<combobox model="@load(vm.branchList)" disabled="@load(vm.disableBr)"
+					value="@load(vm.param.branch.description)"
+					selectedItem="@bind(vm.param.branch)" width="150px"
+					onChange="@command('onSelectBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+				
+				<label value="Sub Branch: " style="padding: 0 0 0 5px;" />
+				<combobox model="@load(vm.subBranchList)" disabled="@load(vm.disableSbr)"
+					value="@load(vm.param.subBranch.description)"
+					selectedItem="@bind(vm.param.subBranch)" width="150px"
+					onChange="@command('onSelectSubBranch')">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" description="@load(t.code)" />
+					</template>
+				</combobox>
+				
+				<label value="Account No: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAll')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+		
+			<listbox id="lstLoan" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selected)" hflex="true" mold="paging" paginal="${lstPaging}"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstLoan.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="CO's Name" sort="auto(cofName)" style="text-align: left"
+						width="150px" />
+					<listheader label="Branch" sort="auto(branchCode)" style="text-align: center"
+						width="50px" />
+					<listheader label="Account No." sort="auto(accNo)" style="text-align: right"
+						width="120px" />
+					<listheader label="Cus. Name" style="text-align: left"
+						sort="auto(cusName)" width="150px" />
+					<listheader label="Loan Amount" style="text-align: right"
+						sort="auto(loanAmount)" width="110px" />
+					<listheader label="Prod. Desc" style="text-align: center"
+						sort="auto(productType)" width="150px"/>
+					<listheader label="Ccy" style="text-align: center"
+						sort="auto(ccy)" width="40px" />
+					<listheader label="Prin. Balance" style="text-align: right"
+						sort="auto(prinBal)" width="110px" />
+					<listheader label="Prin. Overdue" sort="auto(overduePrin)" style="text-align: right"
+						width="110px" />
+					<listheader label="Int. Overdue" sort="auto(overdueInt)" style="text-align: right"
+						width="110px" />
+					<listheader label="Day Overdue" sort="auto(overdueDay)" style="text-align: center"
+						width="100px" />
+					<listheader label="Disburse Date" style="text-align: center"
+						sort="auto(disburseDate)" width="120px" />							
+					<listheader label="Maturity Date" style="text-align: center"
+						sort="auto(maturityDate)" width="120px" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpen')">
+						<listcell label="@load(item.cofName)" style="text-align: left" />
+						<listcell label="@load(item.branchCode)" style="text-align: center" />
+						<listcell label="@load(item.accNo)" style="text-align: right" />
+						<listcell label="@load(item.cusName)" style="text-align: left" />
+						<listcell label="@load(item.loanAmount)" style="text-align: right" />
+						<listcell label="@load(item.productType)" style="text-align: center" />
+						<listcell label="@load(item.ccy)" style="text-align: center"/>
+						<listcell label="@load(item.prinBal)" style="text-align: right"/>
+						<listcell label="@load(item.overduePrin)" style="text-align: right"/>
+						<listcell label="@load(item.overdueInt)" style="text-align: right"/>
+						<listcell label="@load(item.overdueDay)" style="text-align: center"/>
+						<listcell label="@load(item.disburseDate) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: center"/>
+						<listcell label="@load(item.maturityDate) @converter('formatedDate', format='dd-MM-yyyy')" style="text-align: center"/>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSizeL)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging>
+		</vbox>
+</window>
+</zk>

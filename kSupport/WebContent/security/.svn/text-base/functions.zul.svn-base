@@ -1,0 +1,74 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript><![CDATA[
+	String path = "/security/include";
+]]></zscript>
+	<window id="fnls" title="Function Information" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.security.vm.FunctionVM')"
+		mode="overlapped" closable="true" width="670px" height="500px"
+		position="center" onClose="@global-command('onCloseWin', id=self)">
+		<vbox id="mVbox" hflex="true">
+		 
+		 	<toolbar hflex="true" width="100%">
+				<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+					onClick="@command('onNew')"/>
+				<toolbarbutton label="Open" image="/img/icon/edit.png"
+					onClick="@command('onOpen')" disabled="@load(vm.selectedFunction.id eq null)"/>
+					<toolbarbutton label="Delete" image="/img/icon/delete.png" visible="@load(vm.privilege.canDelete)"
+					onClick="@command('onConfirmDelete')" disabled="@load(vm.selectedFunction.id eq null)"/>
+					
+				<space bar="true" sclass="k-ver-bar" />
+				
+				<label value="Look for: " style="padding: 0 0 0 5px;" />
+				<textbox onOK="@command('doSearch')" focus="true"
+					sclass="ksearch" value="@bind(vm.param.filter)"
+					placeholder="Search..." />
+				<toolbarbutton label="Find" image="/img/icon/search.png"
+					onClick="@command('doSearch')" />
+				<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAll')" />
+				<space bar="true" sclass="k-ver-bar" />
+				<label value="Rows per page:" />
+				<combobox id="rowPerPage" model="@load(vm.rows)"
+					value="@load(vm.selectedNumRow.description)"
+					selectedItem="@bind(vm.selectedNumRow)"
+					onChange="@command('doSearch')" width="50px">
+					<template name="model" var="t">
+						<comboitem label="@load(t.description)" />
+					</template>
+				</combobox>
+			</toolbar>
+		 
+			<listbox id="lstFunction" model="@load(vm.lst)"
+				selectedItem="@bind(vm.selectedFunction)" hflex="true" mold="paging"
+				vflex="true" pageSize="@load(vm.selectedNumRow.description)">
+				<attribute name="onCreate">
+				<![CDATA[lstFunction.pagingChild.mold = "os";]]>
+			</attribute>
+				<listhead sizable="true">
+					<listheader label="Name" sort="auto(name)" style="text-align: center"
+						width="200px" />
+					<listheader label="Code" sort="auto(code)" style="text-align: center"
+						width="100px" />
+					<listheader label="Type" sort="auto(type)" style="text-align: center"
+						width="80px" />
+					<listheader label="Status" sort="auto(status)" style="text-align: center"
+						width="80px" />
+					<listheader label="Right" sort="auto(right)" style="text-align: center"
+						width="100%" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" context="menuKBureauUser"
+						onDoubleClick="@command('onOpen')">
+						<listcell label="@load(item.name)" />
+						<listcell label="@load(item.code)" />
+						<listcell label="@load(item.type eq 'F'?'Form':'Report')" />
+						<listcell label="@load(item.status eq 'A'?'Active':'Inactive')" />
+						<listcell label="@load(item.right)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

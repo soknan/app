@@ -1,0 +1,641 @@
+<?page title="Guarantor" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit"?>
+<zk xmlns:n="native">
+<style dynamic="true">
+	.widget-header>:first-child {
+	line-height: 0;	
+	}
+	.widget-header {
+	min-height: 12px !important;
+	}
+</style>
+	<window id="grtip" title="Guarantor Input" border="normal"
+		mode="modal" closable="true" width="971px" height="770px" 
+		position="center" form="@id('fx') @load(vm) @save(vm,before='onSave')"
+		onClose="@command('onClose',cmp=grtip)">
+	    <caption iconSclass="icon-k k-green"></caption>
+	    <vbox hflex="true" vflex="true">
+		<div vflex="true">		
+			<n:div id="consumer_head" class="widget-box transparent" style="opacity: 1;">
+				<n:table width="100%" cellspacing="5" CELLPADDING="5" >
+					<n:div class="widget-header">
+						<n:b>Customer Account</n:b>						
+					</n:div>					
+					<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> Account No</n:td>
+								<n:td align="left" class="k-padding">									
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="input-group input-group-sm">
+												<textbox id="txtAccNo" width="150px" value="@bind(vm.selected.accountNumber)"  readonly="true" />
+												<span class="input-group-btn">
+													<button class="btn-primary" onClick="@command('onShowAcc')"
+														iconSclass="z-icon-search" width="8px"  disabled="@bind(!empty vm.selected.id)"/>
+												</span>
+											</div>
+										</div>
+									</div>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Amount</n:td>
+								<n:td align="left" class="k-padding">
+									<decimalbox id="txtAmount" width="165px" value="@load(vm.selected.customerAmount)" format="#,###.00" locale="en" readonly="true" />
+								</n:td>	
+								<n:td></n:td>								
+								<n:td><n:i class="red">*</n:i> Currency</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" value="@load(vm.selected.customerCurrency)" disabled="true" >
+									</combobox>
+								</n:td>	
+								<n:td align="left" class="k-padding">
+									<button sclass="btn-primary btn-xs" label="Save" onClick="@command('onSave')" visible="@load(vm.privilege.canUpdate)"/>
+									<button sclass="btn-primary btn-xs" label="Close" onClick="@command('onClose',cmp=grtip)" />
+								</n:td>								
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i> Name
+								</n:td>
+								<n:td border="normal" width="165px" class="k-padding">
+								    <textbox id="txtName" width="165px" value="@load(vm.selected.customerName)" readonly="true" />
+								</n:td>	
+								<n:td><n:i class="red">*</n:i> Product Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" value="@bind(vm.selected.productType)"  disabled="true">	
+									</combobox>
+								</n:td>								
+								<n:td></n:td>
+								<n:td></n:td>
+								<n:td></n:td>
+								<n:td></n:td>					
+							</n:tr>												
+				</n:table>
+			</n:div>
+			
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Guarantor Info</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:table width="100%" cellspacing="5">
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIdType1)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIdNumber1)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIdExpiry)"/></n:td>
+						</n:tr>						
+						<n:tr align="right">
+							<n:td>
+								<n:i class="red">*</n:i> ID Type 1
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstIDType1)"
+									value="@load(vm.selected.idTypeItem1.description) @save(vm.selected.idTypeItem1.description,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.idTypeItem1)" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td><n:i class="red">*</n:i> ID Number 1</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtIdNum1" value="@bind(fx.selected.idNumber1)" constraint="no empty" width="165px" />
+							</n:td>
+							<n:td><n:i class="red">*</n:i> ID Expiry Date</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" value="@bind(fx.selected.expiryDate1)" format="dd-MM-yyyy"  />
+							</n:td>
+						</n:tr>
+						
+						<n:tr align="right">
+							<n:td>ID Type 2</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstIDType2)"
+									value="@load(vm.selected.idTypeItem2.description)"
+									selectedItem="@bind(vm.selected.idTypeItem2)" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td>ID Number 2</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtIdNum2" value="@bind(vm.selected.idNumber2)" width="165px" />
+							</n:td>
+							<n:td>ID Expiry Date</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" value="@bind(fx.selected.expiryDate2)" format="dd-MM-yyyy" />
+							</n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>ID Type 3</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstIDType3)"
+									value="@load(vm.selected.idTypeItem3.description)"
+									selectedItem="@bind(vm.selected.idTypeItem3)" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td>ID Number 3</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtIdNum3" value="@bind(vm.selected.idNumber3)" width="165px" />
+							</n:td>
+							<n:td>ID Expiry Date</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" value="@bind(vm.selected.expiryDate3)" format="dd-MM-yyyy" />
+							</n:td>
+						</n:tr>
+					</n:table>
+					<n:table width="100%" cellspacing="5" id="tbl_gotoright">
+						<n:tr align="right">
+							<n:td><n:i class="red">*</n:i> Date of Birth</n:td>
+							<n:td align="left" class="k-padding">
+								<datebox width="165px" value="@bind(fx.selected.dob)" format="dd-MM-yyyy" constraint="no empty"/>
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vDateofbirth)"/></n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td><n:i class="red">*</n:i> Gender</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstGender)"
+									value="@load(vm.selected.sexItem.description) @save(vm.selected.sexItem.description,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.sexItem)" width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td><n:i class="red">*</n:i> Marital Status</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstMaritalStatus)"
+									value="@load(vm.selected.maritalStatusItem.description) @save(vm.selected.maritalStatusItem.description,before='onSave')"  constraint="no empty"
+									selectedItem="@bind(vm.selected.maritalStatusItem)" width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td><n:i class="red">*</n:i> Nationality Code</n:td>
+							<n:td align="left" class="k-padding">
+							<combobox value="${vm.selected.nationalityCode eq null?'KHM':'KHM'}" width="165px" disabled="true">
+									
+								</combobox>
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+						</n:tr>
+					</n:table>
+					<n:table width="100%" cellspacing="5" id="tbl_gotoright2">
+						<n:tr align="right">
+							<n:td></n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> Country</n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> Province</n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> District</n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> Commune</n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> Village</n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>Place of Birth</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox value="${vm.selected.pobCountry eq null?'KHM':'KHM'}"	width="165px" disabled="true">
+									
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstProvince)"
+									value="@bind(vm.selected.provinceC.code) @save(vm.selected.provinceC.code,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.provinceC)"  onChange="@command('onProvince')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstDistrict)"
+									value="@bind(vm.selected.districtC.code) @save(vm.selected.districtC.code,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.districtC)" onChange="@command('onDistrict')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstCommune)"
+									value="@load(vm.selected.communeC.code) @save(vm.selected.communeC.code,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.communeC)" onChange="@command('onCommune')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<combobox model="@load(vm.lstVillage)"
+									value="@load(vm.selected.villageC.code) @save(vm.selected.villageC.code,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.villageC)"  	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+							</n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							<n:td style="text-align:center"><label class="red" /></n:td>
+							<n:td style="text-align:center"><label class="red" value=""/></n:td>
+							<n:td style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td></n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> Last Name</n:td>
+							<n:td class="top_label"><n:i class="red">*</n:i> First Name</n:td>
+							<n:td class="top_label">Second Name</n:td>
+							<n:td class="top_label">Third Name</n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>Khmer Name</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtKhmNam" value="@bind(fx.selected.lastNameKH)" constraint="no empty"  width="165px" />
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtFNam" value="@bind(fx.selected.firstNameKH)" constraint="no empty"  width="165px" />
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtSNam" width="165px" />
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtTNam" width="165px"/>
+							</n:td>
+						</n:tr>
+						
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							<n:td style="text-align:center"><label class="red" /></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vLastNameKH)"/></n:td>
+							<n:td style="text-align:center"><label class="red" value="@load(vm.vMessage.vFirstNameKH)"/></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+						<n:tr align="right">
+							<n:td>English Name</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtEngNam" width="165px" value="@bind(fx.selected.lastNameEN)"  constraint="no empty"/>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtFEngNam" width="165px" value="@bind(fx.selected.firstNameEN)" constraint="no empty"/>
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtSEngNam" width="165px" />
+							</n:td>
+							<n:td align="left" class="k-padding">
+								<textbox id="txtTEngNam" width="165px" />
+							</n:td>
+						</n:tr>
+						
+						<n:tr>
+							<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							<n:td style="text-align:center"><label class="red" /></n:td>
+							<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+						</n:tr>
+					</n:table>
+				</n:div>
+			</n:div>
+			
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Address Details</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> Address Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstAddressType)"
+									value="@load(vm.selected.addressTypeC.description) @save(vm.selected.addressTypeC.description,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.addressTypeC)"	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Address Line 1</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtAdd" width="165px" value="@bind(fx.selected.addressLine1)" constraint="no empty"/>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> City
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCit" width="165px" value="@bind(fx.selected.city)" constraint="no empty"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i> Country
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" value="${fx.selected.country eq null?'KHM':'KHM'}" disabled="true" ></combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Province</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstProvinceD)"
+									value="@load(vm.selected.provinceD.code) @save(vm.selected.provinceD.code,before='onSave')"  constraint="no empty"
+									selectedItem="@bind(vm.selected.provinceD)" onChange="@command('onProvinceD')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> District</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstDistrictD)"
+									value="@load(vm.selected.districtD.code) @save(vm.selected.districtD.code,before='onSave')"  constraint="no empty"
+									selectedItem="@bind(vm.selected.districtD)" onChange="@command('onDistrictD')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> Commune</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstCommuneD)"
+									value="@load(vm.selected.communeD.code) @save(vm.selected.communeD.code,before='onSave')"  constraint="no empty"
+									selectedItem="@bind(vm.selected.communeD)" onChange="@command('onCommuneD')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Village</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstVillageD)"
+									value="@load(vm.selected.villageD.code) @save(vm.selected.villageD.code,before='onSave')"  constraint="no empty"
+									selectedItem="@bind(vm.selected.villageD)" width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Contact Details</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td align="left" class="ContDet_top_label"><n:i class="red">* </n:i>Phone Number Type</n:td>
+								<n:td align="left" class="ContDet_top_label">Country Code</n:td>
+								<n:td align="left" class="ContDet_top_label">Area Code</n:td>
+								<n:td align="left" class="ContDet_top_label"><n:i class="red">* </n:i>Phone Number</n:td>
+								<n:td align="left" class="ContDet_top_label">Extension</n:td>		
+							</n:tr>
+							<n:tr align="right">
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstPhoneNumberType)"
+									value="@load(vm.selected.phoneNumberTypeC.description) @save(vm.selected.phoneNumberTypeC.description,before='onSave')"  constraint="no empty"
+									selectedItem="@bind(vm.selected.phoneNumberTypeC)" width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+								</combobox>			
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" value="${vm.selected.phoneCountryCode1 eq null?'855':'855'}"  disabled="true" >
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCode1" width="165px" value="@bind(vm.selected.areaCode1)" disabled="true"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtPhon1" width="165px" value="@bind(fx.selected.phoneNumber1)" constraint="no empty"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtExt1" width="165px" disabled="true" />
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "3" style="text-align:left"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:left"><label class="red" value="@load(vm.vMessage.vPhone1)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" >
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" >
+									</combobox>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtCode2" width="165px" readonly="true"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtPhon2" width="165px" readonly="true"/>
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtExt2" width="165px" readonly="true"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "3" style="text-align:center"><label class="red" /></n:td>
+								<n:td colspan = "2" style="text-align:left"><label class="red" /></n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:b>Occupation Details</n:b>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> Employment Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" value="@load(vm.selected.employmentType eq null?'Current':'Current')" disabled="true">
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Self Employed</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstSelfEmployed)"
+									value="@load(vm.selected.selfEmployedItem.description) @save(vm.selected.selfEmployedItem.description,before='onSave')" constraint="no empty"
+									selectedItem="@bind(vm.selected.selfEmployedItem)"	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Length of Service</n:td>
+								<n:td align="left" class="k-padding">
+									<doublebox id="txtLeng" width="165px" value="@bind(fx.selected.langthOfService)" constraint="no empty"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vSelfEmployed)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vlengthOfServince)"/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> Occupation</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtOcc" width="165px" value="@bind(fx.selected.occupation)" constraint="no empty"/>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Total Monthly Income</n:td>
+								<n:td align="left" class="k-padding">
+									<doublebox id="txtTotal" width="165px" value="@bind(fx.selected.totalMonthlyIncome)" constraint="no empty"/>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Currency</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="${vm.selected.employedCurrency eq null?'USD':'USD'}">
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vIncome)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> Employer Name</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtEmp" width="165px" value="@bind(fx.selected.employerName)" constraint="no empty"/>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Employer Address Type</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstAddressTypeE)"
+									value="@bind(vm.selected.addressTypeE.description)"
+									selectedItem="@bind(vm.selected.addressTypeE)"	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.description)"
+											description="@load(t.code)" />
+									</template>
+									</combobox>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Employer Address Line 1</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtEmpAddr1" width="165px" value="@bind(fx.selected.employerAddressLine1)" constraint="no empty"/>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" /></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td><n:i class="red">*</n:i> City</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="165px" value="@bind(fx.selected.employerCity)" constraint="no empty"/>
+								</n:td>
+								<n:td><n:i class="red">*</n:i> Employer Country Code</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox width="165px" disabled="true" value="${vm.selected.employerCountryCode eq null?'KHM':'KHM'}">
+									</combobox>
+								</n:td>
+								<n:td>Province</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstProvinceE)"
+									value="@load(vm.selected.provinceE.code)"
+									selectedItem="@bind(vm.selected.provinceE)" onChange="@command('onProvinceE')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+							<n:tr>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vCity)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value="@load(vm.vMessage.vEmployerCountryCode)"/></n:td>
+								<n:td colspan = "2" style="text-align:center"><label class="red" value=""/></n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>District</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstDistrictE)"
+									value="@load(vm.selected.districtE.code)"
+									selectedItem="@bind(vm.selected.districtE)" onChange="@command('onDistrictE')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+									</combobox>
+								</n:td>
+								<n:td>Commune</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstCommuneE)"
+									value="@load(vm.selected.communeE.code)"
+									selectedItem="@bind(vm.selected.communeE)" onChange="@command('onCommuneE')" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+									</combobox>
+								</n:td>
+								<n:td>Village</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstVillageE)"
+									value="@load(vm.selected.villageE.code)"
+									selectedItem="@bind(vm.selected.villageE)" 	width="165px">
+									<template name="model" var="t">
+										<comboitem label="@load(t.code)"
+											description="@load(t.code)" />
+									</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		</vbox>		
+	</window>
+</zk>

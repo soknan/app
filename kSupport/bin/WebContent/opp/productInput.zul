@@ -1,0 +1,225 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winPrdInput" title="Product Input" border="normal" visible="@load(vm.visiblePrdInput)"
+	mode="overlapped" closable="true" width="665px" height="650px"
+	position="center" onClose="@command('onClosePrdInput')">
+	<vbox hflex="true">
+		<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSavePrdInput')"/>
+	</toolbar>
+	
+	<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Product Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i>
+									Product
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstLoanPrd)"
+										value="@load(vm.selectedLoanDetail.product.description)"
+										selectedItem="@bind(vm.selectedLoanDetail.product)" width="180px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+								<n:td>Currency</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstCurrency)"
+										value="@load(vm.selectedLoanDetail.ccy.description)"
+										selectedItem="@bind(vm.selectedLoanDetail.ccy)" width="100px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>2014</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Oct. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.y0m_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.y0m_amt)" width="120px" />
+								</n:td>
+								<n:td>Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.y0d_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.y0d_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>2015</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Jan. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m01_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m01_amt)" width="120px" />
+								</n:td>
+								<n:td>Jul. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m07_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m07_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Feb. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m02_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m02_amt)" width="120px" />
+								</n:td>
+								<n:td>Aug. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m08_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m08_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Mar. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m03_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m03_amt)" width="120px" />
+								</n:td>
+								<n:td>Sep. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m09_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m09_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Apr. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m04_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m04_amt)" width="120px" />
+								</n:td>
+								<n:td>Oct. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m10_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m10_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">May. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m05_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m05_amt)" width="120px" />
+								</n:td>
+								<n:td>Nov. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m11_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m11_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Jun. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m06_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m06_amt)" width="120px" />
+								</n:td>
+								<n:td>Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.m12_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.m12_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>2016</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.y1d_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.y1d_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>2017</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedLoanDetail.y2d_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedLoanDetail.y2d_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+		</n:div>
+	</vbox>
+</window>
+</zk>

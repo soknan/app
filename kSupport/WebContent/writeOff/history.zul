@@ -1,0 +1,51 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<zscript>
+		void closeWindow() {
+		history.setVisible(false);
+		
+		event.stopPropagation();
+		}
+	</zscript>
+	<window id="history" title="Transfer CO History" border="normal" visible="@load(vm.visibleHistory)"
+		mode="overlapped" closable="true" width="900px" height="330px"
+		position="center" onClose="@command('onCloseHistory')">
+		
+		<hbox align="center">
+			<listbox id="lstHistory" model="@load(vm.selectedLoan.trnCo)"
+				width="100%" height="550px">
+				<listhead sizable="false">
+					<listheader label="Org. CO F. Name" width="150px" style="text-align: left"/>
+					<listheader label="Org. CO S. Name" width="150px" style="text-align: left"/>
+					<listheader label="Trn. CO F. Name" width="150px" style="text-align: left"/>
+					<listheader label="Trn. CO S. Name" width="150px" style="text-align: left"/>
+					<listheader label="Transfer Date" width="120px" style="text-align: left"/>
+					<listheader label="Transfer By" width="100%" style="text-align: left"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							<label value="@load(each.orgCoFame)"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.orgCoSame)"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.trnCoFame)"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.trnCoSame)"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.trnDate) @converter('formatedDate', format='dd-MM-yyyy')"></label>
+						</listcell>
+						<listcell>
+							<label value="@load(each.trnBy)"></label>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+		
+	</window>
+</zk>

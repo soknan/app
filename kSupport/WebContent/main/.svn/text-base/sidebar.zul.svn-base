@@ -1,0 +1,9 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<n:ul id="kMenu1" class="nav nav-list">
+		<!-- to render menu dynamically -->
+	</n:ul>
+	<n:div class="sidebar-collapse" id="sidebar-collapse">
+		<n:i class="z-icon-angle-double-left"></n:i>
+	</n:div>
+</zk>

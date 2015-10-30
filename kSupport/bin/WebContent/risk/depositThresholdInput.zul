@@ -1,0 +1,113 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="dethreip" title="Deposit Threshold Input" border="normal"		
+		mode="overlapped" closable="true" width="800px" height="300px"
+		position="center"
+		onClose="@global-command('onCloseWin', id=self, postGlobal='notifyListCbChange')">
+		<caption iconSclass="icon-k k-green"></caption>
+		<div vflex="true" form="@id('fx') @load(vm.selected) @save(vm.selected, before='onSave')">			
+	<toolbar width="100%">		
+		<toolbarbutton label="Save" image="/img/icon/save.png"
+			onClick="@command('onSave')" visible="@load(vm.privilege.canUpdate)"/>		
+	</toolbar>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Deposit Threshold Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px"><n:i class="red">*</n:i> Rating Class</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(fx.rating_class)" width="160px" readonly="true"/>
+								</n:td>
+								<n:td>
+									
+									Title
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(fx.title)" width="160px" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i>
+									Daily Deposit
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<intbox width="160px" value="@bind(fx.per_day_deposit)"
+										constraint="no empty" />
+								</n:td>
+								<!-- <n:td>
+									
+									Color
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox width="160px" value="@bind(fx.color)"/>															
+								</n:td> -->
+							</n:tr>
+							<n:tr align="right">
+								<n:td>
+									<n:i class="red">*</n:i>
+									Monthly Deposit
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<intbox value="@bind(fx.per_month_deposit)" width="160px"
+										constraint="no empty" />
+								</n:td>								
+							</n:tr>							
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<!-- Status Bar -->
+	
+	<n:div class="k-space-2px" style="margin-top: 10px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.create_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.create_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left">
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Modified by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.change_by)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.change_on)" />
+					</n:td>
+					<n:td></n:td>
+					<n:td align="left"></n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+	
+	<!-- Status Bar -->
+	</window>
+</zk>

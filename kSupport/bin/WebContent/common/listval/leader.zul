@@ -1,0 +1,37 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winLeader" title="List Value - Leader" border="normal"
+		mode="modal" closable="true" width="780px" height="400px">
+		<vbox vflex="true">
+			<listbox id="lst" model="@load(vm.lstFetchCIF)" width="100%"
+				selectedItem="@bind(vm.selectedCIF)" mold="paging" pageSize="10"
+				vflex="true" hflex="true" pagingPosition="top">
+
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "default";
+]]>
+				</attribute>
+
+				<listhead sizable="true">
+					<listheader label="Customer No" width="100px" sort="auto(cif)" />
+					<listheader label="Full Name KH" width="160px" sort="auto(fullName)" />
+					<listheader label="Full Name EN" width="160px" sort="auto(fullName)" />
+					<listheader label="Account" width="120px" sort="auto(account)" />
+					<listheader label="Disbursed Date" width="100px" sort="auto(valueDate)" />
+					<listheader label="Maturity Date" sort="auto(maturityDate)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="winLeader.detach();">
+						<listcell label="@load(item.cif)" />
+						<listcell label="@load(item.fullNameKH)" />
+						<listcell label="@load(item.fullName)" />
+						<listcell label="@load(item.account)" />
+						<listcell label="@load(item.valueDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+						<listcell label="@load(item.maturityDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

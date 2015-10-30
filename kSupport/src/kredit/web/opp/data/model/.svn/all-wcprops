@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/scm/svn/kSupport_SVN/!svn/ver/272/src/kredit/web/opp/data/model
+END
+OpCommon.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/269/src/kredit/web/opp/data/model/OpCommon.java
+END
+OpSavingDetail.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/opp/data/model/OpSavingDetail.java
+END
+OpPlan.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/scm/svn/kSupport_SVN/!svn/ver/268/src/kredit/web/opp/data/model/OpPlan.java
+END
+OpSubSummary.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/266/src/kredit/web/opp/data/model/OpSubSummary.java
+END
+OpStaffSummary.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/scm/svn/kSupport_SVN/!svn/ver/268/src/kredit/web/opp/data/model/OpStaffSummary.java
+END
+OpLoanDetail.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/248/src/kredit/web/opp/data/model/OpLoanDetail.java
+END
+TotalSummary.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/268/src/kredit/web/opp/data/model/TotalSummary.java
+END
+OpStaff.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/268/src/kredit/web/opp/data/model/OpStaff.java
+END
+ParamBranches.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/265/src/kredit/web/opp/data/model/ParamBranches.java
+END
+OpSaving.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/opp/data/model/OpSaving.java
+END
+ParamCo.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/opp/data/model/ParamCo.java
+END
+SysCo.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/scm/svn/kSupport_SVN/!svn/ver/269/src/kredit/web/opp/data/model/SysCo.java
+END
+OpCoSummary.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/scm/svn/kSupport_SVN/!svn/ver/265/src/kredit/web/opp/data/model/OpCoSummary.java
+END
+OpPlanCo.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/271/src/kredit/web/opp/data/model/OpPlanCo.java
+END
+ParamPlanList.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/opp/data/model/ParamPlanList.java
+END
+ParamCommune.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/scm/svn/kSupport_SVN/!svn/ver/270/src/kredit/web/opp/data/model/ParamCommune.java
+END
+SysCommune.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/opp/data/model/SysCommune.java
+END
+OpLoan.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/scm/svn/kSupport_SVN/!svn/ver/248/src/kredit/web/opp/data/model/OpLoan.java
+END

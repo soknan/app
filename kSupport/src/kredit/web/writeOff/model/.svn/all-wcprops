@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/scm/svn/kSupport_SVN/!svn/ver/228/src/kredit/web/writeOff/model
+END
+Loan.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/scm/svn/kSupport_SVN/!svn/ver/223/src/kredit/web/writeOff/model/Loan.java
+END
+ParamLoan.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/scm/svn/kSupport_SVN/!svn/ver/85/src/kredit/web/writeOff/model/ParamLoan.java
+END
+Co.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/scm/svn/kSupport_SVN/!svn/ver/199/src/kredit/web/writeOff/model/Co.java
+END
+TrnCo.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/scm/svn/kSupport_SVN/!svn/ver/223/src/kredit/web/writeOff/model/TrnCo.java
+END
+ParamCo.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/scm/svn/kSupport_SVN/!svn/ver/69/src/kredit/web/writeOff/model/ParamCo.java
+END
+ParamAcc.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/scm/svn/kSupport_SVN/!svn/ver/73/src/kredit/web/writeOff/model/ParamAcc.java
+END
+Repayment.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/scm/svn/kSupport_SVN/!svn/ver/222/src/kredit/web/writeOff/model/Repayment.java
+END

@@ -1,0 +1,252 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winSavingInput" title="Product Input" border="normal" visible="@load(vm.visibleSavingInput)"
+	mode="overlapped" closable="true" width="700px" height="730px"
+	position="center" onClose="@command('onCloseSavingInput')">
+	<vbox>
+	<toolbar width="680px">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSaveSavingInput')"/>
+	</toolbar>
+	
+	<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Product Info</n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td>
+									Product
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstSavingPrd)"
+										value="@load(vm.selectedSavingDetail.product.description)"
+										selectedItem="@bind(vm.selectedSavingDetail.product)" width="180px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" description="@load(t.code)" />
+										</template>
+									</combobox>
+								</n:td>
+								<n:td>Currency</n:td>
+								<n:td align="left" class="k-padding">
+									<combobox model="@load(vm.lstCurrency)"
+										value="@load(vm.selectedSavingDetail.ccy.description)"
+										selectedItem="@bind(vm.selectedSavingDetail.ccy)" width="100px">
+										<template name="model" var="t">
+											<comboitem label="@load(t.description)" />
+										</template>
+									</combobox>
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.plan_year)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Average Amount: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.saving_amt_avg_01)" width="70px" />
+									<button class="btn btn-primary btn-xs" label="Generate" onClick="@command('onGenerateSavingY01')" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td width="120px">Oct. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.y0m_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.y0m_amt)" width="120px" />
+								</n:td>
+								<n:td>Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.y0d_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.y0d_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.year_01)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Average Amount: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.saving_amt_avg_02)" width="70px" />
+									<button class="btn btn-primary btn-xs" label="Generate" onClick="@command('onGenerateSavingY02')" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td width="120px">Jan. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m01_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m01_amt)" width="120px" />
+								</n:td>
+								<n:td>Jul. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m07_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m07_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Feb. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m02_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m02_amt)" width="120px" />
+								</n:td>
+								<n:td>Aug. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m08_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m08_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Mar. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m03_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m03_amt)" width="120px" />
+								</n:td>
+								<n:td>Sep. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m09_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m09_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Apr. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m04_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m04_amt)" width="120px" />
+								</n:td>
+								<n:td>Oct. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m10_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m10_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">May. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m05_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m05_amt)" width="120px" />
+								</n:td>
+								<n:td>Nov. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m11_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m11_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+							
+							<n:tr align="right">
+								<n:td width="120px">Jun. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m06_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m06_amt)" width="120px" />
+								</n:td>
+								<n:td>Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.m12_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.m12_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.year_02)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Average Amount: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.saving_amt_avg_03)" width="70px" />
+									<button class="btn btn-primary btn-xs" label="Generate" onClick="@command('onGenerateSavingY03')" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td width="120px">Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.y1d_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.y1d_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+				
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b><label value="@load(vm.selectedPlan.year_03)" /></n:b>
+					</n:h6>
+				</n:div>
+				<n:div class="widget-body">
+					<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Average Amount: </n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.saving_amt_avg_04)" width="70px" />
+									<button class="btn btn-primary btn-xs" label="Generate" onClick="@command('onGenerateSavingY04')" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td width="120px">Dec. CLI:</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox value="@bind(vm.selectedSavingDetail.y2d_cli)" width="70px" />
+									AMT:
+									<textbox value="@bind(vm.selectedSavingDetail.y2d_amt)" width="120px" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+		</n:div>
+	</vbox>
+</window>
+</zk>

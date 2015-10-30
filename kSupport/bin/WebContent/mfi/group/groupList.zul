@@ -1,0 +1,61 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="grls" title="Group List" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.mfi.group.vm.GroupListVM')"
+		mode="overlapped" closable="true" maximizable="true" width="950px"
+		height="600px" position="center"
+		onClose="@global-command('onCloseWin', id=self)">
+		<caption iconSclass="icon-k k-green"></caption>
+		<vbox hflex="true" vflex="true">
+			<include src="/common/ui/toolbarList.zul"></include>
+			<listbox id="lst" model="@load(vm.lstGr)" width="100%"
+				hflex="true" vflex="true" selectedItem="@bind(vm.selected)"
+				pagingPosition="bottom" paginal="${lstPaging}">
+				<listhead sizable="true">
+					<listheader label="No." width="40px" align="right"
+						sort="auto(id)" />
+					<listheader label="Br. Code" width="60px"
+						align="right" sort="auto(brCd)" />
+					<listheader label="Gr. Acc. No." width="120px"
+						sort="auto(groupAccNo)" />
+					<listheader label="Ref. Group" width="100px"
+						sort="auto(refAccNo)" />
+					<listheader label="Mbr." width="40px"
+						sort="auto(countMember)" align="right" />
+					<listheader label="Leader Name" width="160px"
+						sort="auto(leaderNameKH)" />
+					<listheader label="Status" width="50px"
+						sort="auto(recordStat)" />	
+					<listheader label="CB Name" width="160px"
+						sort="auto(cbName)" />
+					<listheader label="CB Cycle" sort="auto(cbCycle)"
+						align="right" width="60px" />
+					<listheader label="Village"
+						sort="auto(villageName)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px"
+						onDoubleClick="@global-command('onCmd', cmd = vm.cmdNew, obj = vm.selected)">
+						<listcell label="@load(item.id)" />
+						<listcell label="@load(item.brCd)" />
+						<listcell label="@load(item.groupAccNo)" />
+						<listcell label="@load(item.refGrp)" />
+						<listcell label="@load(item.countMember)" />
+						<listcell label="@load(item.leaderNameKH)" />
+						<listcell label="@load(item.recordStatDes)" />
+						<listcell label="@load(item.cbName)" />
+						<listcell label="@load(item.cbCycleNo)" />
+						<listcell label="@load(item.villageName)" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="lstPaging" autohide="false" detailed="true"
+				totalSize="@load(vm.totalSize)"
+				pageSize="@load(vm.selectedNumRow.description)" mold="os"
+				activePage="@bind(vm.pageIndex)">
+			</paging>
+		</vbox>
+	</window>
+</zk>

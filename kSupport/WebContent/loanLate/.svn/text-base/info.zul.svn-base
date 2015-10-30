@@ -1,0 +1,233 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<toolbar width="100%">
+		<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSave')" disabled="@load(vm.infoChange)" />
+	</toolbar>
+		
+	<n:div class="widget-box transparent" style="opacity: 1;">
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Account Info</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">CO's Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.cofName)" readonly="true"
+								width="160px" />
+						</n:td>						
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Account No.</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selected.accNo)"
+								readonly="true" width="160px" />
+						</n:td>
+						<n:td width="120px">Customer Name</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.cusName)" readonly="true" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Loan Amount</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.loanAmount)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">Currency</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="50px"
+								value="@bind(vm.selected.ccy)" readonly="true" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Principal Balance</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.prinBal)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">Disburse Date</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.disburseDate) @converter('formatedDate', format='dd-MM-yyyy')" readonly="true" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Product Type</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.productType)" readonly="true"
+								width="160px" />
+						</n:td>
+						<n:td width="120px">Maturity Date</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.maturityDate) @converter('formatedDate', format='dd-MM-yyyy')" readonly="true" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+		
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Overdue Info</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td>Principal Overdue</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selected.overduePrin)"
+								readonly="true" width="160px" />
+						</n:td>
+						<n:td width="120px">Interest Overdue</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.overdueInt)" readonly="true" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Day Overdue</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox
+								value="@bind(vm.selected.overdueDay)" readonly="true"
+								width="160px" />
+						</n:td>
+					</n:tr>					
+				</n:table>
+			</n:div>
+		</n:div>
+		
+		<n:div class="widget-header">
+			<n:h6 class="lighter">
+				<n:b>Address Info</n:b>
+			</n:h6>
+		</n:div>
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">Village</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selected.village)"
+								readonly="true" width="160px" />
+						</n:td>
+						<n:td width="120px">Commune</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.commune)" readonly="true" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>District</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selected.district)"
+								readonly="true" width="160px" />
+						</n:td>
+						<n:td width="120px">Province</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox width="160px"
+								value="@bind(vm.selected.province)" readonly="true" />
+						</n:td>
+					</n:tr>		
+				</n:table>
+			</n:div>
+		</n:div>
+
+		<n:div class="widget-body">
+			<n:div
+				class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">
+							Status
+						</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox
+								model="@load(vm.cStatus)"
+								value="@load(vm.selected.status)" width="160px"
+								selectedItem="@bind(vm.selected.cStatus)"
+								onChange="@command('infoChanging')">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Customer Situation</n:td>
+						<n:td align="left" class="k-padding" colspan="3">
+							<textbox value="@bind(vm.selected.situation)" rows="2"
+								onChanging="@command('infoChanging')" width="470px" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>Customer Situation - Operation</n:td>
+						<n:td align="left" class="k-padding" colspan="3">
+							<textbox value="@bind(vm.selected.hq_situation)" rows="2" readonly="@load(vm.hqInfo)"
+								onChanging="@command('infoChanging')" width="470px" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>
+	</n:div>
+
+	<!-- Status Bar -->
+
+	<n:div class="k-space-1px" />
+	<n:div class="k-bottom-info">
+		<n:div class="alert alert-info k-small">
+			<n:table width="100%" cellspacing="5">
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Create by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.createBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.createOn)" />
+					</n:td>
+				</n:tr>
+				<n:tr align="right">
+					<n:td width="100px">
+						<label value="Change by:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.changeBy)" />
+					</n:td>
+					<n:td>
+						<label value="Date Time:" />
+					</n:td>
+					<n:td align="left">
+						<label value="@load(vm.selected.changeOn)" />
+					</n:td>
+				</n:tr>
+			</n:table>
+		</n:div>
+	</n:div>
+
+	<!-- Status Bar -->
+</zk>

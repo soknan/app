@@ -1,0 +1,67 @@
+<?page title="List Value" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<window id="winMobilzer" title="List Value - Mobilizer" border="normal"
+		mode="modal" closable="true" width="700px" height="400px">
+		<vbox vflex="true">
+			<groupbox width="100%" mold="3d">
+				<n:table width="100%" cellspacing="2">
+					<n:tr align="right">
+						<n:td width="110px">Full Name (EN)</n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<textbox value="@bind(vm.paramMz.nameEN)" width="200px" onOK="@command('onSearchMobilizer')"/>
+						</n:td>
+						<n:td width="130px">ID No</n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<textbox value="@bind(vm.paramMz.idNo)" width="200px" onOK="@command('onSearchMobilizer')"/>
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td width="110px">Full Name (KH)</n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<textbox value="@bind(vm.paramMz.nameKH)" width="200px" onOK="@command('onSearchMobilizer')"/>
+						</n:td>
+						<n:td width="20px"></n:td>
+						<n:td align="left" class="cell-input k-padding">
+							<button sclass="btn-primary btn-xs" iconSclass="z-icon-search"
+								onClick="@command('onSearchMobilizer')">
+								Find
+							</button>
+							<space />
+							<button sclass="btn-primary btn-xs" iconSclass="z-icon-eraser"
+								onClick="@command('onResetSearchMobilizer')">
+								Reset
+							</button>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</groupbox>
+			<listbox id="lst" model="@load(vm.lstFetchMobilizer)" width="100%"
+				selectedItem="@bind(vm.selectedMobilizer)" mold="paging" pageSize="10"
+				vflex="true" pagingPosition="top">
+
+				<attribute name="onCreate">
+				<![CDATA[
+	lst.pagingChild.mold = "default";
+]]>
+				</attribute>
+
+				<listhead sizable="true">
+					<listheader label="No" width="40px" sort="auto(id)" />
+					<listheader label="Full Name (EN)" width="200px" sort="auto(nameEN)" />
+					<listheader label="Full Name (KH)" width="200px" sort="auto(nameKH)" />
+					<listheader label="ID Type" sort="auto(idType)" />
+					<listheader label="ID No" sort="auto(idNo)" />
+				</listhead>
+				<template name="model" var="item">
+					<listitem height="35px" onClick="winMobilzer.detach();">
+						<listcell label="@load(item.id)" />
+						<listcell label="@load(item.nameEN)" />
+						<listcell label="@load(item.nameKH)" />
+						<listcell label="@load(item.idType)" />
+						<listcell label="@load(item.idNo)" />
+					</listitem>
+				</template>
+			</listbox>
+		</vbox>
+	</window>
+</zk>

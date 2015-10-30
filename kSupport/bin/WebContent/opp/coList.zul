@@ -1,0 +1,49 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winCoList" title="Retrieve Co" border="normal" visible="@load(vm.visibleCoList)"
+	mode="overlapped" closable="true" width="430px" height="500px"
+	position="center" onClose="@command('onCloseCoList')">
+
+	<vbox hflex="true"> 
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="New" image="/img/icon/new.png" visible="@load(vm.privilege.canNew)"
+				onClick="@command('onNewNewCo')"/>	
+			<toolbarbutton label="Edit" image="/img/icon/edit.png"
+					onClick="@command('onOpenNewCo')" disabled="@load(vm.selectedCo.id eq null)"/>	
+			<space bar="true" sclass="k-ver-bar" />
+			
+			<label value="Look for: " style="padding: 0 0 0 5px;" />
+			<textbox onOK="@command('doSearchCo')" focus="true"
+				sclass="ksearch" value="@bind(vm.paramCo.filter)"
+				placeholder="Search..." />
+			<toolbarbutton label="Find" image="/img/icon/search.png"
+				onClick="@command('doSearchCo')" />
+		</toolbar>
+		
+		<listbox id="lstCo" model="@load(vm.lstCo)"
+			selectedItem="@bind(vm.selectedCo)" hflex="true" mold="paging"
+			vflex="true" pageSize="7">
+			<attribute name="onCreate">
+				<![CDATA[lstCo.pagingChild.mold = "os";]]>
+			</attribute>
+			<listhead sizable="true">
+				<listheader label="CO_ID" sort="auto(emp_id)" style="text-align: center"
+					width="70px" />
+				<listheader label="FULL NAME" sort="auto(full_name)" style="text-align: center"
+					width="200px" />
+				<listheader label="SHORT NAME" style="text-align: center"
+					sort="auto(short_name)" width="150px" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menuKBureauUser"
+					onDoubleClick="@command('onSelectCo')">
+					<listcell label="@load(item.emp_id)" style="text-align: center"/>
+					<listcell label="@load(item.full_name)" style="text-align: center"/>
+					<listcell label="@load(item.short_name)" style="text-align: center"/>
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+	
+</window>
+</zk>

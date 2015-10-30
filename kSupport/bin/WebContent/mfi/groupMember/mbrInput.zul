@@ -1,0 +1,375 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?init class="kredit.web.core.util.authentication.WorkbenchInit" ?>
+<zk xmlns:n="native">
+	<window id="mbip" title="Member Input" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('kredit.web.mfi.mbr.vm.MbrInputVM')"
+		mode="overlapped" closable="true" width="650px" height="600px"
+		position="center"
+		onClose="@global-command('onCloseWin', id=self, postGlobal='notifyListMbrChange')">
+		<div vflex="true"
+			form="@id('fx') @init(vm.frm) @load(vm.selected) @save(vm.selected, before='onSave')">
+			<include src="/common/ui/toolbarInput3.zul" />
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>Group member info</n:b>
+					</n:h6>
+					<label value="Br. Code" style="margin:5px;" />
+					<textbox value="@bind(fx.brCd)" readonly="true"
+						width="50px" />
+					<label value="Ref." style="margin:5px;" />
+					<textbox id="txtRef" value="@bind(fx.refAccNo)" width="120px" />
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<tabbox vflex="true"
+							selectedIndex="@bind(vm.selectedTabIndex)">
+							<tabs>
+								<tab label="Borrower" />
+								<tab label="Co Borrower" />
+							</tabs>
+							<tabpanels>
+								<tabpanel>
+									<n:table width="100%"
+										cellspacing="5">
+										<n:tr align="right">
+											<n:td width="120px">
+												<n:i class="red">*</n:i>
+												CIF
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<div class="row">
+													<div
+														class="col-lg-6">
+														<div
+															class="input-group input-group-sm">
+															<textbox
+																id="txtCIF" class="form-control" width="145px"
+																value="@bind(fx.cif)" onOK="@command('onShowFetchCIF')"/>
+															<span
+																class="input-group-btn">
+																<button
+																	class="btn-primary"
+																	onClick="@command('onShowFetchCIF')"
+																	iconSclass="z-icon-search" width="8px" />
+															</span>
+														</div>
+													</div>
+												</div>
+											</n:td>
+											<n:td width="120px">
+												Account No.
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox
+													id="txtAccountNo" width="165px" value="@bind(fx.account)"
+													readonly="true" />
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>
+												<n:i class="red">*</n:i>
+												Full Name (KH)
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox
+													id="txtFullNameKH" value="@bind(fx.fullNameKH)"
+													width="165px" readonly="true" constraint="no empty" />	
+											</n:td>
+											<n:td width="120px">
+												Prod. Cat.
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox id="txtPrdCat"
+													width="165px" value="@bind(fx.prdCat)" readonly="true" />
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>
+												Full Name (EN)
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox
+													id="txtFullName" value="@bind(fx.fullName)" width="165px"
+													readonly="true" constraint="no empty" />
+											</n:td>
+											<n:td width="120px">
+												Prod. Code
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox id="txtPrdCd"
+													width="165px" value="@bind(fx.prdCd)" readonly="true" />
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>
+												<n:i class="red">*</n:i>
+												Date of Birth
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<datebox id="txtDob"
+													value="@bind(fx.dateOfBirth)" format="dd-MM-yyyy"
+													width="165px" readonly="true" constraint="no empty" />
+											</n:td>
+											<n:td width="120px">
+												Int. Rate
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox id="txtIntRate"
+													width="165px" value="@bind(fx.inRate)" readonly="true" />
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>Disb. Date</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<datebox id="txtDisb"
+													value="@bind(fx.valueDate)" format="dd-MM-yyyy"
+													width="165px" readonly="true" />
+											</n:td>
+											<n:td width="120px">
+												Matur. Date
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<datebox id="txtMat"
+													width="165px" value="@bind(fx.maturityDate)"
+													format="dd-MM-yyyy" readonly="true" />
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td width="120px">
+												Amount Disb.
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<intbox id="txtAmtDisb"
+													width="165px" format="#,##0.##"
+													value="@bind(fx.amountDisbursed)" readonly="true" />
+											</n:td>
+											<n:td align="left"
+												class="k-padding" colspan="2">
+												<textbox
+													id="txtAmtDisbTxt" width="285px" sclass="k-orange"
+													value="@load(vm.translateNr(fx.amountDisbursed))"
+													readonly="true" />
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td width="120px">
+												Loan Purpose
+											</n:td>
+											<n:td align="left"
+												 class="k-padding">
+												<textbox width="165px"
+													id="txtLnp" value="@load(fx.loanPurpose)" readonly="true" />
+											</n:td>
+											<n:td width="120px">
+												Status
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox width="165px"
+													id="txtStatus" value="@load(fx.statusDes)" readonly="true" />
+											</n:td>
+										</n:tr>
+									</n:table>
+								</tabpanel>
+								<tabpanel>
+									<space/>
+									<label sclass="k-orange" value="This info is READ ONLY. Change can be made in Flexcube." visible="@load(not empty fx.account)"/>
+									<n:div class="k-space"/>
+									<n:table width="100%"
+										cellspacing="5">
+										<n:tr align="right">
+											<n:td width="160px">
+												<n:i class="red">*</n:i>
+												Type
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<combobox id="cmbCoType"
+													model="@load(vm.lstFetchCoType)" width="165px"
+													value="@bind(vm.coborrower.relationType)"
+													constraint="no empty" disabled="@load(not empty fx.account)">
+													<template
+														name="model">
+														<comboitem value="@load(each)"
+															label="@load(each)" />
+													</template>
+												</combobox>
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>
+												<n:i class="red">*</n:i>
+												Full Name (KH)
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox
+													id="txtCoFullName" value="@bind(vm.coborrower.nameKH)"
+													width="165px" constraint="no empty" disabled="@load(not empty fx.account)"/>
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>
+												Full Name (EN)
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<textbox
+													id="txtCoFullNameKH" value="@bind(vm.coborrower.nameEN)"
+													width="165px" disabled="@load(not empty fx.account)"/>
+											</n:td>
+										</n:tr>
+										<n:tr align="right">
+											<n:td>
+												<n:i class="red">*</n:i>
+												Date of Birth
+											</n:td>
+											<n:td align="left"
+												class="k-padding">
+												<datebox id="txtCoDob"
+													value="@bind(vm.coborrower.dob)" format="dd-MM-yyyy"
+													width="165px" constraint="no empty" disabled="@load(not empty fx.account)"/>
+											</n:td>
+										</n:tr>
+										<n:tr>
+											<n:td></n:td>
+											<n:td align="right">
+												<button onClick="@command('onSaveCoborrower')"
+													label="Save Coborrower" sclass="btn-primary btn-xs" disabled="@load(not empty fx.account)"/>
+											</n:td>
+										</n:tr>
+									</n:table>
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>
+							Registered with mobilizer (if available)
+						</n:b>
+					</n:h6>
+					<button class="btn-primary btn-xs" label="clear"
+						style="margin-bottom: -15px; margin-right:25px"
+						onClick="@command('onClearMz')"
+						disabled="@load(empty fx.mobilizerName)" />
+				</n:div>
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">
+									Mobilizer Name
+								</n:td>
+								<n:td align="left" class="k-padding">
+									<div class="row">
+										<div class="col-lg-6">
+											<div
+												class="input-group input-group-sm">
+												<textbox id="txtMzName"
+													class="form-control" width="145px"
+													value="@load(fx.mobilizer.nameEN) @bind(fx.mobilizerName)"
+													readonly="true" />
+												<!-- -->
+												<span
+													class="input-group-btn">
+													<button
+														class="btn-primary"
+														onClick="@command('onShowFetchMobilizer')"
+														iconSclass="z-icon-search" width="8px" disabled="@load(fx.prdCd ne '0201')"/>
+												</span>
+											</div>
+										</div>
+									</div>
+								</n:td>
+								<n:td>ID Type</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtIdType"
+										value="@load(fx.mobilizer.idTypeDesc)" width="165px"
+										readonly="true" />
+								</n:td>
+							</n:tr>
+							<n:tr align="right">
+								<n:td>No</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtMzNo"
+										value="@load(fx.mobilizer.id)" readonly="true" width="50px" />
+								</n:td>
+								<n:td width="120px">ID No</n:td>
+								<n:td align="left" class="k-padding">
+									<textbox id="txtIdNo" width="165px"
+										value="@load(fx.mobilizer.idNo)" readonly="true" />
+								</n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="widget-box transparent" style="opacity: 1;">
+				<n:div class="widget-header">
+					<n:h6 class="lighter">
+						<n:b>As a member of the group</n:b>
+					</n:h6>
+					<button class="btn-primary btn-xs" label="clear"
+						style="margin-bottom: -15px; margin-right:25px"
+						onClick="@command('onClearGr')"
+						disabled="@load(empty fx.groupAccNo)" />
+				</n:div>
+
+				<n:div class="widget-body">
+					<n:div
+						class="widget-main padding-6 no-padding-left no-padding-right">
+						<n:div class="k-space" />
+						<n:table width="100%" cellspacing="5">
+							<n:tr align="right">
+								<n:td width="120px">Gr. Acc. No.</n:td>
+								<n:td align="left" class="k-padding"
+									width="166px">
+									<div class="row">
+										<div class="col-lg-6">
+											<div
+												class="input-group input-group-sm">
+												<textbox id="txtGrAccNo"
+													class="form-control" width="145px"
+													value="@bind(fx.groupAccNo)" readonly="true" />
+												<span
+													class="input-group-btn">
+													<button
+														class="btn-primary" onClick="@command('onShowFetchGroup')"
+														iconSclass="z-icon-search" width="8px" />
+												</span>
+											</div>
+										</div>
+									</div>
+								</n:td>
+								<n:td></n:td>
+								<n:td></n:td>
+							</n:tr>
+						</n:table>
+					</n:div>
+				</n:div>
+			</n:div>
+		</div>
+		<include src="/common/ui/statusBar.zul"></include>
+	</window>
+</zk>

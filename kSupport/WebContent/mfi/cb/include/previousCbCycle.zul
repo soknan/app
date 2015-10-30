@@ -1,0 +1,29 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<vbox id="prevCycles">
+		<!-- <hlayout> <textbox value="%" /> <button sclass="btn-primary btn-xs" 
+			label="Search" iconSclass="z-icon-search" onClick="onSearchGroup"> </button> 
+			</hlayout> -->
+		<listbox hflex="1" vflex="true" rows="6"
+			model="@load(vm.selected.prevCbCycles)">
+			<listhead sizable="true">
+				<listheader label="No." width="40px" sort="auto(cycleNo)"></listheader>
+				<listheader label="Start Date" width="120px" sort="auto(startDate)"></listheader>
+				<listheader label="End Date" width="120px" sort="auto(endDate)"></listheader>
+				<listheader label="Leader CIF" width="80px" sort="auto(leaderCIF)"></listheader>
+				<listheader label="Leader Name" sort="auto(leaderName)"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem onDoubleClick="@command('onEditCycle', id=each.id, isCurrent = false)">
+					<listcell label="@load(each.cycleNo)" />
+					<listcell
+						label="@load(each.startDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell
+						label="@load(each.endDate) @converter('formatedDate', format='dd-MM-yyyy')" />
+					<listcell label="@load(each.leaderCIF)" />
+					<listcell label="@load(each.leaderName)" />
+				</listitem>
+			</template>
+		</listbox>
+	</vbox>
+</zk>

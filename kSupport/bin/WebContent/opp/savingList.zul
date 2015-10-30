@@ -1,0 +1,101 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winSavingList" title="Saving - Product List" border="normal" visible="@load(vm.visibleSavingList)"
+	mode="overlapped" closable="true" width="1200px" height="600px"
+	position="center" onClose="@command('onCloseSavingList')">
+	<vbox hflex="true">
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="New" image="/img/icon/add-icon.png" onClick="@command('onNewSavingInput')" />
+			<toolbarbutton label="Open" image="/img/icon/edit.png" disabled="@load(vm.selectedSavingDetail.id eq null)"
+				onClick="@command('onOpenSavingInput')"/>
+			<toolbarbutton label="Delete" image="/img/icon/delete.png" disabled="@load(vm.selectedSavingDetail.id eq null)"
+				onClick="@command('onConfirmDeleteSavingDetail')"/>
+		</toolbar>
+		
+		<listbox id="lstSavingD" model="@load(vm.selectedSaving.savingDetails)"
+				 hflex="true" mold="paging" selectedItem="@bind(vm.selectedSavingDetail)"
+				vflex="true" pageSize="10">
+			<attribute name="onCreate">
+				<![CDATA[lstSavingD.pagingChild.mold = "os";]]>
+			</attribute>
+			<listhead sizable="true">
+				<listheader label="Pr. Code" style="text-align: center" width="70px" />
+				<listheader label="Product Name" style="text-align: center" width="200px" />
+				<listheader label="CCY" style="text-align: center" width="70px" />
+				<listheader label="Y0. Month CLI" style="text-align: center" width="100px" />
+				<listheader label="Y0. Month AMT" style="text-align: center" width="100px" />
+				<listheader label="Y0. Dec CLI" style="text-align: center" width="100px" />
+				<listheader label="Y0. Dec AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Jan CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Jan AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Feb CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Feb AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Mar CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Mar AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Apr CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Apr AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. May CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. May AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Jun CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Jun AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Jul CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Jul AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Aug CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Aug AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Sep CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Sep AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Oct CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Oct AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Nov CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Nov AMT" style="text-align: center" width="100px" />
+				<listheader label="Y1. Dec CLI" style="text-align: center" width="100px" />
+				<listheader label="Y1. Dec AMT" style="text-align: center" width="100px" />
+				<listheader label="Y2. Dec CLI" style="text-align: center" width="100px" />
+				<listheader label="Y2. Dec AMT" style="text-align: center" width="100px" />
+				<listheader label="Y3. Dec CLI" style="text-align: center" width="100px" />
+				<listheader label="Y3. Dec AMT" style="text-align: center" width="100px" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem height="35px" context="menuKBureauUser"
+					onDoubleClick="@command('onOpenSavingInput')">
+					<listcell label="@load(item.product.code)" style="text-align: center" />
+					<listcell label="@load(item.product.description)" style="text-align: center" />
+					<listcell label="@load(item.currency)" style="text-align: center" />
+					<listcell label="@load(item.y0m_cli)" style="text-align: center" />
+					<listcell label="@load(item.y0m_amt)" style="text-align: center" />
+					<listcell label="@load(item.y0d_cli)" style="text-align: center" />
+					<listcell label="@load(item.y0d_amt)" style="text-align: center" />
+					<listcell label="@load(item.m01_cli)" style="text-align: center" />
+					<listcell label="@load(item.m01_amt)" style="text-align: center" />
+					<listcell label="@load(item.m02_cli)" style="text-align: center" />
+					<listcell label="@load(item.m02_amt)" style="text-align: center" />
+					<listcell label="@load(item.m03_cli)" style="text-align: center" />
+					<listcell label="@load(item.m03_amt)" style="text-align: center" />
+					<listcell label="@load(item.m04_cli)" style="text-align: center" />
+					<listcell label="@load(item.m04_amt)" style="text-align: center" />
+					<listcell label="@load(item.m05_cli)" style="text-align: center" />
+					<listcell label="@load(item.m05_amt)" style="text-align: center" />
+					<listcell label="@load(item.m06_cli)" style="text-align: center" />
+					<listcell label="@load(item.m06_amt)" style="text-align: center" />
+					<listcell label="@load(item.m07_cli)" style="text-align: center" />
+					<listcell label="@load(item.m07_amt)" style="text-align: center" />
+					<listcell label="@load(item.m08_cli)" style="text-align: center" />
+					<listcell label="@load(item.m08_amt)" style="text-align: center" />
+					<listcell label="@load(item.m09_cli)" style="text-align: center" />
+					<listcell label="@load(item.m09_amt)" style="text-align: center" />
+					<listcell label="@load(item.m10_cli)" style="text-align: center" />
+					<listcell label="@load(item.m10_amt)" style="text-align: center" />
+					<listcell label="@load(item.m11_cli)" style="text-align: center" />
+					<listcell label="@load(item.m11_amt)" style="text-align: center" />
+					<listcell label="@load(item.m12_cli)" style="text-align: center" />
+					<listcell label="@load(item.m12_amt)" style="text-align: center" />	
+					<listcell label="@load(item.y1d_cli)" style="text-align: center" />
+					<listcell label="@load(item.y1d_amt)" style="text-align: center" />
+					<listcell label="@load(item.y2d_cli)" style="text-align: center" />
+					<listcell label="@load(item.y2d_amt)" style="text-align: center" />
+				</listitem>
+			</template>
+		</listbox>		
+	</vbox>
+</window>
+</zk>

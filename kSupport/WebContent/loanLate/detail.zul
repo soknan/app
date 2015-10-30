@@ -1,0 +1,21 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="loanDetail" title="Loan Late Information" border="normal" visible="@load(vm.visible)"
+		mode="overlapped" closable="true" width="650px" height="720px"
+		position="center" onClose="@command('onCloseDetail')">
+	<tabbox>
+		<tabs>
+			<tab label="Info" />
+			<tab label="Repayment" />
+		</tabs>
+		<tabpanels>
+			<tabpanel id="tabInfo">
+				<include src="/loanLate/info.zul" />
+			</tabpanel>
+			<tabpanel id="tabPayment">
+				<include src="/loanLate/payment.zul" />
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>
+</zk>

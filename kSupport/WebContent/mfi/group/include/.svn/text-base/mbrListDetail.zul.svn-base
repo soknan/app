@@ -1,0 +1,55 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<listbox id="availLb" model="@load(vm.availMbr)" hflex="1"
+		vflex="true" rows="6" selectedItems="@bind(vm.selectAvails)">
+		<attribute name="onCreate">
+				<![CDATA[
+	availLb.setMultiple(true);
+	availLb.setCheckmark(true);
+]]>
+				</attribute>
+		<listhead>
+			<listheader label="CIF" width="100px"></listheader>
+			<listheader label="Account" width="120px"></listheader>
+			<listheader label="Full Name" width="160px"></listheader>
+			<listheader label="Gender" width="60px"></listheader>
+			<listheader label="DOB" width="60px"></listheader>
+			<listheader label="Age" width="60px"></listheader>
+			<listheader label="Disbursed" width="60px"></listheader>
+			<listheader label="Maturity" width="60px"></listheader>
+			<listheader label="Amount" width="60px" align="right"></listheader>
+			<listheader label="Rate (%)" width="60px" align="right"></listheader>
+			<listheader label="Amount in Words" width="280px"></listheader>
+			<listheader label="Installment" width="100px" align="right"></listheader>
+			<listheader label="Partner Type" width="100px"></listheader>
+			<listheader label="Partner Name" width="160px"></listheader>
+			<listheader label="Partner DOB" width="60px"></listheader>
+			<listheader label="Partner Age" width="100px" align="right"></listheader>
+			<listheader label="Loan Purpose"></listheader>
+
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="@load(each.cif)" />
+				<listcell label="@load(each.account)" />
+				<listcell label="@load(each.fullNameKH)" />
+				<listcell label="@load(each.sex)" />
+				<listcell
+					label="@load(each.dob) @converter('formatedDate', format='dd-MMM-yyyy')" />
+				<listcell label="@load(each.age)" />
+				<listcell label="@load(each.disbursedDateKH)" />
+				<listcell label="@load(each.maturityDateKH)" />
+				<listcell
+					label="@load(each.amountDisbursed) @converter('formatedNumber', format='#,##0.##')" />
+				<listcell label="@load(each.intRate)" />
+				<listcell label="@load(each.amountKH)" />
+				<listcell label="@load(each.noInstallment)" />
+				<listcell label="@load(each.partnerType)" />
+				<listcell label="@load(each.partnerName)" />
+				<listcell label="@load(each.partnerDOB)" />
+				<listcell label="@load(each.partnerAge)" />
+				<listcell label="@load(each.loanPurpose)" />
+			</listitem>
+		</template>
+	</listbox>
+</zk>

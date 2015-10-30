@@ -1,0 +1,43 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+<window id="winNewCo" title="New CO" border="normal" visible="@load(vm.visibleNewCo)"
+	mode="overlapped" closable="true" width="300px" height="160px"
+	position="center" onClose="@command('onCloseNewCo')">
+
+	<vbox hflex="true">
+		<toolbar hflex="true" width="100%">
+			<toolbarbutton label="Clear" image="/img/icon/clear.png" 
+					onClick="@command('onClearAllNewCo')" />	
+			<toolbarbutton label="Save" image="/img/icon/save.png" visible="@load(vm.privilege.canUpdate)"
+			onClick="@command('onSaveNewCo')"/>
+		</toolbar>
+		
+		<n:div class="widget-body">
+			<n:div class="widget-main padding-6 no-padding-left no-padding-right">
+				<n:div class="k-space" />
+				<n:table width="100%" cellspacing="5">
+					<n:tr align="right">
+						<n:td width="120px">SHORT NAME</n:td>
+						<n:td align="left" class="k-padding">
+							<textbox value="@bind(vm.selectedNewCo.short_name)" width="160px" />
+						</n:td>
+					</n:tr>
+					<n:tr align="right">
+						<n:td>BRANCH</n:td>
+						<n:td align="left" class="k-padding">
+							<combobox model="@load(vm.coSubBranchlist)"
+								value="@load(vm.selectedNewCo.branch.description)"
+								selectedItem="@bind(vm.selectedNewCo.branch)" width="160px">
+								<template name="model" var="t">
+									<comboitem label="@load(t.description)" description="@load(t.code)" />
+								</template>
+							</combobox>
+						</n:td>
+					</n:tr>
+				</n:table>
+			</n:div>
+		</n:div>			
+	</vbox>
+
+</window>
+</zk>
